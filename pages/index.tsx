@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 
 export default function Home() {
   const [goldPrice, setGoldPrice] = useState<string>('Loading...')
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  let timeout: NodeJS.Timeout
 
   useEffect(() => {
     async function updateGoldPrice() {
@@ -27,15 +25,6 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  const handleMouseEnter = () => {
-    clearTimeout(timeout)
-    setDropdownOpen(true)
-  }
-
-  const handleMouseLeave = () => {
-    timeout = setTimeout(() => setDropdownOpen(false), 200)
-  }
-
   return (
     <>
       <Head>
@@ -44,22 +33,17 @@ export default function Home() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans">
-
         {/* Dropdown Menu */}
-        <div
-          className="absolute top-4 right-6 z-50"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <button className="bg-[#e0b44a] text-black font-semibold px-6 py-3 rounded shadow-gold hover:bg-yellow-400 transition text-lg">
-            Menu
-          </button>
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
+        <div className="absolute top-4 right-6 z-50 group relative">
+          <div className="relative">
+            <button className="bg-[#e0b44a] text-black font-semibold px-5 py-2.5 rounded shadow-gold text-sm md:text-base">
+              Menu
+            </button>
+            <div className="absolute right-0 mt-1 w-48 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200">
               <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
               <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Hero Section */}
@@ -71,22 +55,22 @@ export default function Home() {
           <p className="text-gray-400 mb-6 max-w-xl">
             Fully-backed, no vault, no delay. Ownership made effortless
           </p>
-          <a href="/login" className="bg-[#e0b44a] text-black font-bold px-6 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition">
+          <a href="/login" className="bg-[#e0b44a] text-black font-bold px-6 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition mb-10">
             Login
           </a>
         </section>
 
         {/* Steps Section */}
-        <section className="px-6 pb-20 flex flex-col items-center">
-          <div className="icon-box w-full md:w-1/2 bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 mb-6 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-lg">
+        <section className="px-6 pb-20 flex flex-col items-center gap-8">
+          <div className="icon-box w-full md:w-2/3 lg:w-1/2 bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-lg">
             <img src="https://i.postimg.cc/NFd4My3k/Chat-GPT-Image-Apr-25-2025-10-06-09-PM.png" alt="User icon" className="w-16 h-16" />
             <h3 className="text-lg font-semibold">Create an account</h3>
           </div>
-          <div className="icon-box w-full md:w-1/2 bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 mb-6 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-lg">
+          <div className="icon-box w-full md:w-2/3 lg:w-1/2 bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-lg">
             <img src="https://i.postimg.cc/Zn54D2mp/Chat-GPT-Image-Apr-23-2025-10-16-28-PM.png" alt="Euro icon" className="w-20 h-20" />
             <h3 className="text-lg font-semibold">Deposit funds</h3>
           </div>
-          <div className="icon-box w-full md:w-1/2 bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 mb-6 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-lg">
+          <div className="icon-box w-full md:w-2/3 lg:w-1/2 bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-lg">
             <img src="https://i.postimg.cc/mDbfzTfG/Chat-GPT-Image-Apr-23-2025-09-51-53-PM.png" alt="Gold bar icon" className="w-24 h-24" />
             <h3 className="text-lg font-semibold">Buy gold</h3>
           </div>
