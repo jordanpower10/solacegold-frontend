@@ -1,10 +1,8 @@
 import Head from 'next/head'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
   const [goldPrice, setGoldPrice] = useState<string>('Loading...')
-  const [menuOpen, setMenuOpen] = useState(false)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     async function updateGoldPrice() {
@@ -27,15 +25,6 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  function handleMouseEnter() {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setMenuOpen(true)
-  }
-
-  function handleMouseLeave() {
-    timeoutRef.current = setTimeout(() => setMenuOpen(false), 200)
-  }
-
   return (
     <>
       <Head>
@@ -44,22 +33,16 @@ export default function Home() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans">
-
+        
         {/* Dropdown Menu */}
-        <div
-          className="absolute top-4 right-6 z-50"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <button className="bg-yellow-500 text-black font-bold px-3 py-2 rounded-md shadow-gold hover:bg-yellow-400 transition text-sm">
+        <div className="absolute top-4 right-6 z-50 group">
+          <button className="bg-[#e0b44a] text-black font-semibold px-6 py-3 rounded shadow-gold hover:bg-yellow-400 transition text-lg">
             Menu
           </button>
-          {menuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
-              <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
-              <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
-            </div>
-          )}
+          <div className="hidden group-hover:block absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
+            <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
+            <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
+          </div>
         </div>
 
         {/* Hero Section */}
@@ -71,7 +54,7 @@ export default function Home() {
           <p className="text-gray-400 mb-6 max-w-xl">
             Fully-backed, no vault, no delay. Ownership made effortless
           </p>
-          <a href="/login" className="bg-yellow-500 text-black font-bold px-6 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition">
+          <a href="/login" className="bg-[#e0b44a] text-black font-bold px-6 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition">
             Login
           </a>
         </section>
