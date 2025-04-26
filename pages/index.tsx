@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 
 export default function Home() {
   const [goldPrice, setGoldPrice] = useState<string>('Loading...')
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  let timeout: NodeJS.Timeout
 
   useEffect(() => {
     async function updateGoldPrice() {
@@ -25,6 +27,15 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
+  const handleMouseEnter = () => {
+    clearTimeout(timeout)
+    setDropdownOpen(true)
+  }
+
+  const handleMouseLeave = () => {
+    timeout = setTimeout(() => setDropdownOpen(false), 200)
+  }
+
   return (
     <>
       <Head>
@@ -33,16 +44,22 @@ export default function Home() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans">
-        
+
         {/* Dropdown Menu */}
-        <div className="absolute top-4 right-6 z-50 group">
+        <div
+          className="absolute top-4 right-6 z-50"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           <button className="bg-[#e0b44a] text-black font-semibold px-6 py-3 rounded shadow-gold hover:bg-yellow-400 transition text-lg">
             Menu
           </button>
-          <div className="hidden group-hover:block absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
-            <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
-            <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
-          </div>
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
+              <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
+              <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
+            </div>
+          )}
         </div>
 
         {/* Hero Section */}
