@@ -1,9 +1,10 @@
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export default function Home() {
   const [goldPrice, setGoldPrice] = useState<string>('Loading...')
-  const [menuOpen, setMenuOpen] = useState<boolean>(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     async function updateGoldPrice() {
@@ -26,6 +27,15 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
+  function handleMouseEnter() {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    setMenuOpen(true)
+  }
+
+  function handleMouseLeave() {
+    timeoutRef.current = setTimeout(() => setMenuOpen(false), 200)
+  }
+
   return (
     <>
       <Head>
@@ -34,22 +44,22 @@ export default function Home() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans">
-        
+
         {/* Dropdown Menu */}
-        <div className="absolute top-4 right-6 z-50 group">
-          <div 
-            className="inline-block relative"
-            onMouseEnter={() => setMenuOpen(true)}
-            onMouseLeave={() => setMenuOpen(false)}
-          >
-            <button className="bg-yellow-500 text-black font-bold px-5 py-2 rounded-lg shadow-gold hover:bg-yellow-400 transition">
-              Menu
-            </button>
-            <div className={`${menuOpen ? 'block' : 'hidden'} absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg`}>
+        <div
+          className="absolute top-4 right-6 z-50"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <button className="bg-yellow-500 text-black font-bold px-3 py-2 rounded-md shadow-gold hover:bg-yellow-400 transition text-sm">
+            Menu
+          </button>
+          {menuOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
               <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
               <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Hero Section */}
