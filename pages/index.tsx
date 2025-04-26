@@ -47,7 +47,7 @@ export default function Home() {
 
         {/* Hero Section */}
         <section className="flex flex-col items-center justify-center text-center px-6 pb-10 mt-20">
-          <img src="/logo.png" alt="Solace Gold Logo" className="w-52 h-auto mix-blend-lighten mb-6" />
+          <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-52 h-auto mix-blend-lighten mb-6" />
           <h2 className="text-5xl font-bold leading-tight mb-4">
             <span className="text-[#e0b44a]">Gold,</span> Simplified
           </h2>
@@ -83,6 +83,7 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Footer */}
         <footer className="text-center text-sm text-gray-600 py-6 border-t border-gray-800">
           &copy; 2025 Solace Gold. All rights reserved.
         </footer>
