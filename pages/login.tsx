@@ -13,8 +13,8 @@ export default function Login() {
           <div className="flex justify-center mb-6">
             <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-32 h-auto" />
           </div>
-          <h2 className="text-2xl font-bold text-center mb-6">
-            <span className="text-[#e0b44a]">Log in</span> to your account
+          <h2 className="text-2xl font-bold text-center mb-6 text-[#e0b44a]">
+            Log in to your account
           </h2>
 
           <form className="flex flex-col gap-4">
