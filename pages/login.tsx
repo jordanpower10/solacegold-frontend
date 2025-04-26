@@ -8,26 +8,49 @@ export default function Login() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen flex items-center justify-center bg-[#0d0d0d] text-white font-sans">
-        <div className="bg-[#121212] p-10 rounded-lg shadow-lg w-full max-w-sm">
-          <h2 className="text-2xl font-bold mb-6 text-center text-[#e0b44a]">Login</h2>
+      <div className="min-h-screen bg-[#0d0d0d] px-4 flex items-center justify-center font-sans">
+        <div className="w-full max-w-md bg-[#121212] p-8 rounded-lg shadow-md">
+          <div className="flex justify-center mb-6">
+            <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-32 h-auto" />
+          </div>
+          <h2 className="text-2xl font-bold text-center mb-6">
+            <span className="text-[#e0b44a]">Log in</span> to your account
+          </h2>
+
           <form className="flex flex-col gap-4">
-            <input
-              type="email"
-              placeholder="Email"
-              className="p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
-            />
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="••••••••"
+                className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
+              />
+            </div>
+
             <button
               type="submit"
-              className="mt-4 bg-[#e0b44a] text-black font-semibold py-3 rounded hover:bg-yellow-400 transition"
+              className="w-full mt-4 bg-[#e0b44a] text-black font-bold py-2 rounded shadow-gold hover:bg-yellow-400 transition"
             >
               Log In
             </button>
+
+            <p className="text-sm text-center text-gray-500 mt-6">
+              Don't have an account?{' '}
+              <a href="/register" className="text-[#e0b44a] underline">
+                Sign up
+              </a>
+            </p>
           </form>
         </div>
       </div>
