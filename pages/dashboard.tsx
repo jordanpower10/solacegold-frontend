@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 
 export default function Dashboard() {
   const [goldPrice, setGoldPrice] = useState<number | null>(null)
-  const [goldHoldings, setGoldHoldings] = useState<number>(12.34) // example grams owned
-  const clientName = "John Doe" // example client name
+  const [goldHoldings, setGoldHoldings] = useState<number>(12.34) // Example gold in grams
+  const clientName = "John Doe" // Example client name
 
   useEffect(() => {
     async function fetchGoldPrice() {
@@ -25,7 +25,7 @@ export default function Dashboard() {
     return () => clearInterval(interval)
   }, [])
 
-  const goldValueEUR = goldPrice ? (goldHoldings * goldPrice / 31.1035).toFixed(2) : 'Loading...' // 1 troy oz = 31.1035g
+  const goldValueEUR = goldPrice ? (goldHoldings * goldPrice / 31.1035).toFixed(2) : 'Loading...'
 
   return (
     <>
@@ -33,32 +33,72 @@ export default function Dashboard() {
         <title>Dashboard - Solace Gold</title>
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans px-6 py-10">
-        
-        <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-32 h-auto mb-8" />
-
-        <h1 className="text-3xl font-bold mb-4">Hi, {clientName}</h1>
-
-        <div className="bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 mb-10">
-          <h2 className="text-2xl font-semibold">Your Gold Holdings</h2>
-          <div className="text-xl text-[#e0b44a]">{goldHoldings} grams</div>
-          <div className="text-md text-gray-400">
-            Current Value: <span className="text-[#e0b44a]">{goldValueEUR} EUR</span>
+      <div className="min-h-screen bg-[#0d0d0d] text-[#f5f5f5] font-sans px-4 py-6 md:px-12 md:py-10">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-10">
+          <div className="flex items-center gap-3">
+            <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Logo" className="w-12 h-12" />
+            <h1 className="text-2xl font-bold">Welcome, {clientName}</h1>
+          </div>
+          <div className="hidden md:flex gap-4">
+            <a href="/buy" className="bg-[#e0b44a] hover:bg-yellow-400 text-black font-semibold py-2 px-6 rounded-lg transition">Buy Gold</a>
+            <a href="/sell" className="bg-[#e0b44a] hover:bg-yellow-400 text-black font-semibold py-2 px-6 rounded-lg transition">Sell Gold</a>
+            <a href="/withdraw" className="bg-[#e0b44a] hover:bg-yellow-400 text-black font-semibold py-2 px-6 rounded-lg transition">Withdraw</a>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 justify-center">
-          <a href="/buy" className="bg-[#e0b44a] text-black font-bold px-6 py-4 rounded-lg shadow-gold hover:bg-yellow-400 transition text-center">
-            Buy Gold
-          </a>
-          <a href="/sell" className="bg-[#e0b44a] text-black font-bold px-6 py-4 rounded-lg shadow-gold hover:bg-yellow-400 transition text-center">
-            Sell Gold
-          </a>
-          <a href="/withdraw" className="bg-[#e0b44a] text-black font-bold px-6 py-4 rounded-lg shadow-gold hover:bg-yellow-400 transition text-center">
-            Withdraw Funds
-          </a>
+        {/* Wallet Section */}
+        <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-8 shadow-lg mb-10 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#e0b44a33] to-transparent rounded-2xl pointer-events-none"></div>
+
+          <h2 className="text-lg font-semibold mb-6">Your Gold Wallet</h2>
+
+          <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+            {/* Circular Display */}
+            <div className="w-40 h-40 rounded-full border-8 border-[#e0b44a] flex items-center justify-center text-center animate-pulse">
+              <div>
+                <div className="text-2xl font-bold">{goldHoldings}g</div>
+                <div className="text-sm text-gray-400 mt-1">Gold Owned</div>
+              </div>
+            </div>
+
+            {/* Holdings Info */}
+            <div className="flex flex-col items-center md:items-start">
+              <div className="text-gray-400 mb-1">Current Value</div>
+              <div className="text-3xl font-bold text-[#e0b44a] mb-4">{goldValueEUR} EUR</div>
+              <div className="flex flex-col gap-2 text-sm text-gray-500">
+                <div>Vault Status: <span className="text-green-400">Secured</span></div>
+                <div>Account Level: <span className="text-yellow-400">Basic</span></div>
+              </div>
+            </div>
+          </div>
         </div>
 
+        {/* Recent Activity */}
+        <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-8 shadow-lg">
+          <h2 className="text-lg font-semibold mb-6">Recent Activity</h2>
+          <div className="flex flex-col gap-4 text-sm text-gray-300">
+            <div className="flex justify-between border-b border-[#2a2a2a] pb-3">
+              <div>➔ Bought 1g Gold</div>
+              <div className="text-[#e0b44a]">€93.21</div>
+            </div>
+            <div className="flex justify-between border-b border-[#2a2a2a] pb-3">
+              <div>➔ Sold 0.5g Gold</div>
+              <div className="text-[#e0b44a]">€46.00</div>
+            </div>
+            <div className="flex justify-between">
+              <div>➔ Withdrawal Initiated</div>
+              <div className="text-[#e0b44a]">€200.00</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons for mobile */}
+        <div className="flex md:hidden flex-col gap-4 mt-8">
+          <a href="/buy" className="bg-[#e0b44a] hover:bg-yellow-400 text-black font-semibold py-3 rounded-lg text-center transition">Buy Gold</a>
+          <a href="/sell" className="bg-[#e0b44a] hover:bg-yellow-400 text-black font-semibold py-3 rounded-lg text-center transition">Sell Gold</a>
+          <a href="/withdraw" className="bg-[#e0b44a] hover:bg-yellow-400 text-black font-semibold py-3 rounded-lg text-center transition">Withdraw</a>
+        </div>
       </div>
     </>
   )
