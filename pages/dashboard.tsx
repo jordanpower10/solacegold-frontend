@@ -1,92 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Solace Gold Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-black text-white min-h-screen flex">
+import Head from 'next/head'
+import { useEffect, useState } from 'react'
+import { Line } from 'react-chartjs-2'
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip } from 'chart.js'
 
-  <!-- Sidebar -->
-  <aside class="w-64 bg-gray-900 p-6 flex flex-col space-y-6">
-    <div class="text-2xl font-bold text-gold-400">SolaceGold</div>
-    <nav class="flex flex-col gap-4">
-      <a href="#" class="hover:bg-gray-700 p-3 rounded-lg transition">🏠 Dashboard</a>
-      <a href="#" class="hover:bg-gray-700 p-3 rounded-lg transition">📈 Portfolio</a>
-      <a href="#" class="hover:bg-gray-700 p-3 rounded-lg transition">💰 Buy Gold</a>
-      <a href="#" class="hover:bg-gray-700 p-3 rounded-lg transition">🔁 Auto-Invest</a>
-      <a href="#" class="hover:bg-gray-700 p-3 rounded-lg transition">⚙️ Settings</a>
-    </nav>
-    <div class="mt-auto">
-      <button class="w-full bg-gold-500 text-black font-semibold py-2 rounded-lg hover:bg-gold-400 transition">Logout</button>
-    </div>
-  </aside>
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip)
 
-  <!-- Main Content -->
-  <main class="flex-1 p-10 overflow-y-auto">
+export default function Dashboard() {
+  const [goldPrice, setGoldPrice] = useState<number>(1855)
+  const goldHoldings = 12.34
+  const gramsPerOunce = 31.1035
+  const investmentValue = 1000
+  const clientName = "John Doe"
 
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-10">
-      <h1 class="text-3xl font-bold">Welcome Back</h1>
-      <div class="flex items-center space-x-4">
-        <span class="text-sm text-gray-400">Account Balance:</span>
-        <span class="text-xl font-bold text-gold-400">€12,450.00</span>
-      </div>
-    </div>
+  const currentValue = (goldHoldings / gramsPerOunce) * goldPrice
+  const goldValueEUR = currentValue.toFixed(2)
+  const profitLoss = (((currentValue - investmentValue) / investmentValue) * 100).toFixed(2)
 
-    <!-- Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+  const chartData = {
+    labels: ['12mo', '11mo', '10mo', '9mo', '8mo', '7mo', '6mo', '5mo', '4mo', '3mo', '2mo', 'Now'],
+    datasets: [
+      {
+        label: 'Gold Price (EUR)',
+        data: [1650, 1680, 1700, 1725, 1750, 1775, 1790, 1805, 1820, 1835, 1845, 1855],
+        borderColor: '#e0b44a',
+        backgroundColor: 'transparent',
+        tension: 0.4,
+      },
+    ],
+  }
 
-      <!-- Portfolio Summary -->
-      <div class="bg-gray-800 rounded-2xl p-6 shadow-lg">
-        <h2 class="text-xl font-semibold mb-4">Portfolio Summary</h2>
-        <div class="space-y-2">
-          <div class="flex justify-between">
-            <span>Total Gold Owned:</span>
-            <span>250g</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Today's Gain/Loss:</span>
-            <span class="text-green-400">+€120</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Current Gold Price:</span>
-            <span>€50/g</span>
+  const chartOptions = {
+    plugins: { legend: { display: false }, tooltip: { enabled: true } },
+    scales: {
+      x: { ticks: { color: '#aaa' } },
+      y: { ticks: { color: '#aaa' } },
+    },
+  }
+
+  return (
+    <>
+      <Head>
+        <title>Dashboard - Solace Gold</title>
+      </Head>
+
+      <div className="min-h-screen bg-[#0d0d0d] text-white flex flex-col items-center px-4 py-10 font-sans">
+
+        {/* Logo and Welcome */}
+        <div className="flex flex-col items-center mb-12">
+          <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-16 h-16 mb-4" />
+          <h1 className="text-3xl font-bold">Welcome, {clientName}</h1>
+        </div>
+
+        {/* Wallet Card */}
+        <div className="w-full max-w-3xl bg-gradient-to-br from-[#141414] to-[#1e1e1e] border border-[#2a2a2a] rounded-2xl p-10 mb-10 shadow-lg">
+          <div className="flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-6">
+
+            <div>
+              <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Holdings</div>
+              <div className="text-5xl font-extrabold text-[#e0b44a]">{goldHoldings}g</div>
+            </div>
+
+            <div>
+              <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Value</div>
+              <div className="text-5xl font-extrabold text-[#e0b44a]">{goldValueEUR} EUR</div>
+            </div>
+
+            <div>
+              <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Profit/Loss</div>
+              <div className={`px-5 py-2 rounded-full font-bold text-lg ${parseFloat(profitLoss) >= 0 ? 'bg-green-600' : 'bg-red-600'}`}>
+                {parseFloat(profitLoss) >= 0 ? '+' : ''}{profitLoss}%
+              </div>
+            </div>
+
           </div>
         </div>
+
+        {/* Chart */}
+        <div className="w-full max-w-5xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 mb-10 shadow-md">
+          <h3 className="text-md font-semibold mb-6">Gold Price (Last 12 months)</h3>
+          <Line data={chartData} options={chartOptions} />
+        </div>
+
+        {/* Recent Activity */}
+        <div className="w-full max-w-2xl">
+          <h3 className="text-md font-semibold mb-6 text-center">Recent Activity</h3>
+
+          <div className="flex flex-col gap-4">
+            {[
+              { date: '05 Apr 2025', action: 'Bought 1g Gold', amount: '€93.21' },
+              { date: '15 Mar 2025', action: 'Sold 0.5g Gold', amount: '€46.00' },
+              { date: '01 Mar 2025', action: 'Withdrawal', amount: '€200.00' },
+            ].map((item, index) => (
+              <div key={index} className="flex justify-between items-center bg-gradient-to-br from-[#161616] to-[#1a1a1a] p-4 rounded-lg hover:scale-[1.02] transition-transform">
+                <div className="text-sm text-gray-400">{item.date}</div>
+                <div className="text-base font-semibold">{item.action}</div>
+                <div className="text-[#e0b44a] font-bold">{item.amount}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
-
-      <!-- Recent Activity -->
-      <div class="bg-gray-800 rounded-2xl p-6 shadow-lg col-span-2">
-        <h2 class="text-xl font-semibold mb-4">Recent Activity</h2>
-        <ul class="divide-y divide-gray-700">
-          <li class="py-3 flex justify-between">
-            <span>Bought 50g Gold</span>
-            <span class="text-gray-400 text-sm">2 days ago</span>
-          </li>
-          <li class="py-3 flex justify-between">
-            <span>Set up Auto-Invest</span>
-            <span class="text-gray-400 text-sm">1 week ago</span>
-          </li>
-          <li class="py-3 flex justify-between">
-            <span>Withdrawal Request</span>
-            <span class="text-gray-400 text-sm">3 weeks ago</span>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- Chart Section -->
-    <div class="mt-10 bg-gray-800 rounded-2xl p-6 shadow-lg">
-      <h2 class="text-xl font-semibold mb-4">Gold Price Chart</h2>
-      <div class="w-full h-64 bg-gray-700 rounded-lg flex items-center justify-center text-gray-400">
-        Chart Placeholder
-      </div>
-    </div>
-
-  </main>
-
-</body>
-</html>
+    </>
+  )
+}
