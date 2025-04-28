@@ -55,19 +55,27 @@ export default function Dashboard() {
         </div>
 
         {/* Wallet Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 animate-fadeIn">
+
           <div className="text-sm text-gray-400 uppercase tracking-widest mb-2">Current Holdings</div>
-          <div className="text-6xl font-extrabold text-[#e0b44a]">{goldHoldings}g</div>
-
-          <div className="mt-8 text-sm text-gray-400 uppercase tracking-widest mb-2">Current Value</div>
-          <div className="text-5xl font-extrabold text-[#e0b44a]">{goldValueEUR} EUR</div>
-
-          <div className={`mt-6 text-xl font-semibold ${parseFloat(profitLoss) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-            {parseFloat(profitLoss) >= 0 ? '+' : ''}{profitLoss}%
+          <div className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#e0b44a] via-yellow-300 to-[#e0b44a] animate-glow">
+            {goldHoldings}g
           </div>
+
+          <div className="mt-10 text-sm text-gray-400 uppercase tracking-widest mb-2">Current Value</div>
+          <div className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#e0b44a] via-yellow-300 to-[#e0b44a] animate-glow">
+            {goldValueEUR} EUR
+          </div>
+
+          <div className="mt-8">
+            <span className={`px-6 py-2 rounded-full font-semibold text-lg ${parseFloat(profitLoss) >= 0 ? 'bg-green-600' : 'bg-red-600'} animate-fadeIn`}>
+              {parseFloat(profitLoss) >= 0 ? '+' : ''}{profitLoss}%
+            </span>
+          </div>
+
         </div>
 
-        {/* Chart */}
+        {/* Chart Section */}
         <div className="w-full max-w-4xl mb-12 bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 shadow-md">
           <h3 className="text-md font-semibold mb-4">Gold Price (Last 12 months)</h3>
           <Line data={chartData} options={chartOptions} />
