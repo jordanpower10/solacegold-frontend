@@ -43,57 +43,48 @@ export default function Dashboard() {
         <title>Dashboard - Solace Gold</title>
       </Head>
 
-      <div className="min-h-screen bg-[#0d0d0d] text-white flex flex-col items-center px-4 py-10 font-sans">
+      <div className="min-h-screen bg-[#0d0d0d] text-white flex flex-col items-center font-sans px-4 py-8">
 
-        {/* Logo and Welcome */}
+        {/* Logo + Welcome */}
         <div className="flex flex-col items-center mb-12">
-          <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-16 h-16 mb-4" />
-          <h1 className="text-3xl font-bold">Welcome, {clientName}</h1>
+          <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Logo" className="w-16 h-16 mb-4" />
+          <h1 className="text-3xl font-bold tracking-wider">Welcome, {clientName}</h1>
         </div>
 
-        {/* Wallet Card */}
-        <div className="w-full max-w-3xl bg-gradient-to-br from-[#141414] to-[#1e1e1e] border border-[#2a2a2a] rounded-2xl p-10 mb-10 shadow-lg">
-          <div className="flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-6">
+        {/* Wallet Hero Section */}
+        <div className="w-full max-w-4xl bg-gradient-to-br from-[#121212] to-[#1a1a1a] border border-[#2a2a2a] rounded-3xl p-10 text-center mb-12 shadow-xl animate-fadeInSlow">
 
-            <div>
-              <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Holdings</div>
-              <div className="text-5xl font-extrabold text-[#e0b44a]">{goldHoldings}g</div>
-            </div>
+          <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Holdings</div>
+          <div className="text-6xl font-extrabold text-[#e0b44a] mb-8">{goldHoldings}g</div>
 
-            <div>
-              <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Value</div>
-              <div className="text-5xl font-extrabold text-[#e0b44a]">{goldValueEUR} EUR</div>
-            </div>
+          <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Value</div>
+          <div className="text-5xl font-extrabold text-[#e0b44a] mb-8">{goldValueEUR} EUR</div>
 
-            <div>
-              <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Profit/Loss</div>
-              <div className={`px-5 py-2 rounded-full font-bold text-lg ${parseFloat(profitLoss) >= 0 ? 'bg-green-600' : 'bg-red-600'}`}>
-                {parseFloat(profitLoss) >= 0 ? '+' : ''}{profitLoss}%
-              </div>
-            </div>
-
+          <div className={`px-6 py-2 rounded-full font-bold text-xl inline-block ${parseFloat(profitLoss) >= 0 ? 'bg-green-600' : 'bg-red-600'}`}>
+            {parseFloat(profitLoss) >= 0 ? '+' : ''}{profitLoss}%
           </div>
+
         </div>
 
-        {/* Chart */}
-        <div className="w-full max-w-5xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 mb-10 shadow-md">
-          <h3 className="text-md font-semibold mb-6">Gold Price (Last 12 months)</h3>
+        {/* Chart Section */}
+        <div className="w-full max-w-5xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-8 mb-12 shadow-md">
+          <h3 className="text-lg font-semibold mb-6">Gold Price (Last 12 months)</h3>
           <Line data={chartData} options={chartOptions} />
         </div>
 
         {/* Recent Activity */}
-        <div className="w-full max-w-2xl">
-          <h3 className="text-md font-semibold mb-6 text-center">Recent Activity</h3>
+        <div className="w-full max-w-3xl">
+          <h3 className="text-lg font-semibold mb-6 text-center">Recent Activity</h3>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             {[
               { date: '05 Apr 2025', action: 'Bought 1g Gold', amount: '€93.21' },
               { date: '15 Mar 2025', action: 'Sold 0.5g Gold', amount: '€46.00' },
               { date: '01 Mar 2025', action: 'Withdrawal', amount: '€200.00' },
             ].map((item, index) => (
-              <div key={index} className="flex justify-between items-center bg-gradient-to-br from-[#161616] to-[#1a1a1a] p-4 rounded-lg hover:scale-[1.02] transition-transform">
-                <div className="text-sm text-gray-400">{item.date}</div>
-                <div className="text-base font-semibold">{item.action}</div>
+              <div key={index} className="flex justify-between items-center px-6 py-4 bg-[#141414] border border-[#2a2a2a] rounded-2xl hover:scale-[1.02] transition-transform">
+                <div className="text-gray-400 text-sm">{item.date}</div>
+                <div className="text-base font-medium">{item.action}</div>
                 <div className="text-[#e0b44a] font-bold">{item.amount}</div>
               </div>
             ))}
