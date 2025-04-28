@@ -1,36 +1,32 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, TimeScale } from 'chart.js'
-import 'chartjs-adapter-date-fns'
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip } from 'chart.js'
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, TimeScale)
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip)
 
 export default function Dashboard() {
   const [goldPrice, setGoldPrice] = useState<number | null>(null)
   const [goldHoldings, setGoldHoldings] = useState<number>(12.34)
   const [investmentValue] = useState<number>(1000)
-  const [priceHistory, setPriceHistory] = useState<any[]>([])
   const clientName = "John Doe"
 
   useEffect(() => {
-    async function fetchGoldData() {
+    async function fetchGoldPrice() {
       try {
-        const res = await fetch('https://api.metals.live/v1/spot/gold') // using metals.live as quick free API
+        const res = await fetch('https://data-asg.goldprice.org/dbXRates/EUR')
         const data = await res.json()
-        if (data && Array.isArray(data)) {
-          const slicedData = data.slice(-365) // take last 365 points
-          setPriceHistory(slicedData)
-          const latestPrice = slicedData[slicedData.length - 1]?.[1]
-          setGoldPrice(latestPrice)
+        const price = data?.items?.[0]?.xauPrice
+        if (price) {
+          setGoldPrice(price)
         }
       } catch {
         setGoldPrice(null)
       }
     }
 
-    fetchGoldData()
-    const interval = setInterval(fetchGoldData, 3600000) // refresh every hour
+    fetchGoldPrice()
+    const interval = setInterval(fetchGoldPrice, 60000)
     return () => clearInterval(interval)
   }, [])
 
@@ -38,12 +34,13 @@ export default function Dashboard() {
   const goldValueEUR = currentValue.toFixed(2)
   const profitLoss = investmentValue ? (((currentValue - investmentValue) / investmentValue) * 100).toFixed(2) : '0'
 
+  // Static 12-month chart data (simple working version)
   const chartData = {
-    labels: priceHistory.map((p) => new Date(p[0] * 1000)), // assuming timestamp format
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
         label: 'Gold Price (EUR)',
-        data: priceHistory.map((p) => p[1]),
+        data: [1832, 1850, 1840, 1860, 1880, 1900, 1925, 1950, 1940, 1920, 1910, 1930],
         fill: false,
         borderColor: '#e0b44a',
         tension: 0.4,
@@ -57,12 +54,10 @@ export default function Dashboard() {
     },
     scales: {
       x: {
-        type: 'time',
-        time: { unit: 'month' },
-        ticks: { color: '#ccc' }
+        ticks: { color: '#ccc' },
       },
       y: {
-        ticks: { color: '#ccc' }
+        ticks: { color: '#ccc' },
       }
     },
   }
