@@ -6,8 +6,8 @@ import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip }
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip)
 
 export default function Dashboard() {
-  const [goldPrice, setGoldPrice] = useState<number>(1855) // Current gold price €/oz
-  const goldHoldings = 12.34 // in grams
+  const [goldPrice, setGoldPrice] = useState<number>(1855)
+  const goldHoldings = 12.34
   const gramsPerOunce = 31.1035
   const investmentValue = 1000
   const clientName = "John Doe"
@@ -57,28 +57,33 @@ export default function Dashboard() {
         </div>
 
         {/* Wallet */}
-        <div className="relative bg-[#121212] border border-[#2a2a2a] rounded-2xl p-10 shadow-lg overflow-hidden mb-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#e0b44a22] to-transparent rounded-2xl pointer-events-none animate-pulse"></div>
-          <h2 className="text-xl font-bold mb-6 text-center text-[#e0b44a] tracking-wide">Your Gold Wallet</h2>
+        <div className="relative bg-[#121212] border border-[#2a2a2a] rounded-2xl p-10 shadow-xl overflow-hidden mb-10">
 
-          <div className="flex flex-col items-center justify-center gap-6 text-center">
-            <div>
-              <div className="text-gray-400 text-sm uppercase tracking-widest mb-1">Current Holdings</div>
-              <div className="text-5xl font-extrabold text-[#e0b44a]">{goldHoldings}g</div>
+          <h2 className="text-xl font-bold mb-8 text-center text-[#e0b44a] tracking-wide uppercase">Your Gold Wallet</h2>
+
+          <div className="flex flex-col md:flex-row justify-center items-center gap-12 text-center">
+
+            <div className="flex flex-col items-center bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] p-6 rounded-xl w-60 shadow-md">
+              <div className="text-xs text-gray-400 tracking-widest uppercase mb-1">Current Holdings</div>
+              <div className="text-4xl font-extrabold text-[#e0b44a]">{goldHoldings}g</div>
             </div>
 
-            <div>
-              <div className="text-gray-400 text-sm uppercase tracking-widest mb-1">Current Value</div>
+            <div className="flex flex-col items-center bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] p-6 rounded-xl w-60 shadow-md">
+              <div className="text-xs text-gray-400 tracking-widest uppercase mb-1">Current Value</div>
               <div className="text-4xl font-extrabold text-[#e0b44a]">{goldValueEUR} EUR</div>
             </div>
 
-            <div className={`text-2xl font-semibold ${parseFloat(profitLoss) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <div className={`px-6 py-3 rounded-lg font-bold text-lg shadow-md ${parseFloat(profitLoss) >= 0 ? 'bg-green-600' : 'bg-red-600'}`}>
               {parseFloat(profitLoss) >= 0 ? '+' : ''}{profitLoss}%
             </div>
           </div>
+
         </div>
 
-        {/* Chart + Activity */}
+        {/* Chart + Recent Activity */}
         <div className="flex flex-col md:flex-row gap-6 mb-10">
 
           {/* Chart */}
@@ -97,7 +102,7 @@ export default function Dashboard() {
                 { date: '15 Mar 2025', action: 'Sold 0.5g Gold', amount: '€46.00' },
                 { date: '01 Mar 2025', action: 'Withdrawal', amount: '€200.00' },
               ].map((item, index) => (
-                <div key={index} className="bg-[#1a1a1a] border border-[#2a2a2a] p-4 rounded-lg hover:-translate-y-1 hover:shadow-gold transition transform">
+                <div key={index} className="bg-gradient-to-br from-[#1f1f1f] to-[#2a2a2a] border border-[#2a2a2a] p-4 rounded-xl hover:-translate-y-1 hover:shadow-gold transition transform">
                   <div className="flex justify-between items-center text-sm">
                     <div className="text-gray-400">{item.date}</div>
                     <div className="text-[#e0b44a] font-bold">{item.amount}</div>
