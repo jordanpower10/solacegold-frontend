@@ -1,97 +1,54 @@
-import Head from 'next/head'
-import { useEffect, useState } from 'react'
-import { Line } from 'react-chartjs-2'
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip } from 'chart.js'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SolaceGold Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col items-center p-6">
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip)
+  <!-- Logo -->
+  <header class="w-full flex justify-center mb-8">
+    <img src="https://i.postimg.cc/zf1VnDV0/Gold-solace-logo.png" alt="SolaceGold Logo" class="h-10">
+  </header>
 
-export default function Dashboard() {
-  const [goldPrice, setGoldPrice] = useState<number>(1855)
-  const goldHoldings = 12.34
-  const gramsPerOunce = 31.1035
-  const investmentValue = 1000
-  const clientName = "John Doe"
+  <!-- Account Section -->
+  <section class="text-center space-y-4">
+    <h1 class="text-2xl font-bold">Your account</h1>
+    <div class="text-4xl font-bold">€12,530.75</div>
+    <div class="text-gray-400">
+      6.754 oz 
+      <span class="text-green-400 ml-2">1.42% in the past day</span>
+    </div>
+  </section>
 
-  const currentValue = (goldHoldings / gramsPerOunce) * goldPrice
-  const goldValueEUR = currentValue.toFixed(2)
-  const profitLoss = (((currentValue - investmentValue) / investmentValue) * 100).toFixed(2)
+  <!-- Action Buttons -->
+  <section class="flex gap-6 mt-10">
+    <button class="flex flex-col items-center justify-center bg-gray-900 border border-gray-700 p-6 rounded-xl hover:bg-gray-800 transition">
+      <div class="text-2xl mb-2">€</div>
+      <div>Deposit</div>
+    </button>
+    <button class="flex flex-col items-center justify-center bg-gray-900 border border-gray-700 p-6 rounded-xl hover:bg-gray-800 transition">
+      <div class="text-2xl mb-2">⬆️</div>
+      <div>Withdraw</div>
+    </button>
+    <button class="flex flex-col items-center justify-center bg-gray-900 border border-gray-700 p-6 rounded-xl hover:bg-gray-800 transition">
+      <div class="text-2xl mb-2">🪙</div>
+      <div>Buy Gold</div>
+    </button>
+  </section>
 
-  const chartData = {
-    labels: ['12mo', '11mo', '10mo', '9mo', '8mo', '7mo', '6mo', '5mo', '4mo', '3mo', '2mo', 'Now'],
-    datasets: [
-      {
-        label: 'Gold Price (EUR)',
-        data: [1650, 1680, 1700, 1725, 1750, 1775, 1790, 1805, 1820, 1835, 1845, 1855],
-        borderColor: '#e0b44a',
-        backgroundColor: 'transparent',
-        tension: 0.4,
-      },
-    ],
-  }
+  <!-- Gold Price Section -->
+  <section class="w-full max-w-2xl mt-12 bg-gray-900 border border-gray-700 rounded-2xl p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold">Gold price</h2>
+      <div class="text-white font-semibold">€2922.01</div>
+    </div>
+    <div class="h-48 bg-gray-800 rounded-lg flex items-center justify-center text-gray-500">
+      Chart Placeholder
+    </div>
+  </section>
 
-  const chartOptions = {
-    plugins: { legend: { display: false }, tooltip: { enabled: true } },
-    scales: {
-      x: { ticks: { color: '#aaa' } },
-      y: { ticks: { color: '#aaa' } },
-    },
-  }
-
-  return (
-    <>
-      <Head>
-        <title>Dashboard - Solace Gold</title>
-      </Head>
-
-      <div className="min-h-screen bg-[#0d0d0d] text-white flex flex-col items-center font-sans px-4 py-8">
-
-        {/* Logo + Welcome */}
-        <div className="flex flex-col items-center mb-12">
-          <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Logo" className="w-16 h-16 mb-4" />
-          <h1 className="text-3xl font-bold tracking-wider">Welcome, {clientName}</h1>
-        </div>
-
-        {/* Wallet Hero Section */}
-        <div className="w-full max-w-4xl bg-gradient-to-br from-[#121212] to-[#1a1a1a] border border-[#2a2a2a] rounded-3xl p-10 text-center mb-12 shadow-xl animate-fadeInSlow">
-
-          <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Holdings</div>
-          <div className="text-6xl font-extrabold text-[#e0b44a] mb-8">{goldHoldings}g</div>
-
-          <div className="text-gray-400 text-xs uppercase tracking-widest mb-2">Current Value</div>
-          <div className="text-5xl font-extrabold text-[#e0b44a] mb-8">{goldValueEUR} EUR</div>
-
-          <div className={`px-6 py-2 rounded-full font-bold text-xl inline-block ${parseFloat(profitLoss) >= 0 ? 'bg-green-600' : 'bg-red-600'}`}>
-            {parseFloat(profitLoss) >= 0 ? '+' : ''}{profitLoss}%
-          </div>
-
-        </div>
-
-        {/* Chart Section */}
-        <div className="w-full max-w-5xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-8 mb-12 shadow-md">
-          <h3 className="text-lg font-semibold mb-6">Gold Price (Last 12 months)</h3>
-          <Line data={chartData} options={chartOptions} />
-        </div>
-
-        {/* Recent Activity */}
-        <div className="w-full max-w-3xl">
-          <h3 className="text-lg font-semibold mb-6 text-center">Recent Activity</h3>
-
-          <div className="flex flex-col gap-6">
-            {[
-              { date: '05 Apr 2025', action: 'Bought 1g Gold', amount: '€93.21' },
-              { date: '15 Mar 2025', action: 'Sold 0.5g Gold', amount: '€46.00' },
-              { date: '01 Mar 2025', action: 'Withdrawal', amount: '€200.00' },
-            ].map((item, index) => (
-              <div key={index} className="flex justify-between items-center px-6 py-4 bg-[#141414] border border-[#2a2a2a] rounded-2xl hover:scale-[1.02] transition-transform">
-                <div className="text-gray-400 text-sm">{item.date}</div>
-                <div className="text-base font-medium">{item.action}</div>
-                <div className="text-[#e0b44a] font-bold">{item.amount}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-      </div>
-    </>
-  )
-}
+</body>
+</html>
