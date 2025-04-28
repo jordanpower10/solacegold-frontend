@@ -9,16 +9,19 @@ export default function Dashboard() {
   const [goldPrice, setGoldPrice] = useState<number | null>(null)
   const [goldHoldings, setGoldHoldings] = useState<number>(12.34)
   const [investmentValue] = useState<number>(1000)
+  const [priceHistory, setPriceHistory] = useState<number[]>([])
   const clientName = "John Doe"
 
   useEffect(() => {
     async function fetchGoldPrice() {
       try {
-        const res = await fetch('https://data-asg.goldprice.org/dbXRates/EUR')
+        const res = await fetch('https://api.metals.live/v1/spot/gold')
         const data = await res.json()
-        const price = data?.items?.[0]?.xauPrice
-        if (price) {
-          setGoldPrice(price)
+        if (data && Array.isArray(data)) {
+          const prices = data.slice(0, 12).map((p: any) => p[1]) // Use latest 12 months
+          setPriceHistory(prices.reverse())
+          const latest = prices[prices.length - 1]
+          setGoldPrice(latest)
         }
       } catch {
         setGoldPrice(null)
@@ -26,7 +29,7 @@ export default function Dashboard() {
     }
 
     fetchGoldPrice()
-    const interval = setInterval(fetchGoldPrice, 60000)
+    const interval = setInterval(fetchGoldPrice, 3600000)
     return () => clearInterval(interval)
   }, [])
 
@@ -34,13 +37,12 @@ export default function Dashboard() {
   const goldValueEUR = currentValue.toFixed(2)
   const profitLoss = investmentValue ? (((currentValue - investmentValue) / investmentValue) * 100).toFixed(2) : '0'
 
-  // Static 12-month chart data (simple working version)
   const chartData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    labels: ['12mo', '11mo', '10mo', '9mo', '8mo', '7mo', '6mo', '5mo', '4mo', '3mo', '2mo', 'Now'],
     datasets: [
       {
         label: 'Gold Price (EUR)',
-        data: [1832, 1850, 1840, 1860, 1880, 1900, 1925, 1950, 1940, 1920, 1910, 1930],
+        data: priceHistory,
         fill: false,
         borderColor: '#e0b44a',
         tension: 0.4,
@@ -69,7 +71,7 @@ export default function Dashboard() {
       </Head>
 
       <div className="min-h-screen bg-[#0d0d0d] text-[#f5f5f5] font-sans px-4 py-6 md:px-12 md:py-10">
-        
+
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-3">
@@ -78,8 +80,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Gold Wallet */}
-        <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-8 shadow-lg mb-8">
+        {/* Wallet */}
+        <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-8 shadow-gold relative overflow-hidden mb-8">
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-[#e0b44a22] to-transparent rounded-2xl pointer-events-none"></div>
           <h2 className="text-lg font-semibold mb-4">Your Gold Wallet</h2>
           <div className="text-center">
             <div className="text-gray-400 mb-1">Current Holdings</div>
@@ -92,26 +95,28 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Chart and Activity */}
+        {/* Chart + Recent Activity */}
         <div className="flex flex-col md:flex-row gap-6 mb-10">
+          {/* Chart */}
           <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 flex-1">
             <h3 className="text-md font-semibold mb-4">Gold Price (Last 12 months)</h3>
             <Line data={chartData} options={chartOptions} />
           </div>
 
+          {/* Recent Activity */}
           <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 flex-1">
             <h3 className="text-md font-semibold mb-4">Recent Activity</h3>
             <div className="flex flex-col gap-4 text-sm text-gray-300">
               <div className="flex justify-between border-b border-[#2a2a2a] pb-2">
-                <div>➔ Bought 1g Gold</div>
+                <div>05 Apr 2025 - Bought 1g Gold</div>
                 <div className="text-[#e0b44a]">€93.21</div>
               </div>
               <div className="flex justify-between border-b border-[#2a2a2a] pb-2">
-                <div>➔ Sold 0.5g Gold</div>
+                <div>15 Mar 2025 - Sold 0.5g Gold</div>
                 <div className="text-[#e0b44a]">€46.00</div>
               </div>
               <div className="flex justify-between">
-                <div>➔ Withdrawal Initiated</div>
+                <div>01 Mar 2025 - Withdrawal</div>
                 <div className="text-[#e0b44a]">€200.00</div>
               </div>
             </div>
