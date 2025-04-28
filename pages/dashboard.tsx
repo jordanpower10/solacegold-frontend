@@ -1,10 +1,14 @@
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip } from 'chart.js'
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip)
 
 export default function Dashboard() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  let timeoutId: NodeJS.Timeout
+
   const goldHoldings = 6.754
   const goldPrice = 2922.01
   const accountValue = 12530.75
@@ -39,64 +43,100 @@ export default function Dashboard() {
     <>
       <Head>
         <title>Dashboard - Solace Gold</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen bg-[#0d0d0d] text-white flex flex-col items-center px-4 py-10 font-sans">
+      <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans relative">
 
-        {/* Logo */}
-        <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-14 h-14 mb-4" />
-
-        {/* Title */}
-        <h1 className="text-2xl font-semibold mb-2">Your account</h1> {/* ✅ Made thinner */}
-        <div className="text-4xl font-semibold tracking-tight mb-6">
-          €{accountValue.toLocaleString('de-DE')}
+        {/* Dropdown Menu */}
+        <div
+          className="absolute top-4 right-6 z-50"
+          onMouseEnter={() => {
+            clearTimeout(timeoutId)
+            setIsMenuOpen(true)
+          }}
+          onMouseLeave={() => {
+            timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
+          }}
+        >
+          <button className="bg-[#e0b44a] text-black font-semibold px-5 py-3 rounded-md shadow-gold hover:bg-yellow-400 transition text-sm">
+            Menu
+          </button>
+          {isMenuOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
+              <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
+              <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
+            </div>
+          )}
         </div>
 
-        {/* Holdings and Daily Change */}
-        <div className="text-gray-400 mb-10 text-md">
-          {goldHoldings} oz{" "}
-          <span className={dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}>
-            {dailyChangePercent >= 0 ? '+' : ''}{dailyChangePercent}%
-          </span>{" "}
-          in the past day
-        </div>
+        {/* Main Content */}
+        <div className="flex flex-col items-center px-4 py-10 mt-20">
 
-        {/* Action Buttons */}
-        <div className="flex gap-6 flex-wrap justify-center mb-10">
-          {/* Deposit */}
-          <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#1f1f1f] transition cursor-pointer">
-            <div className="text-3xl mb-1">€</div>
-            <div className="text-sm">Deposit</div>
+          {/* Logo */}
+          <a href="/" className="mb-6">
+            <img
+              src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png"
+              alt="Solace Gold Logo"
+              className="w-20 h-20" // ✅ Slightly bigger now (was w-14 h-14)
+            />
+          </a>
+
+          {/* Title */}
+          <h1 className="text-2xl font-semibold mb-2">Your account</h1>
+
+          {/* Account Value */}
+          <div className="text-4xl font-semibold tracking-tight mb-6">
+            €{accountValue.toLocaleString('de-DE')}
           </div>
 
-          {/* Withdraw */}
-          <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#1f1f1f] transition cursor-pointer">
-            <div className="text-3xl mb-1">↑</div>
-            <div className="text-sm">Withdraw</div>
+          {/* Holdings and Daily Change */}
+          <div className="text-gray-400 mb-10 text-md">
+            {goldHoldings} oz{" "}
+            <span className={dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}>
+              {dailyChangePercent >= 0 ? '+' : ''}{dailyChangePercent}%
+            </span>{" "}
+            in the past day
           </div>
 
-          {/* Buy Gold */}
-          <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#1f1f1f] transition cursor-pointer">
-            <img src="https://i.postimg.cc/yNXXRbY3/Gold-bar-white.png" alt="Gold Bar" className="w-8 h-8 mb-2" />
-            <div className="text-sm">Buy Gold</div>
+          {/* Action Buttons */}
+          <div className="flex flex-wrap gap-6 justify-center mb-10">
+            {/* Deposit */}
+            <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
+              <div className="text-3xl mb-1">€</div>
+              <div className="text-sm">Deposit</div>
+            </div>
+
+            {/* Withdraw */}
+            <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
+              <div className="text-3xl mb-1">↑</div>
+              <div className="text-sm">Withdraw</div>
+            </div>
+
+            {/* Buy Gold */}
+            <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
+              <img src="https://i.postimg.cc/yNXXRbY3/Gold-bar-white.png" alt="Gold Bar" className="w-8 h-8 mb-2" />
+              <div className="text-sm">Buy Gold</div>
+            </div>
+
+            {/* Sell Gold */}
+            <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
+              <div className="text-3xl mb-1">↓</div>
+              <div className="text-sm">Sell Gold</div>
+            </div>
           </div>
 
-          {/* Sell Gold */}
-          <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#1f1f1f] transition cursor-pointer">
-            <div className="text-3xl mb-1">↓</div>
-            <div className="text-sm">Sell Gold</div>
+          {/* Gold Price Chart Placeholder */}
+          <div className="w-full max-w-2xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6">
+            <div className="flex justify-between mb-4">
+              <h3 className="text-md font-semibold">Gold price</h3>
+              <div className="text-[#e0b44a] font-semibold">€{goldPrice}</div>
+            </div>
+            <div className="text-gray-500 text-center py-10">
+              (Gold price chart loading...)
+            </div>
           </div>
-        </div>
 
-        {/* Gold Price Chart */}
-        <div className="w-full max-w-2xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6">
-          <div className="flex justify-between mb-4">
-            <h3 className="text-md font-semibold">Gold price</h3>
-            <div className="text-[#e0b44a] font-semibold">€{goldPrice}</div>
-          </div>
-          <div className="text-gray-500 text-center py-10">
-            (Gold price chart loading...)
-          </div> {/* ✅ Placeholder chart for now */}
         </div>
 
       </div>
