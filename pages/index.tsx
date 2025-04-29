@@ -67,8 +67,8 @@ export default function Home() {
           <p className="text-gray-400 mb-6 max-w-xl">
             Fully-backed, no vault, no delay. Ownership made effortless
           </p>
-          <a href="/login" className="bg-[#e0b44a] text-black font-bold px-6 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition">
-            Login
+          <a href="/signup" className="bg-[#e0b44a] text-black font-bold px-6 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition">
+            Sign Up
           </a>
         </section>
 
@@ -76,7 +76,7 @@ export default function Home() {
         <section className="px-6 pb-20 flex flex-col items-center gap-8">
           <div className="icon-box w-full md:w-[40%] bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-gold">
             <img src="https://i.postimg.cc/NFd4My3k/Chat-GPT-Image-Apr-25-2025-10-06-09-PM.png" alt="User icon" className="w-16 h-16" />
-            <h3 className="text-lg font-semibold">Create an account</h3>
+            <a href="/login" className="text-lg font-semibold hover:underline">Login</a>
           </div>
           <div className="icon-box w-full md:w-[40%] bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-gold">
             <img src="https://i.postimg.cc/Zn54D2mp/Chat-GPT-Image-Apr-23-2025-10-16-28-PM.png" alt="Euro icon" className="w-20 h-20" />
