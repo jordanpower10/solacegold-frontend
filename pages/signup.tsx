@@ -1,4 +1,39 @@
+// PART 1 of signup.tsx with full country codes + dropdowns
+
 import Head from 'next/head'
+
+const countries = [
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
+  "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
+  "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon",
+  "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia",
+  "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador",
+  "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany",
+  "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary",
+  "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan",
+  "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho",
+  "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali"
+]
+
+const countryCodes = [
+  { code: "+1", name: "United States" },
+  { code: "+44", name: "United Kingdom" },
+  { code: "+353", name: "Ireland" },
+  { code: "+49", name: "Germany" },
+  { code: "+33", name: "France" },
+  { code: "+34", name: "Spain" },
+  { code: "+39", name: "Italy" },
+  { code: "+61", name: "Australia" },
+  { code: "+81", name: "Japan" },
+  { code: "+86", name: "China" },
+  { code: "+91", name: "India" },
+  { code: "+7", name: "Russia" },
+  { code: "+90", name: "Turkey" },
+  { code: "+880", name: "Bangladesh" },
+  { code: "+966", name: "Saudi Arabia" },
+  { code: "+971", name: "UAE" }
+  // Extend this list as needed
+]
 
 export default function Signup() {
   return (
@@ -21,88 +56,62 @@ export default function Signup() {
           </h2>
 
           <form className="flex flex-col gap-4">
-
-            {/* Full Name */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="name">Full Name</label>
               <input type="text" id="name" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
             </div>
 
-            {/* Date of Birth */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="dob">Date of Birth</label>
               <input type="date" id="dob" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
             </div>
 
-            {/* Address */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="address">Address</label>
               <input type="text" id="address" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
             </div>
 
-            {/* Phone Number */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="phone">Phone Number</label>
               <div className="flex gap-2">
-                <select id="countryCode" className="w-24 px-2 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]">
-                  <option value="+353">+353 (IE)</option>
-                  <option value="+44">+44 (UK)</option>
-                  <option value="+1">+1 (US)</option>
-                  <option value="+61">+61 (AU)</option>
-                  <option value="+49">+49 (DE)</option>
-                  <option value="+34">+34 (ES)</option>
-                  <option value="+39">+39 (IT)</option>
-                  {/* Add more if you want later */}
+                <select id="countryCode" className="w-28 px-2 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]">
+                  {countryCodes.map((entry) => (
+                    <option key={entry.code} value={entry.code}>{entry.code} ({entry.name})</option>
+                  ))}
                 </select>
                 <input type="tel" id="phone" className="flex-1 px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
               </div>
             </div>
-
-            {/* Email */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="email">Email</label>
               <input type="email" id="email" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
             </div>
 
-            {/* Nationality */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="nationality">Nationality</label>
               <select id="nationality" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]">
                 <option value="">Select Nationality</option>
-                <option value="Irish">Irish</option>
-                <option value="British">British</option>
-                <option value="American">American</option>
-                <option value="Australian">Australian</option>
-                <option value="German">German</option>
-                <option value="Spanish">Spanish</option>
-                <option value="Italian">Italian</option>
-                {/* Add more countries here */}
+                {countries.map((country) => (
+                  <option key={country} value={country}>{country}</option>
+                ))}
               </select>
             </div>
 
-            {/* Country of Residence */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="residence">Country of Residence</label>
               <select id="residence" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]">
                 <option value="">Select Country</option>
-                <option value="Ireland">Ireland</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="United States">United States</option>
-                <option value="Australia">Australia</option>
-                <option value="Germany">Germany</option>
-                <option value="Spain">Spain</option>
-                <option value="Italy">Italy</option>
-                {/* Add more countries here */}
+                {countries.map((country) => (
+                  <option key={country} value={country}>{country}</option>
+                ))}
               </select>
             </div>
 
-            {/* Create Password */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="password">Create Password</label>
               <input type="password" id="password" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="confirmPassword">Confirm Password</label>
               <input type="password" id="confirmPassword" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
@@ -124,7 +133,6 @@ export default function Signup() {
               </label>
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               className="w-full mt-4 bg-[#e0b44a] text-black font-bold py-2 rounded shadow-gold hover:bg-yellow-400 transition"
@@ -132,7 +140,6 @@ export default function Signup() {
               Create Account
             </button>
 
-            {/* Already have an account link */}
             <p className="text-sm text-center text-gray-500 mt-6">
               Already have an account?{' '}
               <a href="/login" className="text-[#e0b44a] underline">
