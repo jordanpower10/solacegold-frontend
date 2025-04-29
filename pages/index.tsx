@@ -74,10 +74,10 @@ export default function Home() {
 
         {/* Steps Section */}
         <section className="px-6 pb-20 flex flex-col items-center gap-8">
-          <div className="icon-box w-full md:w-[40%] bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-gold">
+          <a href="/login" className="icon-box w-full md:w-[40%] bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-gold">
             <img src="https://i.postimg.cc/NFd4My3k/Chat-GPT-Image-Apr-25-2025-10-06-09-PM.png" alt="User icon" className="w-16 h-16" />
-            <a href="/login" className="text-lg font-semibold hover:underline">Login</a>
-          </div>
+            <div className="text-lg font-semibold">Login</div>
+          </a>
           <div className="icon-box w-full md:w-[40%] bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-gold">
             <img src="https://i.postimg.cc/Zn54D2mp/Chat-GPT-Image-Apr-23-2025-10-16-28-PM.png" alt="Euro icon" className="w-20 h-20" />
             <h3 className="text-lg font-semibold">Deposit funds</h3>
