@@ -11,7 +11,9 @@ export default function Login() {
       <div className="min-h-screen bg-[#0d0d0d] px-4 flex items-center justify-center font-sans">
         <div className="w-full max-w-md bg-[#121212] p-8 rounded-lg shadow-md">
           <div className="flex justify-center mb-6">
-            <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-32 h-auto" />
+            <a href="/">
+              <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-32 h-auto" />
+            </a>
           </div>
           <h2 className="text-2xl font-bold text-center mb-6 text-[#e0b44a]">
             Log in to your account
@@ -47,7 +49,7 @@ export default function Login() {
 
             <p className="text-sm text-center text-gray-500 mt-6">
               Don't have an account?{' '}
-              <a href="/register" className="text-[#e0b44a] underline">
+              <a href="/signup" className="text-[#e0b44a] underline">
                 Sign up
               </a>
             </p>
