@@ -48,11 +48,34 @@ export default function Signup() {
               <input type="date" id="dob" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
             </div>
 
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" htmlFor="residence">Country of Residence</label>
+              <input type="text" id="residence" placeholder="Ireland" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" htmlFor="password">Create Password</label>
+              <input type="password" id="password" placeholder="••••••••" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-1" htmlFor="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirmPassword" placeholder="••••••••" className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]" />
+            </div>
+
             {/* Terms Checkbox */}
             <div className="flex items-start gap-2 mt-2">
               <input type="checkbox" id="terms" required className="mt-1" />
               <label htmlFor="terms" className="text-sm text-gray-400">
                 I agree to the <a href="/terms.pdf" target="_blank" className="text-blue-400 underline">terms and conditions</a>
+              </label>
+            </div>
+
+            {/* KYC Checkbox */}
+            <div className="flex items-start gap-2 mt-2">
+              <input type="checkbox" id="kyc" required className="mt-1" />
+              <label htmlFor="kyc" className="text-sm text-gray-400">
+                I agree to the <a href="/kyc.pdf" target="_blank" className="text-blue-400 underline">KYC checks</a>
               </label>
             </div>
 
