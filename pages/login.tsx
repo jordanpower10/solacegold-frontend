@@ -36,8 +36,11 @@ export default function Login() {
                 password,
               })
 
-              if (res?.ok) router.push("/dashboard")
-              else alert("Invalid login")
+              if (res?.ok) {
+                router.push("/dashboard")
+              } else {
+                alert("Invalid login")
+              }
             }}
           >
             <div>
