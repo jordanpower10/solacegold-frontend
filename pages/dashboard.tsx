@@ -1,9 +1,29 @@
 import Head from 'next/head'
+import { getSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip } from 'chart.js'
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip)
+
+import { GetServerSidePropsContext } from "next"
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+
+  const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: { session },
+  }
+}
 
 export default function Dashboard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -78,7 +98,7 @@ export default function Dashboard() {
             <img
               src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png"
               alt="Solace Gold Logo"
-              className="w-20 h-20" // ✅ Slightly bigger now (was w-14 h-14)
+              className="w-20 h-20"
             />
           </a>
 
@@ -101,25 +121,21 @@ export default function Dashboard() {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-6 justify-center mb-10">
-            {/* Deposit */}
             <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
               <div className="text-3xl mb-1">€</div>
               <div className="text-sm">Deposit</div>
             </div>
 
-            {/* Withdraw */}
             <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
               <div className="text-3xl mb-1">↑</div>
               <div className="text-sm">Withdraw</div>
             </div>
 
-            {/* Buy Gold */}
             <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
               <img src="https://i.postimg.cc/yNXXRbY3/Gold-bar-white.png" alt="Gold Bar" className="w-8 h-8 mb-2" />
               <div className="text-sm">Buy Gold</div>
             </div>
 
-            {/* Sell Gold */}
             <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
               <div className="text-3xl mb-1">↓</div>
               <div className="text-sm">Sell Gold</div>
