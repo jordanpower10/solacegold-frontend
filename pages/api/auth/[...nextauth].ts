@@ -21,7 +21,6 @@ export default NextAuth({
           credentials?.email === user.email &&
           credentials?.password === user.password
         ) {
-          // ✅ Proper object required for successful session
           return {
             id: user.id,
             name: user.name,
@@ -39,6 +38,25 @@ export default NextAuth({
   },
   session: {
     strategy: "jwt",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.email = user.email
+      }
+      return token
+    },
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          email: token.email,
+        },
+      }
+    },
   },
   secret: process.env.NEXTAUTH_SECRET || "super-secret-dev-key",
 })

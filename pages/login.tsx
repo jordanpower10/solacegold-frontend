@@ -36,12 +36,12 @@ export default function Login() {
                 redirect: false,
                 email,
                 password,
+                callbackUrl: "/dashboard"
               })
               console.log("Login response:", res)
 
-              // ✅ This line will fix redirection issues
               if (res?.ok && res.url) {
-                window.location.href = res.url
+                router.replace(res.url) // ✅ fixed redirect logic
               } else {
                 alert("Invalid login")
               }
