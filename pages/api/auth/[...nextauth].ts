@@ -6,7 +6,7 @@ export default NextAuth({
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -21,7 +21,11 @@ export default NextAuth({
           credentials?.email === user.email &&
           credentials?.password === user.password
         ) {
-          return user
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email
+          } // ✅ must return without password
         }
 
         return null
@@ -34,5 +38,5 @@ export default NextAuth({
   session: {
     strategy: "jwt",
   },
-  secret: "your-super-secret-key",
+  secret: process.env.NEXTAUTH_SECRET || "super-secret-dev-key",
 })
