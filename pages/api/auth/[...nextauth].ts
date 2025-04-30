@@ -1,7 +1,7 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -14,7 +14,7 @@ export default NextAuth({
           id: "1",
           name: "Jordan",
           email: "info@solacegold.com",
-          password: "gold123"
+          password: "gold123",
         }
 
         if (
@@ -25,7 +25,6 @@ export default NextAuth({
             id: user.id,
             name: user.name,
             email: user.email,
-            type: "credentials"
           }
         }
 
@@ -40,14 +39,14 @@ export default NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id
         token.email = user.email
       }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       return {
         ...session,
         user: {
@@ -59,4 +58,6 @@ export default NextAuth({
     },
   },
   secret: process.env.NEXTAUTH_SECRET || "super-secret-dev-key",
-})
+}
+
+export default NextAuth(authOptions)
