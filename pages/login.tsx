@@ -39,8 +39,9 @@ export default function Login() {
               })
               console.log("Login response:", res)
 
-              if (res?.ok) {
-                router.push("/dashboard")
+              // ✅ This line will fix redirection issues
+              if (res?.ok && res.url) {
+                window.location.href = res.url
               } else {
                 alert("Invalid login")
               }
