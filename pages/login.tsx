@@ -8,6 +8,25 @@ export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log("🔐 Submitting login for:", email)
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    })
+
+    console.log("📦 Login result:", res)
+
+    if (res?.ok && res.url) {
+      window.location.href = res.url
+    } else {
+      alert("❌ Invalid email or password.")
+    }
+  }
+
   return (
     <>
       <Head>
@@ -26,35 +45,16 @@ export default function Login() {
             Log in to your account
           </h2>
 
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={async (e) => {
-              e.preventDefault()
-              console.log("submitted")
-              console.log("Attempting login:", email, password)
-              const res = await signIn("credentials", {
-                redirect: false,
-                email,
-                password,
-              })
-              console.log("Login response:", res)
-
-              if (res?.ok) {
-                router.push("/dashboard")
-              } else {
-                alert("Invalid login")
-              }
-            }}
-          >
+          <form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="email">Email</label>
               <input
                 type="email"
                 id="email"
-                placeholder="you@example.com"
-                className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
+                required
               />
             </div>
 
@@ -63,10 +63,10 @@ export default function Login() {
               <input
                 type="password"
                 id="password"
-                placeholder="••••••••"
-                className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
+                required
               />
             </div>
 
