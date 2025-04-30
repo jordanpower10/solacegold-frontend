@@ -1,6 +1,13 @@
 import Head from 'next/head'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 export default function Login() {
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
   return (
     <>
       <Head>
@@ -19,7 +26,20 @@ export default function Login() {
             Log in to your account
           </h2>
 
-          <form className="flex flex-col gap-4">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={async (e) => {
+              e.preventDefault()
+              const res = await signIn("credentials", {
+                redirect: false,
+                email,
+                password,
+              })
+
+              if (res?.ok) router.push("/dashboard")
+              else alert("Invalid login")
+            }}
+          >
             <div>
               <label className="block text-sm text-gray-400 mb-1" htmlFor="email">Email</label>
               <input
@@ -27,6 +47,8 @@ export default function Login() {
                 id="email"
                 placeholder="you@example.com"
                 className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -37,6 +59,8 @@ export default function Login() {
                 id="password"
                 placeholder="••••••••"
                 className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
