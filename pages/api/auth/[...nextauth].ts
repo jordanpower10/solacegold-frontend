@@ -21,11 +21,13 @@ export default NextAuth({
           credentials?.email === user.email &&
           credentials?.password === user.password
         ) {
+          // ✅ Proper object required for successful session
           return {
             id: user.id,
             name: user.name,
-            email: user.email
-          } // ✅ must return without password
+            email: user.email,
+            type: "credentials"
+          }
         }
 
         return null
