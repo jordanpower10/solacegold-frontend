@@ -16,12 +16,13 @@ export default function Login() {
       redirect: false,
       email,
       password,
+      callbackUrl: "/dashboard", // ✅ Ensures redirect to dashboard
     })
 
     console.log("📦 Login result:", res)
 
     if (res?.ok && res.url) {
-      window.location.href = res.url
+      router.push(res.url) // ✅ This handles the redirect properly
     } else {
       alert("❌ Invalid email or password.")
     }
