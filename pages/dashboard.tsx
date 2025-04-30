@@ -12,6 +12,7 @@ import {
 
 import { GetServerSidePropsContext } from 'next'
 import { getServerSession } from 'next-auth/next'
+import { signOut } from 'next-auth/react'
 import { authOptions } from './api/auth/[...nextauth]' // ✅ import your config
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip)
@@ -97,6 +98,12 @@ export default function Dashboard() {
             <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
               <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
               <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
+              <button
+                onClick={() => signOut({ callbackUrl: '/login' })}
+                className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+              >
+                Sign Out
+              </button>
             </div>
           )}
         </div>
