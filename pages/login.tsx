@@ -36,12 +36,11 @@ export default function Login() {
                 redirect: false,
                 email,
                 password,
-                callbackUrl: "/dashboard"
               })
               console.log("Login response:", res)
 
-              if (res?.ok && res.url) {
-                router.replace(res.url) // ✅ fixed redirect logic
+              if (res?.ok) {
+                router.push("/dashboard")
               } else {
                 alert("Invalid login")
               }
