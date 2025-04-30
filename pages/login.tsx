@@ -30,11 +30,14 @@ export default function Login() {
             className="flex flex-col gap-4"
             onSubmit={async (e) => {
               e.preventDefault()
+              console.log("submitted")
+              console.log("Attempting login:", email, password)
               const res = await signIn("credentials", {
                 redirect: false,
                 email,
                 password,
               })
+              console.log("Login response:", res)
 
               if (res?.ok) {
                 router.push("/dashboard")
