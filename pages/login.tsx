@@ -1,30 +1,29 @@
 import Head from 'next/head'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { supabase } from '../lib/supabaseClient'
 
 export default function Login() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("🔐 Submitting login for:", email)
+    setError("")
 
-    const res = await signIn("credentials", {
-      redirect: false,
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
-      callbackUrl: "/dashboard", // ✅ Ensures redirect to dashboard
     })
 
-    console.log("📦 Login result:", res)
-
-    if (res?.ok && res.url) {
-      router.push(res.url) // ✅ This handles the redirect properly
+    if (error) {
+      console.error("❌ Login failed:", error)
+      setError("Invalid email or password.")
     } else {
-      alert("❌ Invalid email or password.")
+      console.log("✅ Login success:", data)
+      router.push("/dashboard")
     }
   }
 
@@ -70,6 +69,8 @@ export default function Login() {
                 required
               />
             </div>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
 
             <button
               type="submit"
