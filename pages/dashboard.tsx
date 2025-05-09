@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { Line } from 'react-chartjs-2'
+import { supabase } from '../lib/supabaseClient'
 import {
   Chart,
   CategoryScale,
@@ -11,33 +13,29 @@ import {
   Legend,
 } from 'chart.js'
 
-import { GetServerSidePropsContext } from 'next'
-import { getServerSession } from 'next-auth/next'
 import { signOut } from 'next-auth/react'
-import { authOptions } from './api/auth/[...nextauth]'
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions)
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: { session },
-  }
-}
-
 export default function Dashboard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const router = useRouter()
   let timeoutId: NodeJS.Timeout
+
+  // 🔐 Supabase session check
+  useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (!session) {
+        router.push('/login')
+      }
+    }
+
+    checkSession()
+  }, [router])
 
   const goldHoldings = 6.754
   const goldPrice = 2922.01
