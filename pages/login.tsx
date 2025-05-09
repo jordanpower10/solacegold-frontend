@@ -1,17 +1,28 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
 export default function Login() {
   const router = useRouter()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  // Redirect if already logged in
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.push('/dashboard')
+      }
+    })
+  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
+    setLoading(true)
+    setError('')
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -19,11 +30,12 @@ export default function Login() {
     })
 
     if (error) {
-      console.error("❌ Login failed:", error)
-      setError("Invalid email or password.")
+      console.error('❌ Login failed:', error)
+      setError('Invalid email or password.')
+      setLoading(false)
     } else {
-      console.log("✅ Login success:", data)
-      router.push("/dashboard")
+      console.log('✅ Login success:', data)
+      router.push('/dashboard')
     }
   }
 
@@ -75,8 +87,9 @@ export default function Login() {
             <button
               type="submit"
               className="w-full mt-4 bg-[#e0b44a] text-black font-bold py-2 rounded shadow-gold hover:bg-yellow-400 transition"
+              disabled={loading}
             >
-              Log In
+              {loading ? 'Logging in...' : 'Log In'}
             </button>
 
             <p className="text-sm text-center text-gray-500 mt-6">
