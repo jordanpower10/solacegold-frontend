@@ -13,8 +13,6 @@ import {
   Legend,
 } from 'chart.js'
 
-import { signOut } from 'next-auth/react'
-
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 export default function Dashboard() {
@@ -113,7 +111,10 @@ export default function Dashboard() {
               <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
               <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
               <button
-                onClick={() => signOut({ callbackUrl: '/login' })}
+                onClick={async () => {
+                  await supabase.auth.signOut()
+                  router.push('/login')
+                }}
                 className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
               >
                 Sign Out
