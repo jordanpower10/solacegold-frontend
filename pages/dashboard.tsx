@@ -8,14 +8,15 @@ import {
   PointElement,
   LineElement,
   Tooltip,
+  Legend,
 } from 'chart.js'
 
 import { GetServerSidePropsContext } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { signOut } from 'next-auth/react'
-import { authOptions } from './api/auth/[...nextauth]' // ✅ import your config
+import { authOptions } from './api/auth/[...nextauth]'
 
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip)
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions)
@@ -60,14 +61,29 @@ export default function Dashboard() {
     ],
   }
 
-  const chartOptions = {
+  const chartOptions: any = {
+    responsive: true,
     plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false },
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        backgroundColor: '#111',
+        titleColor: '#e0b44a',
+        bodyColor: '#fff',
+      },
     },
     scales: {
-      x: { ticks: { display: false }, grid: { display: false } },
-      y: { ticks: { display: false }, grid: { display: false } },
+      x: {
+        ticks: { color: '#999', display: false },
+        grid: { color: '#333', display: false },
+      },
+      y: {
+        ticks: { color: '#999', display: false },
+        grid: { color: '#333', display: false },
+      },
     },
   }
 
@@ -152,15 +168,13 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Gold Chart Placeholder */}
+          {/* Gold Chart */}
           <div className="w-full max-w-2xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6">
             <div className="flex justify-between mb-4">
               <h3 className="text-md font-semibold">Gold price</h3>
               <div className="text-[#e0b44a] font-semibold">€{goldPrice}</div>
             </div>
-            <div className="text-gray-500 text-center py-10">
-              (Gold price chart loading...)
-            </div>
+            <Line data={chartData} options={chartOptions} />
           </div>
         </div>
       </div>
