@@ -17,27 +17,55 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, L
 
 export default function Dashboard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [userName, setUserName] = useState('')
+  const [cashBalance, setCashBalance] = useState(0)
+  const [goldBalance, setGoldBalance] = useState(0)
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
-  // 🔐 Supabase session check
+  // 🔐 Supabase session check and data fetching
   useEffect(() => {
-    const checkSession = async () => {
+    const fetchData = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession()
 
       if (!session) {
         router.push('/login')
+        return
       }
+
+      const userId = session.user.id
+
+      // Fetch user profile
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', userId)
+        .single()
+
+      setUserName(profileData?.full_name || 'User')
+
+      // Fetch wallets
+      const { data: wallets } = await supabase
+        .from('wallets')
+        .select('wallet_type, balance')
+        .eq('user_id', userId)
+
+      wallets?.forEach((wallet) => {
+        if (wallet.wallet_type === 'cash') {
+          setCashBalance(wallet.balance)
+        } else if (wallet.wallet_type === 'gold') {
+          setGoldBalance(wallet.balance)
+        }
+      })
     }
 
-    checkSession()
+    fetchData()
   }, [router])
 
-  const goldHoldings = 6.754
   const goldPrice = 2922.01
-  const accountValue = 12530.75
+  const accountValue = cashBalance + goldBalance * goldPrice
   const dailyChangePercent = 1.42
 
   const chartData = {
@@ -133,13 +161,13 @@ export default function Dashboard() {
             />
           </a>
 
-          <h1 className="text-2xl font-semibold mb-2">Your account</h1>
+          <h1 className="text-2xl font-semibold mb-2">Hi {userName}</h1>
           <div className="text-4xl font-semibold tracking-tight mb-6">
             €{accountValue.toLocaleString('de-DE')}
           </div>
 
           <div className="text-gray-400 mb-10 text-md">
-            {goldHoldings} oz{' '}
+            {goldBalance} oz{' '}
             <span className={dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}>
               {dailyChangePercent >= 0 ? '+' : ''}
               {dailyChangePercent}%
