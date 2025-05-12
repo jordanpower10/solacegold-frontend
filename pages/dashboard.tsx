@@ -117,14 +117,14 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Action Buttons with Gold Icons */}
+          {/* Action Buttons with New Gold Icons */}
           <div className="grid grid-cols-2 gap-6 mb-10">
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
               <img src="https://i.postimg.cc/L87SP2kp/gold-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
               <span>Deposit Funds</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/y8hhg8CJ/gold-transparent-bank-withdrawal.png" alt="Withdraw Icon" className="w-8 h-8 mb-2 mix-blend-multiply" />
+              <img src="https://i.postimg.cc/0NKzK93g/withdraw-funds-image.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
               <span>Withdraw Funds</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
@@ -132,7 +132,7 @@ export default function Dashboard() {
               <span>Buy Gold</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/wvFg7J0W/gold-withdrawal-sign.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2 mix-blend-multiply" />
+              <img src="https://i.postimg.cc/wTx3cXPQ/sell-gold-image.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2" />
               <span>Sell Gold</span>
             </button>
           </div>
@@ -155,7 +155,7 @@ export default function Dashboard() {
           </div>
 
           {/* Recent Transactions */}
-          <div className="bg-black border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md">
+          <div className="bg-black border border-[#2a2a2a] rounded-2l p-6 w-full max-w-md">
             <h2 className="text-md font-semibold mb-4">Recent Transactions</h2>
             <div className="text-sm text-gray-400 mb-2">Bought 0.1 oz – €290.20</div>
             <div className="text-sm text-gray-400">Deposited €500</div>
