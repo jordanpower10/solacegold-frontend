@@ -72,46 +72,51 @@ export default function Dashboard() {
 
           {/* Balances */}
           <div className="grid grid-cols-2 gap-6 mb-10">
-            <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-40">
-              <div className="text-sm text-gray-400 mb-2">Cash Balance</div>
-              <div className="text-xl font-bold">€{cashBalance.toLocaleString('de-DE')}</div>
+            <div className="bg-black border border-[#2a2a2a] rounded-2xl p-6 w-40 flex flex-col items-center">
+              <div className="text-2xl font-bold mb-1">€{cashBalance.toLocaleString('de-DE')}</div>
+              <div className="text-sm text-gray-400">Cash Balance</div>
             </div>
-            <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-40">
-              <div className="text-sm text-gray-400 mb-2">Gold</div>
-              <div className="text-xl font-bold">{goldBalance.toFixed(2)} oz</div>
+            <div className="bg-black border border-[#2a2a2a] rounded-2xl p-6 w-40 flex flex-col items-center">
+              <div className="text-2xl font-bold mb-1">{goldBalance.toFixed(2)} oz</div>
+              <div className="text-sm text-gray-400">Gold</div>
             </div>
           </div>
 
           {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-6 mb-10">
-            <button className="bg-[#121212] border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
               Deposit Funds
             </button>
-            <button className="bg-[#121212] border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
               Withdraw Funds
             </button>
-            <button className="bg-[#121212] border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
               Buy Gold
             </button>
-            <button className="bg-[#121212] border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
               Sell Gold
             </button>
           </div>
 
           {/* Gold Holdings */}
-          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md mb-10">
-            <h2 className="text-md font-semibold mb-2">Gold Holdings</h2>
-            <p className="text-sm text-gray-400">{goldBalance.toFixed(2)} oz (worth <span className="text-[#e0b44a]">€{(goldBalance * goldPrice).toLocaleString('de-DE')}</span>)</p>
-            <p className={`mt-2 ${dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-              {dailyChangePercent >= 0 ? '+' : ''}{dailyChangePercent}% Today
-            </p>
-            <div className="flex justify-center mt-4">
-              <img src="https://i.postimg.cc/wTjhf7WF/goldbars.png" alt="Gold Bars" className="w-20" />
+          <div className="bg-black border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md mb-10 flex items-center justify-between">
+            {/* Text Side */}
+            <div className="text-left">
+              <h2 className="text-md font-semibold mb-2">Gold Holdings</h2>
+              <p className="text-sm text-gray-400">
+                {goldBalance.toFixed(2)} oz (worth <span className="text-[#e0b44a]">€{(goldBalance * goldPrice).toLocaleString('de-DE')}</span>)
+              </p>
+              <p className={`mt-2 ${dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {dailyChangePercent >= 0 ? '+' : ''}{dailyChangePercent}% Today
+              </p>
             </div>
+
+            {/* Image Side */}
+            <img src="https://i.postimg.cc/YSKtGdRq/gold-bars.png" alt="Gold Bars" className="w-20 ml-4" />
           </div>
 
           {/* Recent Transactions */}
-          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md">
+          <div className="bg-black border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md">
             <h2 className="text-md font-semibold mb-4">Recent Transactions</h2>
             <div className="text-sm text-gray-400 mb-2">Bought 0.1 oz – €290.20</div>
             <div className="text-sm text-gray-400">Deposited €500</div>
