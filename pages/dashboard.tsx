@@ -7,8 +7,9 @@ export default function Dashboard() {
   const [userName, setUserName] = useState('User')
   const [cashBalance, setCashBalance] = useState(0)
   const [goldBalance, setGoldBalance] = useState(0)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const router = useRouter()
+  let timeoutId: NodeJS.Timeout
 
   const goldPrice = 2922.01
   const dailyChangePercent = 1.42
@@ -60,15 +61,24 @@ export default function Dashboard() {
 
         {/* Top Navigation */}
         <div className="flex justify-between items-center p-4 bg-black relative">
-          {/* Logo with dropdown */}
+          {/* Logo with hover dropdown */}
           <div
             className="relative"
-            onMouseEnter={() => setIsDropdownOpen(true)}
-            onMouseLeave={() => setIsDropdownOpen(false)}
+            onMouseEnter={() => {
+              clearTimeout(timeoutId)
+              setIsMenuOpen(true)
+            }}
+            onMouseLeave={() => {
+              timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
+            }}
           >
-            <img src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-16 h-16 cursor-pointer" />
-            {isDropdownOpen && (
-              <div className="absolute mt-2 w-32 bg-gray-800 rounded-lg shadow-lg">
+            <img
+              src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
+              alt="Solace Gold Logo"
+              className="w-20 h-20 cursor-pointer"
+            />
+            {isMenuOpen && (
+              <div className="absolute left-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
                 <button
                   onClick={async () => {
                     await supabase.auth.signOut()
@@ -82,10 +92,10 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Balance top right */}
-          <div className="text-[#e0b44a] font-semibold text-lg flex items-center space-x-1">
-            <span>€</span>
-            <span>{goldPrice.toLocaleString('de-DE')}</span>
+          {/* Balance top right (fixed) */}
+          <div className="absolute top-6 right-6 flex items-center space-x-1">
+            <span className="text-[#e0b44a] font-semibold text-lg">€</span>
+            <span className="text-[#e0b44a] font-semibold text-lg">{goldPrice.toLocaleString('de-DE')}</span>
             <span className="text-gray-400 text-sm">/oz</span>
           </div>
         </div>
@@ -107,22 +117,22 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Action Buttons with Gold Icons */}
+          {/* Action Buttons with New Gold Icons */}
           <div className="grid grid-cols-2 gap-6 mb-10">
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/Kc3SLdq7/transaprent-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2 filter brightness-0 invert sepia saturate-300 hue-rotate-10" />
+              <img src="https://i.postimg.cc/L87SP2kp/gold-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
               <span>Deposit Funds</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/pdHgtrRq/transparent-bank-withdrawal.png" alt="Withdraw Icon" className="w-8 h-8 mb-2 filter brightness-0 invert sepia saturate-300 hue-rotate-10" />
+              <img src="https://i.postimg.cc/y8hhg8CJ/gold-transparent-bank-withdrawal.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
               <span>Withdraw Funds</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/280sN2MX/Gold-bar-white.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2 filter brightness-0 invert sepia saturate-300 hue-rotate-10" />
+              <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2" />
               <span>Buy Gold</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/Lsxv08Xq/transparent-withdrawal.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2 filter brightness-0 invert sepia saturate-300 hue-rotate-10" />
+              <img src="https://i.postimg.cc/wvFg7J0W/gold-withdrawal-sign.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2" />
               <span>Sell Gold</span>
             </button>
           </div>
@@ -145,7 +155,7 @@ export default function Dashboard() {
           </div>
 
           {/* Recent Transactions */}
-          <div className="bg-black border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md">
+          <div className="bg-black border border-[#2a2a2a] rounded-2l p-6 w-full max-w-md">
             <h2 className="text-md font-semibold mb-4">Recent Transactions</h2>
             <div className="text-sm text-gray-400 mb-2">Bought 0.1 oz – €290.20</div>
             <div className="text-sm text-gray-400">Deposited €500</div>
