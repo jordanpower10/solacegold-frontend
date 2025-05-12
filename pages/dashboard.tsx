@@ -4,12 +4,10 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 
 export default function Dashboard() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [userName, setUserName] = useState('User')
   const [cashBalance, setCashBalance] = useState(0)
   const [goldBalance, setGoldBalance] = useState(0)
   const router = useRouter()
-  let timeoutId: NodeJS.Timeout
 
   const goldPrice = 2922.01
   const dailyChangePercent = 1.42
@@ -50,8 +48,6 @@ export default function Dashboard() {
     fetchData()
   }, [router])
 
-  const accountValue = cashBalance + goldBalance * goldPrice
-
   return (
     <>
       <Head>
@@ -59,40 +55,13 @@ export default function Dashboard() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-white font-sans relative">
+      <div className="min-h-screen flex flex-col bg-black text-white font-sans relative">
 
         {/* Top Navigation */}
-        <div className="flex justify-between items-center p-4 bg-black shadow-md">
+        <div className="flex justify-between items-center p-4 bg-black">
           <img src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-10 h-10" />
-          <div className="text-gold font-semibold text-lg">€{goldPrice.toLocaleString('de-DE')}/oz</div>
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              clearTimeout(timeoutId)
-              setIsMenuOpen(true)
-            }}
-            onMouseLeave={() => {
-              timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
-            }}
-          >
-            <button className="bg-[#e0b44a] text-black font-semibold px-4 py-2 rounded-md text-sm">
-              Menu
-            </button>
-            {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-gray-800 rounded-lg shadow-lg">
-                <a href="/about" className="block px-4 py-2 text-white hover:bg-gray-700">About Us</a>
-                <a href="/contact" className="block px-4 py-2 text-white hover:bg-gray-700">Contact Us</a>
-                <button
-                  onClick={async () => {
-                    await supabase.auth.signOut()
-                    router.push('/login')
-                  }}
-                  className="w-full text-left px-4 py-2 text-white hover:bg-gray-700"
-                >
-                  Sign Out
-                </button>
-              </div>
-            )}
+          <div className="text-[#e0b44a] font-semibold text-lg">
+            €{goldPrice.toLocaleString('de-DE')}/oz
           </div>
         </div>
 
