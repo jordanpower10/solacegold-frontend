@@ -17,7 +17,11 @@ export default function AdminPage() {
         return
       }
 
-      const { data, error } = await supabase.from('profiles').select('id, email, role')
+      // ✅ Fetch from auth.users instead of profiles
+      const { data, error } = await supabase
+        .from('users')  // IMPORTANT: needs RLS open or Supabase Admin Key
+        .select('id, email, created_at')
+
       if (error) {
         console.error('❌ Error fetching users:', error)
       } else {
@@ -86,14 +90,14 @@ export default function AdminPage() {
                 <thead>
                   <tr className="text-left border-b border-[#333]">
                     <th className="py-2 px-3">Email</th>
-                    <th className="py-2 px-3">Role</th>
+                    <th className="py-2 px-3">Registered</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((user) => (
                     <tr key={user.id} className="border-b border-[#2a2a2a] hover:bg-[#1d1d1d]">
                       <td className="py-3 px-3">{user.email}</td>
-                      <td className="py-3 px-3 capitalize">{user.role}</td>
+                      <td className="py-3 px-3">{new Date(user.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
