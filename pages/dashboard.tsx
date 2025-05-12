@@ -59,7 +59,7 @@ export default function Dashboard() {
 
         {/* Top Navigation */}
         <div className="flex justify-between items-center p-4 bg-black">
-          <img src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-10 h-10" />
+          <img src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-14 h-14" />
           <div className="text-[#e0b44a] font-semibold text-lg">
             €{goldPrice.toLocaleString('de-DE')}/oz
           </div>
@@ -82,19 +82,23 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons with Icons */}
           <div className="grid grid-cols-2 gap-6 mb-10">
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
-              Deposit Funds
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
+              <img src="https://i.postimg.cc/Kc3SLdq7/transaprent-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
+              <span>Deposit Funds</span>
             </button>
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
-              Withdraw Funds
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
+              <img src="https://i.postimg.cc/pdHgtrRq/transparent-bank-withdrawal.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
+              <span>Withdraw Funds</span>
             </button>
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
-              Buy Gold
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
+              <img src="https://i.postimg.cc/280sN2MX/Gold-bar-white.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2" />
+              <span>Buy Gold</span>
             </button>
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
-              Sell Gold
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
+              <img src="https://i.postimg.cc/Lsxv08Xq/transparent-withdrawal.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2" />
+              <span>Sell Gold</span>
             </button>
           </div>
 
