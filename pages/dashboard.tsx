@@ -14,6 +14,9 @@ export default function Dashboard() {
   const goldPrice = 2922.01
   const dailyChangePercent = 1.42
 
+  // 🧠 New: Calculate full account value
+  const accountValue = cashBalance + (goldBalance * goldPrice)
+
   useEffect(() => {
     const fetchData = async () => {
       const { data: { session } } = await supabase.auth.getSession()
@@ -92,11 +95,10 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Balance top right (fixed) */}
+          {/* 🧠 Top right updated to show full account value */}
           <div className="absolute top-6 right-6 flex items-center space-x-1">
             <span className="text-[#e0b44a] font-semibold text-lg">€</span>
-            <span className="text-[#e0b44a] font-semibold text-lg">{goldPrice.toLocaleString('de-DE')}</span>
-            <span className="text-gray-400 text-sm">/oz</span>
+            <span className="text-[#e0b44a] font-semibold text-lg">{accountValue.toLocaleString('de-DE')}</span>
           </div>
         </div>
 
@@ -117,7 +119,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Action Buttons with New Gold Icons */}
+          {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-6 mb-10">
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
               <img src="https://i.postimg.cc/L87SP2kp/gold-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
@@ -139,7 +141,6 @@ export default function Dashboard() {
 
           {/* Gold Holdings */}
           <div className="bg-black border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md mb-10 flex items-center justify-between">
-            {/* Text Side */}
             <div className="text-left">
               <h2 className="text-md font-semibold mb-2">Gold Holdings</h2>
               <p className="text-sm text-gray-400">
@@ -150,12 +151,11 @@ export default function Dashboard() {
               </p>
             </div>
 
-            {/* Image Side */}
             <img src="https://i.postimg.cc/YSKtGdRq/gold-bars.png" alt="Gold Bars" className="w-20 ml-4" />
           </div>
 
           {/* Recent Transactions */}
-          <div className="bg-black border border-[#2a2a2a] rounded-2l p-6 w-full max-w-md">
+          <div className="bg-black border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md">
             <h2 className="text-md font-semibold mb-4">Recent Transactions</h2>
             <div className="text-sm text-gray-400 mb-2">Bought 0.1 oz – €290.20</div>
             <div className="text-sm text-gray-400">Deposited €500</div>
