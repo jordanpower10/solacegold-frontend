@@ -1,34 +1,22 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Line } from 'react-chartjs-2'
 import { supabase } from '../lib/supabaseClient'
-import {
-  Chart,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-  Legend,
-} from 'chart.js'
-
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 export default function Dashboard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState('User')
   const [cashBalance, setCashBalance] = useState(0)
   const [goldBalance, setGoldBalance] = useState(0)
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
-  // 🔐 Supabase session check and data fetching
+  const goldPrice = 2922.01
+  const dailyChangePercent = 1.42
+
   useEffect(() => {
     const fetchData = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+      const { data: { session } } = await supabase.auth.getSession()
 
       if (!session) {
         router.push('/login')
@@ -37,7 +25,6 @@ export default function Dashboard() {
 
       const userId = session.user.id
 
-      // Fetch user profile
       const { data: profileData } = await supabase
         .from('profiles')
         .select('full_name')
@@ -46,7 +33,6 @@ export default function Dashboard() {
 
       setUserName(profileData?.full_name || 'User')
 
-      // Fetch wallets
       const { data: wallets } = await supabase
         .from('wallets')
         .select('wallet_type, balance')
@@ -64,52 +50,7 @@ export default function Dashboard() {
     fetchData()
   }, [router])
 
-  const goldPrice = 2922.01
   const accountValue = cashBalance + goldBalance * goldPrice
-  const dailyChangePercent = 1.42
-
-  const chartData = {
-    labels: Array.from({ length: 20 }, () => ''),
-    datasets: [
-      {
-        label: 'Gold Price (EUR)',
-        data: [
-          2500, 2520, 2530, 2545, 2560, 2575, 2580, 2595, 2610, 2625,
-          2650, 2680, 2700, 2720, 2750, 2780, 2820, 2850, 2890, 2922,
-        ],
-        borderColor: '#e0b44a',
-        backgroundColor: 'transparent',
-        tension: 0.4,
-        pointRadius: 0,
-      },
-    ],
-  }
-
-  const chartOptions: any = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        backgroundColor: '#111',
-        titleColor: '#e0b44a',
-        bodyColor: '#fff',
-      },
-    },
-    scales: {
-      x: {
-        ticks: { color: '#999', display: false },
-        grid: { color: '#333', display: false },
-      },
-      y: {
-        ticks: { color: '#999', display: false },
-        grid: { color: '#333', display: false },
-      },
-    },
-  }
 
   return (
     <>
@@ -118,92 +59,101 @@ export default function Dashboard() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans relative">
+      <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-white font-sans relative">
 
-        {/* Dropdown */}
-        <div
-          className="absolute top-4 right-6 z-50"
-          onMouseEnter={() => {
-            clearTimeout(timeoutId)
-            setIsMenuOpen(true)
-          }}
-          onMouseLeave={() => {
-            timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
-          }}
-        >
-          <button className="bg-[#e0b44a] text-black font-semibold px-5 py-3 rounded-md shadow-gold hover:bg-yellow-400 transition text-sm">
-            Menu
-          </button>
-          {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
-              <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
-              <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
-              <button
-                onClick={async () => {
-                  await supabase.auth.signOut()
-                  router.push('/login')
-                }}
-                className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
-              >
-                Sign Out
-              </button>
-            </div>
-          )}
+        {/* Top Navigation */}
+        <div className="flex justify-between items-center p-4 bg-black shadow-md">
+          <img src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-10 h-10" />
+          <div className="text-gold font-semibold text-lg">€{goldPrice.toLocaleString('de-DE')}/oz</div>
+          <div
+            className="relative"
+            onMouseEnter={() => {
+              clearTimeout(timeoutId)
+              setIsMenuOpen(true)
+            }}
+            onMouseLeave={() => {
+              timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
+            }}
+          >
+            <button className="bg-[#e0b44a] text-black font-semibold px-4 py-2 rounded-md text-sm">
+              Menu
+            </button>
+            {isMenuOpen && (
+              <div className="absolute right-0 mt-2 w-40 bg-gray-800 rounded-lg shadow-lg">
+                <a href="/about" className="block px-4 py-2 text-white hover:bg-gray-700">About Us</a>
+                <a href="/contact" className="block px-4 py-2 text-white hover:bg-gray-700">Contact Us</a>
+                <button
+                  onClick={async () => {
+                    await supabase.auth.signOut()
+                    router.push('/login')
+                  }}
+                  className="w-full text-left px-4 py-2 text-white hover:bg-gray-700"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="flex flex-col items-center px-4 py-10 mt-20">
-          <a href="/" className="mb-6">
-            <img
-              src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png"
-              alt="Solace Gold Logo"
-              className="w-20 h-20"
-            />
-          </a>
+        {/* Main Content */}
+        <div className="flex flex-col items-center text-center py-10 px-4">
+          <h1 className="text-3xl font-bold mb-2">Hi {userName},</h1>
+          <p className="text-gray-400 mb-6 text-lg">Your Balance</p>
 
-          <h1 className="text-2xl font-semibold mb-2">Hi {userName}</h1>
-          <div className="text-4xl font-semibold tracking-tight mb-6">
-            €{accountValue.toLocaleString('de-DE')}
-          </div>
-
-          <div className="text-gray-400 mb-10 text-md">
-            {goldBalance} oz{' '}
-            <span className={dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}>
-              {dailyChangePercent >= 0 ? '+' : ''}
-              {dailyChangePercent}%
-            </span>{' '}
-            in the past day
+          {/* Balances */}
+          <div className="grid grid-cols-2 gap-6 mb-10">
+            <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-40">
+              <div className="text-sm text-gray-400 mb-2">Cash Balance</div>
+              <div className="text-xl font-bold">€{cashBalance.toLocaleString('de-DE')}</div>
+            </div>
+            <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-40">
+              <div className="text-sm text-gray-400 mb-2">Gold</div>
+              <div className="text-xl font-bold">{goldBalance.toFixed(2)} oz</div>
+            </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap gap-6 justify-center mb-10">
-            <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
-              <div className="text-3xl mb-1">€</div>
-              <div className="text-sm">Deposit</div>
-            </div>
-            <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
-              <div className="text-3xl mb-1">↑</div>
-              <div className="text-sm">Withdraw</div>
-            </div>
-            <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
-              <img src="https://i.postimg.cc/yNXXRbY3/Gold-bar-white.png" alt="Gold Bar" className="w-8 h-8 mb-2" />
-              <div className="text-sm">Buy Gold</div>
-            </div>
-            <div className="flex flex-col items-center justify-center w-28 h-28 bg-[#121212] border border-[#2a2a2a] rounded-xl hover:bg-[#e0b44a] hover:border-[#e0b44a] hover:text-black transition-all duration-300 cursor-pointer">
-              <div className="text-3xl mb-1">↓</div>
-              <div className="text-sm">Sell Gold</div>
+          <div className="grid grid-cols-2 gap-6 mb-10">
+            <button className="bg-[#121212] border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
+              Deposit Funds
+            </button>
+            <button className="bg-[#121212] border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
+              Withdraw Funds
+            </button>
+            <button className="bg-[#121212] border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
+              Buy Gold
+            </button>
+            <button className="bg-[#121212] border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40">
+              Sell Gold
+            </button>
+          </div>
+
+          {/* Gold Holdings */}
+          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md mb-10">
+            <h2 className="text-md font-semibold mb-2">Gold Holdings</h2>
+            <p className="text-sm text-gray-400">{goldBalance.toFixed(2)} oz (worth <span className="text-[#e0b44a]">€{(goldBalance * goldPrice).toLocaleString('de-DE')}</span>)</p>
+            <p className={`mt-2 ${dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {dailyChangePercent >= 0 ? '+' : ''}{dailyChangePercent}% Today
+            </p>
+            <div className="flex justify-center mt-4">
+              <img src="https://i.postimg.cc/wTjhf7WF/goldbars.png" alt="Gold Bars" className="w-20" />
             </div>
           </div>
 
-          {/* Gold Chart */}
-          <div className="w-full max-w-2xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6">
-            <div className="flex justify-between mb-4">
-              <h3 className="text-md font-semibold">Gold price</h3>
-              <div className="text-[#e0b44a] font-semibold">€{goldPrice}</div>
-            </div>
-            <Line data={chartData} options={chartOptions} />
+          {/* Recent Transactions */}
+          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-md">
+            <h2 className="text-md font-semibold mb-4">Recent Transactions</h2>
+            <div className="text-sm text-gray-400 mb-2">Bought 0.1 oz – €290.20</div>
+            <div className="text-sm text-gray-400">Deposited €500</div>
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className="text-center text-xs text-gray-600 mt-auto mb-4">
+          © 2025 SolaceGold. All rights reserved.
+        </footer>
+
       </div>
     </>
   )
