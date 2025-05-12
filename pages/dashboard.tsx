@@ -7,6 +7,7 @@ export default function Dashboard() {
   const [userName, setUserName] = useState('User')
   const [cashBalance, setCashBalance] = useState(0)
   const [goldBalance, setGoldBalance] = useState(0)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const router = useRouter()
 
   const goldPrice = 2922.01
@@ -58,10 +59,34 @@ export default function Dashboard() {
       <div className="min-h-screen flex flex-col bg-black text-white font-sans relative">
 
         {/* Top Navigation */}
-        <div className="flex justify-between items-center p-4 bg-black">
-          <img src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-14 h-14" />
-          <div className="text-[#e0b44a] font-semibold text-lg">
-            €{goldPrice.toLocaleString('de-DE')}/oz
+        <div className="flex justify-between items-center p-4 bg-black relative">
+          {/* Logo with dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => setIsDropdownOpen(true)}
+            onMouseLeave={() => setIsDropdownOpen(false)}
+          >
+            <img src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-16 h-16 cursor-pointer" />
+            {isDropdownOpen && (
+              <div className="absolute mt-2 w-32 bg-gray-800 rounded-lg shadow-lg">
+                <button
+                  onClick={async () => {
+                    await supabase.auth.signOut()
+                    router.push('/login')
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Balance top right */}
+          <div className="text-[#e0b44a] font-semibold text-lg flex items-center space-x-1">
+            <span>€</span>
+            <span>{goldPrice.toLocaleString('de-DE')}</span>
+            <span className="text-gray-400 text-sm">/oz</span>
           </div>
         </div>
 
@@ -82,22 +107,22 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Action Buttons with Icons */}
+          {/* Action Buttons with Gold Icons */}
           <div className="grid grid-cols-2 gap-6 mb-10">
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/Kc3SLdq7/transaprent-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
+              <img src="https://i.postimg.cc/Kc3SLdq7/transaprent-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2 filter brightness-0 invert sepia saturate-300 hue-rotate-10" />
               <span>Deposit Funds</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/pdHgtrRq/transparent-bank-withdrawal.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
+              <img src="https://i.postimg.cc/pdHgtrRq/transparent-bank-withdrawal.png" alt="Withdraw Icon" className="w-8 h-8 mb-2 filter brightness-0 invert sepia saturate-300 hue-rotate-10" />
               <span>Withdraw Funds</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/280sN2MX/Gold-bar-white.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2" />
+              <img src="https://i.postimg.cc/280sN2MX/Gold-bar-white.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2 filter brightness-0 invert sepia saturate-300 hue-rotate-10" />
               <span>Buy Gold</span>
             </button>
             <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
-              <img src="https://i.postimg.cc/Lsxv08Xq/transparent-withdrawal.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2" />
+              <img src="https://i.postimg.cc/Lsxv08Xq/transparent-withdrawal.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2 filter brightness-0 invert sepia saturate-300 hue-rotate-10" />
               <span>Sell Gold</span>
             </button>
           </div>
