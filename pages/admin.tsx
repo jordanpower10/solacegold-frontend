@@ -37,7 +37,7 @@ export default function AdminPage() {
       // Fetch all users from profiles
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
-        .select('id, email, full_name')
+        .select('id, email')  // ✅ FIXED - removed full_name
 
       if (profilesError) {
         console.error('❌ Error fetching profiles:', profilesError)
@@ -68,7 +68,6 @@ export default function AdminPage() {
         return {
           id: profile.id,
           email: profile.email,
-          full_name: profile.full_name,
           cashBalance,
           goldBalance,
           totalValue
@@ -179,7 +178,6 @@ export default function AdminPage() {
             )}
           </div>
         </div>
-
       </div>
     </>
   )
