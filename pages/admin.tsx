@@ -7,10 +7,11 @@ export default function AdminPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [users, setUsers] = useState<any[]>([])
   const [siteValue, setSiteValue] = useState(0)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
-  const goldPrice = 2922.01 // Current gold price (can be dynamic later)
+  const goldPrice = 2922.01
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -20,22 +21,28 @@ export default function AdminPage() {
         return
       }
 
-      // Fetch the current user's role
+      // Fetch the current user's profile based on id
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', session.user.id)
+        .eq('id', session.user.id)  // ❗ Correct - checking by ID now, not email
         .single()
 
-      if (profileError || profileData?.role !== 'admin') {
-        router.push('/dashboard') // Redirect non-admins
+      if (profileError || !profileData) {
+        console.error('❌ Error fetching profile:', profileError)
+        router.push('/dashboard')
         return
       }
 
-      // Fetch all profiles
+      if (profileData.role !== 'admin') {
+        router.push('/dashboard')
+        return
+      }
+
+      // Fetch all users
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
-        .select('id, full_name')
+        .select('id, full_name, email')
 
       if (profilesError) {
         console.error('❌ Error fetching profiles:', profilesError)
@@ -52,7 +59,7 @@ export default function AdminPage() {
         return
       }
 
-      // Match balances to users
+      // Assemble user data
       const userData = profiles.map((profile) => {
         const userWallets = wallets.filter(w => w.user_id === profile.id)
 
@@ -65,7 +72,7 @@ export default function AdminPage() {
 
         return {
           id: profile.id,
-          full_name: profile.full_name,
+          full_name: profile.full_name || profile.email || 'Unknown',
           cashBalance,
           goldBalance,
           totalBalance,
@@ -77,10 +84,20 @@ export default function AdminPage() {
       // Calculate site total
       const totalSiteValue = userData.reduce((sum, user) => sum + user.totalBalance, 0)
       setSiteValue(totalSiteValue)
+
+      setLoading(false)
     }
 
     fetchAdminData()
   }, [router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <p>Loading...</p>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -144,7 +161,7 @@ export default function AdminPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left border-b border-[#333]">
-                    <th className="py-2 px-3">Name</th>
+                    <th className="py-2 px-3">Name / Email</th>
                     <th className="py-2 px-3">Cash (€)</th>
                     <th className="py-2 px-3">Gold (oz)</th>
                     <th className="py-2 px-3">Total Value (€)</th>
