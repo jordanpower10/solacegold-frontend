@@ -6,30 +6,80 @@ import { supabase } from '../lib/supabaseClient'
 export default function AdminPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [users, setUsers] = useState<any[]>([])
+  const [siteValue, setSiteValue] = useState(0)
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
+  const goldPrice = 2922.01 // Current gold price (can be dynamic later)
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
+    const fetchAdminData = async () => {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      if (!session || sessionError) {
         router.push('/login')
         return
       }
 
-      // ✅ Fetch from auth.users instead of profiles
-      const { data, error } = await supabase
-        .from('users')  // IMPORTANT: needs RLS open or Supabase Admin Key
-        .select('id, email, created_at')
+      // Fetch the current user's role
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single()
 
-      if (error) {
-        console.error('❌ Error fetching users:', error)
-      } else {
-        setUsers(data || [])
+      if (profileError || profileData?.role !== 'admin') {
+        router.push('/dashboard') // Redirect non-admins
+        return
       }
+
+      // Fetch all profiles
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, full_name')
+
+      if (profilesError) {
+        console.error('❌ Error fetching profiles:', profilesError)
+        return
+      }
+
+      // Fetch all wallets
+      const { data: wallets, error: walletsError } = await supabase
+        .from('wallets')
+        .select('user_id, wallet_type, balance')
+
+      if (walletsError) {
+        console.error('❌ Error fetching wallets:', walletsError)
+        return
+      }
+
+      // Match balances to users
+      const userData = profiles.map((profile) => {
+        const userWallets = wallets.filter(w => w.user_id === profile.id)
+
+        const cashWallet = userWallets.find(w => w.wallet_type === 'cash')
+        const goldWallet = userWallets.find(w => w.wallet_type === 'gold')
+
+        const cashBalance = cashWallet ? cashWallet.balance : 0
+        const goldBalance = goldWallet ? goldWallet.balance : 0
+        const totalBalance = cashBalance + (goldBalance * goldPrice)
+
+        return {
+          id: profile.id,
+          full_name: profile.full_name,
+          cashBalance,
+          goldBalance,
+          totalBalance,
+        }
+      })
+
+      setUsers(userData)
+
+      // Calculate site total
+      const totalSiteValue = userData.reduce((sum, user) => sum + user.totalBalance, 0)
+      setSiteValue(totalSiteValue)
     }
 
-    fetchUsers()
+    fetchAdminData()
   }, [router])
 
   return (
@@ -80,24 +130,33 @@ export default function AdminPage() {
             />
           </a>
 
-          <h1 className="text-3xl font-bold mb-8 text-[#e0b44a]">Admin Panel</h1>
+          <h1 className="text-3xl font-bold mb-4 text-[#e0b44a]">Admin Panel</h1>
+
+          {/* Total Site Holdings */}
+          <div className="text-2xl font-semibold text-white mb-8">
+            Total Site Holdings: <span className="text-[#e0b44a]">€{siteValue.toLocaleString('de-DE')}</span>
+          </div>
 
           {/* User Table */}
-          <div className="w-full max-w-4xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6">
+          <div className="w-full max-w-6xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6">
             <h2 className="text-xl font-semibold mb-4">Registered Users</h2>
             {users.length > 0 ? (
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left border-b border-[#333]">
-                    <th className="py-2 px-3">Email</th>
-                    <th className="py-2 px-3">Registered</th>
+                    <th className="py-2 px-3">Name</th>
+                    <th className="py-2 px-3">Cash (€)</th>
+                    <th className="py-2 px-3">Gold (oz)</th>
+                    <th className="py-2 px-3">Total Value (€)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((user) => (
                     <tr key={user.id} className="border-b border-[#2a2a2a] hover:bg-[#1d1d1d]">
-                      <td className="py-3 px-3">{user.email}</td>
-                      <td className="py-3 px-3">{new Date(user.created_at).toLocaleDateString()}</td>
+                      <td className="py-3 px-3">{user.full_name}</td>
+                      <td className="py-3 px-3">€{user.cashBalance.toLocaleString('de-DE')}</td>
+                      <td className="py-3 px-3">{user.goldBalance.toFixed(2)} oz</td>
+                      <td className="py-3 px-3 text-[#e0b44a]">€{user.totalBalance.toLocaleString('de-DE')}</td>
                     </tr>
                   ))}
                 </tbody>
