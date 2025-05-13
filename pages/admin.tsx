@@ -6,31 +6,93 @@ import { supabase } from '../lib/supabaseClient'
 export default function AdminPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [users, setUsers] = useState<any[]>([])
+  const [siteValue, setSiteValue] = useState(0)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
+  const goldPrice = 2922.01 // Replace later with live gold price if you want!
+
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchAdminData = async () => {
       const { data: { session } } = await supabase.auth.getSession()
+
       if (!session) {
         router.push('/login')
         return
       }
 
-      // ✅ Fetch from auth.users instead of profiles
-      const { data, error } = await supabase
-        .from('users')  // IMPORTANT: needs RLS open or Supabase Admin Key
-        .select('id, email, created_at')
+      // Fetch the current user's role
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single()
 
-      if (error) {
-        console.error('❌ Error fetching users:', error)
-      } else {
-        setUsers(data || [])
+      if (profileError || !profileData || profileData.role !== 'admin') {
+        router.push('/dashboard')
+        return
       }
+
+      // Fetch all users from profiles
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, email, full_name')
+
+      if (profilesError) {
+        console.error('❌ Error fetching profiles:', profilesError)
+        return
+      }
+
+      // Fetch wallets
+      const { data: wallets, error: walletsError } = await supabase
+        .from('wallets')
+        .select('user_id, wallet_type, balance')
+
+      if (walletsError) {
+        console.error('❌ Error fetching wallets:', walletsError)
+        return
+      }
+
+      // Match user balances
+      const userData = profiles.map((profile) => {
+        const userWallets = wallets.filter(w => w.user_id === profile.id)
+
+        const cashWallet = userWallets.find(w => w.wallet_type === 'cash')
+        const goldWallet = userWallets.find(w => w.wallet_type === 'gold')
+
+        const cashBalance = cashWallet ? cashWallet.balance : 0
+        const goldBalance = goldWallet ? goldWallet.balance : 0
+        const totalValue = cashBalance + (goldBalance * goldPrice)
+
+        return {
+          id: profile.id,
+          email: profile.email,
+          full_name: profile.full_name,
+          cashBalance,
+          goldBalance,
+          totalValue
+        }
+      })
+
+      setUsers(userData)
+
+      const totalSiteValue = userData.reduce((sum, user) => sum + user.totalValue, 0)
+      setSiteValue(totalSiteValue)
+
+      setLoading(false)
     }
 
-    fetchUsers()
+    fetchAdminData()
   }, [router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <p>Loading...</p>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -40,6 +102,7 @@ export default function AdminPage() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans relative">
+        
         {/* Dropdown */}
         <div
           className="absolute top-4 right-6 z-50"
@@ -51,7 +114,7 @@ export default function AdminPage() {
             timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
           }}
         >
-          <button className="bg-[#e0b44a] text-black font-semibold px-5 py-3 rounded-md shadow-gold hover:bg-yellow-400 transition text-sm">
+          <button className="bg-[#e0b44a] text-black font-semibold px-5 py-3 rounded-md hover:bg-yellow-400 transition text-sm">
             Menu
           </button>
           {isMenuOpen && (
@@ -80,24 +143,33 @@ export default function AdminPage() {
             />
           </a>
 
-          <h1 className="text-3xl font-bold mb-8 text-[#e0b44a]">Admin Panel</h1>
+          <h1 className="text-3xl font-bold mb-4 text-[#e0b44a]">Admin Panel</h1>
+
+          {/* Site total */}
+          <div className="text-2xl font-semibold text-white mb-8">
+            Total Site Holdings: <span className="text-[#e0b44a]">€{siteValue.toLocaleString('de-DE')}</span>
+          </div>
 
           {/* User Table */}
-          <div className="w-full max-w-4xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6">
+          <div className="w-full max-w-6xl bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6">
             <h2 className="text-xl font-semibold mb-4">Registered Users</h2>
             {users.length > 0 ? (
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left border-b border-[#333]">
                     <th className="py-2 px-3">Email</th>
-                    <th className="py-2 px-3">Registered</th>
+                    <th className="py-2 px-3">Cash (€)</th>
+                    <th className="py-2 px-3">Gold (oz)</th>
+                    <th className="py-2 px-3">Total Value (€)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((user) => (
                     <tr key={user.id} className="border-b border-[#2a2a2a] hover:bg-[#1d1d1d]">
                       <td className="py-3 px-3">{user.email}</td>
-                      <td className="py-3 px-3">{new Date(user.created_at).toLocaleDateString()}</td>
+                      <td className="py-3 px-3">€{user.cashBalance.toLocaleString('de-DE')}</td>
+                      <td className="py-3 px-3">{user.goldBalance.toFixed(2)} oz</td>
+                      <td className="py-3 px-3 text-[#e0b44a]">€{user.totalValue.toLocaleString('de-DE')}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -107,9 +179,8 @@ export default function AdminPage() {
             )}
           </div>
         </div>
+
       </div>
     </>
   )
 }
-
-
