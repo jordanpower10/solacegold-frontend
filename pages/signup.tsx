@@ -39,7 +39,6 @@ export default function Signup() {
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [nationality, setNationality] = useState('')
-  const [residence, setResidence] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -60,8 +59,7 @@ export default function Signup() {
           dob,
           address,
           phone: `${countryCode}${phone}`,
-          nationality,
-          residence
+          nationality
         }
       }
     })
@@ -80,61 +78,143 @@ export default function Signup() {
         <title>Sign Up – Solace Gold</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div className="min-h-screen bg-[#0d0d0d] px-4 flex items-center justify-center font-sans">
-        <div className="w-full max-w-md bg-[#121212] p-8 rounded-lg shadow-md">
-          <div className="flex justify-center mb-6">
+      <div className="min-h-screen bg-black px-4 flex items-center justify-center font-sans">
+        <div className="w-full max-w-md bg-[#121212] p-8 rounded-2xl border border-[#2a2a2a]">
+          <div className="flex justify-center mb-8">
             <a href="/">
               <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-32 h-auto" />
             </a>
           </div>
-          <h2 className="text-2xl font-bold text-center mb-6 text-[#e0b44a]">
+          <h2 className="text-2xl font-bold text-center mb-8 text-[#e0b44a]">
             Create your account
           </h2>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} required className="input-style" />
-            <input type="date" value={dob} onChange={e => setDob(e.target.value)} required className="input-style" />
-            <input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} required className="input-style" />
-            <div className="flex gap-2">
-              <select value={countryCode} onChange={e => setCountryCode(e.target.value)} required className="w-28 input-style">
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div>
+              <input 
+                type="text" 
+                placeholder="Full Name" 
+                value={name} 
+                onChange={e => setName(e.target.value)} 
+                required 
+                className="input-style" 
+              />
+            </div>
+            <div>
+              <input 
+                type="date" 
+                value={dob} 
+                onChange={e => setDob(e.target.value)} 
+                required 
+                className="input-style text-gray-400" 
+              />
+            </div>
+            <div>
+              <input 
+                type="text" 
+                placeholder="Address" 
+                value={address} 
+                onChange={e => setAddress(e.target.value)} 
+                required 
+                className="input-style" 
+              />
+            </div>
+            <div className="flex gap-3">
+              <select 
+                value={countryCode} 
+                onChange={e => setCountryCode(e.target.value)} 
+                required 
+                className="w-24 input-style bg-[#1a1a1a]"
+              >
                 {countryCodes.map((entry) => (
-                  <option key={entry.code} value={entry.code}>{entry.code} ({entry.name})</option>
+                  <option key={entry.code} value={entry.code}>{entry.code}</option>
                 ))}
               </select>
-              <input type="tel" placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} required className="flex-1 input-style" />
+              <input 
+                type="tel" 
+                placeholder="Phone Number" 
+                value={phone} 
+                onChange={e => setPhone(e.target.value)} 
+                required 
+                className="flex-1 input-style" 
+              />
             </div>
-            <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required className="input-style" />
-            <select value={nationality} onChange={e => setNationality(e.target.value)} required className="input-style">
-              <option value="">Select Nationality</option>
-              {countries.map((country) => (
-                <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
-            <select value={residence} onChange={e => setResidence(e.target.value)} required className="input-style">
-              <option value="">Select Country of Residence</option>
-              {countries.map((country) => (
-                <option key={country} value={country}>{country}</option>
-              ))}
-            </select>
-            <input type="password" placeholder="Create Password" value={password} onChange={e => setPassword(e.target.value)} required className="input-style" />
-            <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required className="input-style" />
-            <div className="flex items-start gap-2 mt-2">
-              <input type="checkbox" id="terms" required className="mt-1" />
-              <label htmlFor="terms" className="text-sm text-gray-400">
-                I agree to the <a href="/terms.pdf" target="_blank" className="text-blue-400 underline">terms and conditions</a>
-              </label>
+            <div>
+              <input 
+                type="email" 
+                placeholder="Email" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                required 
+                className="input-style" 
+              />
             </div>
-            <div className="flex items-start gap-2">
-              <input type="checkbox" id="kyc" required className="mt-1" />
-              <label htmlFor="kyc" className="text-sm text-gray-400">
-                I agree to the <a href="/kyc.pdf" target="_blank" className="text-blue-400 underline">KYC checks</a>
-              </label>
+            <div>
+              <select 
+                value={nationality} 
+                onChange={e => setNationality(e.target.value)} 
+                required 
+                className="input-style bg-[#1a1a1a]"
+              >
+                <option value="">Select Nationality</option>
+                {countries.map((country) => (
+                  <option key={country} value={country}>{country}</option>
+                ))}
+              </select>
             </div>
-            <button type="submit" className="w-full mt-4 bg-[#e0b44a] text-black font-bold py-2 rounded shadow-gold hover:bg-yellow-400 transition">
+            <div>
+              <input 
+                type="password" 
+                placeholder="Create Password" 
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                required 
+                className="input-style" 
+              />
+            </div>
+            <div>
+              <input 
+                type="password" 
+                placeholder="Confirm Password" 
+                value={confirmPassword} 
+                onChange={e => setConfirmPassword(e.target.value)} 
+                required 
+                className="input-style" 
+              />
+            </div>
+            <div className="space-y-3 mt-6">
+              <div className="flex items-start gap-3">
+                <input 
+                  type="checkbox" 
+                  id="terms" 
+                  required 
+                  className="mt-1.5 h-4 w-4 rounded border-gray-600 bg-[#1a1a1a]" 
+                />
+                <label htmlFor="terms" className="text-sm text-gray-400">
+                  I agree to the <a href="/terms.pdf" target="_blank" className="text-[#e0b44a] hover:text-[#f0c45a] underline">terms and conditions</a>
+                </label>
+              </div>
+              <div className="flex items-start gap-3">
+                <input 
+                  type="checkbox" 
+                  id="kyc" 
+                  required 
+                  className="mt-1.5 h-4 w-4 rounded border-gray-600 bg-[#1a1a1a]" 
+                />
+                <label htmlFor="kyc" className="text-sm text-gray-400">
+                  I agree to the <a href="/kyc.pdf" target="_blank" className="text-[#e0b44a] hover:text-[#f0c45a] underline">KYC checks</a>
+                </label>
+              </div>
+            </div>
+            <button 
+              type="submit" 
+              className="w-full mt-6 bg-[#e0b44a] text-black font-bold py-3 px-4 rounded-lg hover:bg-[#f0c45a] transition-colors duration-200"
+              disabled={loading}
+            >
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
             <p className="text-sm text-center text-gray-500 mt-6">
               Already have an account?{' '}
-              <a href="/login" className="text-[#e0b44a] underline">Log in</a>
+              <a href="/login" className="text-[#e0b44a] hover:text-[#f0c45a] underline">Log in</a>
             </p>
           </form>
         </div>
@@ -142,16 +222,20 @@ export default function Signup() {
       <style jsx>{`
         .input-style {
           width: 100%;
-          padding: 0.5rem 1rem;
-          border-radius: 0.375rem;
-          background-color: #121212;
+          padding: 0.75rem 1rem;
+          border-radius: 0.5rem;
+          background-color: #1a1a1a;
           border: 1px solid #2a2a2a;
           color: white;
           outline: none;
+          transition: all 0.2s;
         }
         .input-style:focus {
           border-color: #e0b44a;
-          box-shadow: 0 0 0 2px #e0b44a;
+          box-shadow: 0 0 0 1px #e0b44a;
+        }
+        .input-style::placeholder {
+          color: #666;
         }
       `}</style>
     </>
