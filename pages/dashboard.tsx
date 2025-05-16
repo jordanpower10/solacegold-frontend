@@ -211,15 +211,8 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Gold Price Chart */}
-          <div className="w-full max-w-2xl mb-10">
-            <div className="h-[250px]">
-              <GoldPriceChart />
-            </div>
-          </div>
-
           {/* Recent Transactions */}
-          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl">
+          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
             <h2 className="text-xl font-semibold mb-4 text-left">Recent Transactions</h2>
             <div className="space-y-3">
               <div className="flex justify-between items-center text-sm">
@@ -230,6 +223,13 @@ export default function Dashboard() {
                 <span className="text-gray-400">Deposited</span>
                 <span className="text-[#e0b44a]">€500.00</span>
               </div>
+            </div>
+          </div>
+
+          {/* Gold Price Chart */}
+          <div className="w-full max-w-2xl mb-10">
+            <div className="h-[250px]">
+              <GoldPriceChart />
             </div>
           </div>
         </div>
