@@ -146,12 +146,91 @@ export default function Dashboard() {
           </div>
         </div>
 
-        // ... existing content ...
+        {/* Main Content */}
+        <div className="flex flex-col items-center text-center py-10 px-4">
+          <h1 className="text-3xl font-bold mb-2">Hi {userName},</h1>
+          <p className="text-gray-400 mb-8 text-lg">Your Balance</p>
 
-        {/* Gold Price Chart */}
-        <div className="px-4 mb-10">
-          <div className="h-[250px]">
-            <GoldPriceChart />
+          {/* Balances */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 w-full max-w-2xl">
+            <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col items-center">
+              <div className="text-2xl font-bold mb-1">€{cashBalance.toLocaleString('de-DE')}</div>
+              <div className="text-sm text-gray-400">Cash Balance</div>
+            </div>
+            <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col items-center">
+              <div className="text-2xl font-bold mb-1">{goldBalance.toFixed(2)} oz</div>
+              <div className="text-sm text-gray-400">Gold Balance</div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 w-full max-w-2xl">
+            <button 
+              onClick={() => router.push('/deposit')}
+              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
+            >
+              <img src="https://i.postimg.cc/L87SP2kp/gold-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
+              <span className="text-sm">Deposit</span>
+            </button>
+            <button 
+              onClick={() => router.push('/withdraw')}
+              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
+            >
+              <img src="https://i.postimg.cc/0NKzK93g/withdraw-funds-image.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
+              <span className="text-sm">Withdraw</span>
+            </button>
+            <button 
+              onClick={() => router.push('/buy')}
+              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
+            >
+              <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2" />
+              <span className="text-sm">Buy Gold</span>
+            </button>
+            <button 
+              onClick={() => router.push('/sell')}
+              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
+            >
+              <img src="https://i.postimg.cc/wTx3cXPQ/sell-gold-image.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2" />
+              <span className="text-sm">Sell Gold</span>
+            </button>
+          </div>
+
+          {/* Gold Holdings */}
+          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
+            <div className="flex items-center justify-between">
+              <div className="text-left">
+                <h2 className="text-xl font-semibold mb-2">Gold Holdings</h2>
+                <p className="text-sm text-gray-400">
+                  {goldBalance.toFixed(2)} oz <span className="text-[#e0b44a]">(€{(goldBalance * goldPrice).toLocaleString('de-DE')})</span>
+                </p>
+                <p className={`mt-2 text-sm ${dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {dailyChangePercent >= 0 ? '+' : ''}{dailyChangePercent}% Today
+                </p>
+              </div>
+              <img src="https://i.postimg.cc/YSKtGdRq/gold-bars.png" alt="Gold Bars" className="w-20 ml-4" />
+            </div>
+          </div>
+
+          {/* Gold Price Chart */}
+          <div className="w-full max-w-2xl mb-10">
+            <div className="h-[250px]">
+              <GoldPriceChart />
+            </div>
+          </div>
+
+          {/* Recent Transactions */}
+          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl">
+            <h2 className="text-xl font-semibold mb-4 text-left">Recent Transactions</h2>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-400">Bought 0.1 oz</span>
+                <span className="text-[#e0b44a]">€290.20</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-400">Deposited</span>
+                <span className="text-[#e0b44a]">€500.00</span>
+              </div>
+            </div>
           </div>
         </div>
 
