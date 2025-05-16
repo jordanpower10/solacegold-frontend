@@ -76,12 +76,30 @@ export default function Dashboard() {
         {/* Top Navigation */}
         <div className="flex justify-between items-center p-4 bg-black relative">
           {/* Logo and Mobile Menu */}
-          <div className="flex items-center">
+          <div className="flex items-center relative"
+            onMouseEnter={() => {
+              clearTimeout(timeoutId)
+              setIsMenuOpen(true)
+            }}
+            onMouseLeave={() => {
+              timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
+            }}
+          >
             <img
               src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
               alt="Solace Gold Logo"
-              className="w-20 h-20"
+              className="w-20 h-20 cursor-pointer"
             />
+            {isMenuOpen && (
+              <div className="absolute top-20 left-0 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 rounded-lg"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
@@ -115,29 +133,6 @@ export default function Dashboard() {
               </button>
             </div>
           )}
-
-          {/* Desktop Menu */}
-          <div
-            className="hidden md:block relative"
-            onMouseEnter={() => {
-              clearTimeout(timeoutId)
-              setIsMenuOpen(true)
-            }}
-            onMouseLeave={() => {
-              timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
-            }}
-          >
-            {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
 
           {/* Top right account value */}
           <div className="absolute top-6 right-6 flex items-center space-x-1">
@@ -211,15 +206,15 @@ export default function Dashboard() {
           </div>
 
           {/* Gold Price Chart */}
-          <div className="w-full max-w-2xl mb-10">
-            <div className="h-[250px]">
+          <div className="w-full max-w-2xl mb-20">
+            <div className="h-[250px] mb-8">
               <GoldPriceChart />
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <footer className="text-center text-xs text-gray-600 mt-auto mb-4">
+        <footer className="text-center text-xs text-gray-600 py-6">
           © 2025 SolaceGold. All rights reserved.
         </footer>
       </div>
