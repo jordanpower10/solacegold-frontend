@@ -64,7 +64,7 @@ export default function Home() {
             <span className="text-[#e0b44a]">Gold,</span> Simplified
           </h2>
           <p className="text-gray-400 mb-10 max-w-xl">
-            Fully-backed, no vault, Ownership made effortless
+            Fully-backed, no vault, ownership made effortless
           </p>
           
           {/* Authentication Buttons */}
