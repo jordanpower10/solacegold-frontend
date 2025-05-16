@@ -109,6 +109,19 @@ export default function Signup() {
               />
             </div>
             <div>
+              <select 
+                value={nationality} 
+                onChange={e => setNationality(e.target.value)} 
+                required 
+                className="input-style bg-[#1a1a1a]"
+              >
+                <option value="">Select Nationality</option>
+                {countries.map((country) => (
+                  <option key={country} value={country}>{country}</option>
+                ))}
+              </select>
+            </div>
+            <div>
               <input 
                 type="text" 
                 placeholder="Address" 
@@ -118,12 +131,12 @@ export default function Signup() {
                 className="input-style" 
               />
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <select 
                 value={countryCode} 
                 onChange={e => setCountryCode(e.target.value)} 
                 required 
-                className="w-24 input-style bg-[#1a1a1a]"
+                className="w-20 input-style bg-[#1a1a1a] text-sm"
               >
                 {countryCodes.map((entry) => (
                   <option key={entry.code} value={entry.code}>{entry.code}</option>
@@ -147,19 +160,6 @@ export default function Signup() {
                 required 
                 className="input-style" 
               />
-            </div>
-            <div>
-              <select 
-                value={nationality} 
-                onChange={e => setNationality(e.target.value)} 
-                required 
-                className="input-style bg-[#1a1a1a]"
-              >
-                <option value="">Select Nationality</option>
-                {countries.map((country) => (
-                  <option key={country} value={country}>{country}</option>
-                ))}
-              </select>
             </div>
             <div>
               <input 
