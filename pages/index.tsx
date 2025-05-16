@@ -35,7 +35,6 @@ export default function Home() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans relative">
-
         {/* Dropdown Menu */}
         <div
           className="absolute top-4 right-6 z-50"
@@ -64,32 +63,29 @@ export default function Home() {
           <h2 className="text-5xl font-bold leading-tight mb-4">
             <span className="text-[#e0b44a]">Gold,</span> Simplified
           </h2>
-          <p className="text-gray-400 mb-6 max-w-xl">
-            Fully-backed, no vault, no delay. Ownership made effortless
+          <p className="text-gray-400 mb-10 max-w-xl">
+            Fully-backed, no vault, Ownership made effortless
           </p>
-          <a href="/signup" className="bg-[#e0b44a] text-black font-bold px-6 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition">
-            Sign Up
-          </a>
-        </section>
-
-        {/* Steps Section */}
-        <section className="px-6 pb-20 flex flex-col items-center gap-8">
-          <a href="/login" className="icon-box w-full md:w-[40%] bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-gold">
-            <img src="https://i.postimg.cc/NFd4My3k/Chat-GPT-Image-Apr-25-2025-10-06-09-PM.png" alt="User icon" className="w-16 h-16" />
-            <div className="text-lg font-semibold">Login</div>
-          </a>
-          <div className="icon-box w-full md:w-[40%] bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-gold">
-            <img src="https://i.postimg.cc/Zn54D2mp/Chat-GPT-Image-Apr-23-2025-10-16-28-PM.png" alt="Euro icon" className="w-20 h-20" />
-            <h3 className="text-lg font-semibold">Deposit funds</h3>
-          </div>
-          <div className="icon-box w-full md:w-[40%] bg-[#121212] border border-[#2a2a2a] rounded-xl p-8 flex flex-col items-center justify-center gap-6 transition transform hover:-translate-y-1 hover:shadow-gold">
-            <img src="https://i.postimg.cc/mDbfzTfG/Chat-GPT-Image-Apr-23-2025-09-51-53-PM.png" alt="Gold bar icon" className="w-24 h-24" />
-            <h3 className="text-lg font-semibold">Buy gold</h3>
+          
+          {/* Authentication Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xs">
+            <a 
+              href="/signup" 
+              className="flex-1 bg-[#e0b44a] text-black font-bold px-8 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition text-center"
+            >
+              Sign Up
+            </a>
+            <a 
+              href="/login" 
+              className="flex-1 bg-transparent text-[#e0b44a] font-bold px-8 py-3 rounded-lg border-2 border-[#e0b44a] hover:bg-[#e0b44a] hover:text-black transition text-center"
+            >
+              Sign In
+            </a>
           </div>
         </section>
 
         {/* Live Gold Ticker */}
-        <section className="py-8 text-center">
+        <section className="py-8 text-center mt-auto">
           <div className="text-xl text-[#e0b44a] mb-2">Live Gold Price</div>
           <div className="text-3xl font-bold text-[#e0b44a] animate-pulse">
             {goldPrice}
