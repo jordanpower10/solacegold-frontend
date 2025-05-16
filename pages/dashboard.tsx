@@ -14,7 +14,7 @@ export default function Dashboard() {
   const goldPrice = 2922.01
   const dailyChangePercent = 1.42
 
-  // 🧠 New: Calculate full account value
+  // Calculate full account value
   const accountValue = cashBalance + (goldBalance * goldPrice)
 
   useEffect(() => {
@@ -61,7 +61,6 @@ export default function Dashboard() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-black text-white font-sans relative">
-
         {/* Top Navigation */}
         <div className="flex justify-between items-center p-4 bg-black relative">
           {/* Logo with hover dropdown */}
@@ -95,7 +94,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* 🧠 Top right updated to show full account value */}
+          {/* Top right account value */}
           <div className="absolute top-6 right-6 flex items-center space-x-1">
             <span className="text-[#e0b44a] font-semibold text-lg">€</span>
             <span className="text-[#e0b44a] font-semibold text-lg">{accountValue.toLocaleString('de-DE')}</span>
@@ -121,19 +120,22 @@ export default function Dashboard() {
 
           {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-6 mb-10">
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
+            <button 
+              onClick={() => router.push('/deposit')}
+              className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center transition-colors duration-200"
+            >
               <img src="https://i.postimg.cc/L87SP2kp/gold-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
               <span>Deposit Funds</span>
             </button>
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center transition-colors duration-200">
               <img src="https://i.postimg.cc/0NKzK93g/withdraw-funds-image.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
               <span>Withdraw Funds</span>
             </button>
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center transition-colors duration-200">
               <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2" />
               <span>Buy Gold</span>
             </button>
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center">
+            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center transition-colors duration-200">
               <img src="https://i.postimg.cc/wTx3cXPQ/sell-gold-image.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2" />
               <span>Sell Gold</span>
             </button>
@@ -150,7 +152,6 @@ export default function Dashboard() {
                 {dailyChangePercent >= 0 ? '+' : ''}{dailyChangePercent}% Today
               </p>
             </div>
-
             <img src="https://i.postimg.cc/YSKtGdRq/gold-bars.png" alt="Gold Bars" className="w-20 ml-4" />
           </div>
 
@@ -166,7 +167,6 @@ export default function Dashboard() {
         <footer className="text-center text-xs text-gray-600 mt-auto mb-4">
           © 2025 SolaceGold. All rights reserved.
         </footer>
-
       </div>
     </>
   )
