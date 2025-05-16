@@ -195,22 +195,6 @@ export default function Dashboard() {
             </button>
           </div>
 
-          {/* Gold Holdings */}
-          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
-            <div className="flex items-center justify-between">
-              <div className="text-left">
-                <h2 className="text-xl font-semibold mb-2">Gold Holdings</h2>
-                <p className="text-sm text-gray-400">
-                  {goldBalance.toFixed(2)} oz <span className="text-[#e0b44a]">(€{(goldBalance * goldPrice).toLocaleString('de-DE')})</span>
-                </p>
-                <p className={`mt-2 text-sm ${dailyChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {dailyChangePercent >= 0 ? '+' : ''}{dailyChangePercent}% Today
-                </p>
-              </div>
-              <img src="https://i.postimg.cc/YSKtGdRq/gold-bars.png" alt="Gold Bars" className="w-20 ml-4" />
-            </div>
-          </div>
-
           {/* Recent Transactions */}
           <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
             <h2 className="text-xl font-semibold mb-4 text-left">Recent Transactions</h2>
