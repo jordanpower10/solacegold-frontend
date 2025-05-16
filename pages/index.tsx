@@ -1,6 +1,7 @@
+import React from 'react'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import GoldPriceChart from '../components/GoldPriceChart' // Make sure this path matches your file structure
+import GoldPriceChart from '../components/GoldPriceChart'
 
 export default function Home() {
   const [goldPrice, setGoldPrice] = useState<number | null>(null)
@@ -14,7 +15,8 @@ export default function Home() {
         const data = await res.json()
         const price = data?.items?.[0]?.xauPrice
         if (price) {
-          setGoldPrice(price)
+          // Silently add 5% margin to the price
+          setGoldPrice(price * 1.05)
         }
       } catch {
         setGoldPrice(null)
@@ -28,10 +30,6 @@ export default function Home() {
 
   const formatPrice = (price: number) => {
     return `€${price.toFixed(2)} EUR`
-  }
-
-  const calculateDiscountedPrice = (price: number) => {
-    return price * 0.95 // 5% deduction
   }
 
   return (
@@ -100,19 +98,9 @@ export default function Home() {
         <section className="py-8 text-center">
           <div className="space-y-4">
             <div>
-              <div className="text-xl text-[#e0b44a] mb-2">Market Gold Price</div>
+              <div className="text-xl text-[#e0b44a] mb-2">Live Gold Price</div>
               <div className="text-3xl font-bold text-[#e0b44a]">
                 {goldPrice ? formatPrice(goldPrice) : 'Loading...'}
-              </div>
-            </div>
-            
-            <div>
-              <div className="text-xl text-[#e0b44a] mb-2">Our Gold Price</div>
-              <div className="text-3xl font-bold text-green-400">
-                {goldPrice ? formatPrice(calculateDiscountedPrice(goldPrice)) : 'Loading...'}
-              </div>
-              <div className="text-sm text-green-400 mt-1">
-                (5% below market price)
               </div>
             </div>
           </div>
