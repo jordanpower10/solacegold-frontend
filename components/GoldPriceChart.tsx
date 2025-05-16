@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -60,7 +60,9 @@ export default function GoldPriceChart() {
             return tooltipItems[0].label || '';
           },
           label: (context) => {
-            return `€${context.parsed.y.toFixed(2)}`;
+            // Add 5% margin to the displayed price
+            const price = context.parsed.y * 1.05;
+            return `€${price.toFixed(2)}`;
           },
         },
       },
@@ -89,7 +91,11 @@ export default function GoldPriceChart() {
         },
         ticks: {
           color: '#666',
-          callback: (value) => `€${value.toString()}`,
+          callback: (value) => {
+            // Add 5% margin to the y-axis values
+            const price = Number(value) * 1.05;
+            return `€${price.toFixed(0)}`;
+          },
         },
       },
     },
@@ -97,6 +103,9 @@ export default function GoldPriceChart() {
 
   useEffect(() => {
     fetchGoldData();
+    // Auto-refresh data every 5 minutes
+    const interval = setInterval(fetchGoldData, 300000);
+    return () => clearInterval(interval);
   }, [timeframe]);
 
   const getDaysFromTimeframe = () => {
@@ -159,7 +168,7 @@ export default function GoldPriceChart() {
   };
 
   return (
-    <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-4xl">
+    <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-3xl">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
         <h2 className="text-xl font-semibold text-[#e0b44a]">Gold Price Chart</h2>
         <div className="flex gap-2">
@@ -179,7 +188,7 @@ export default function GoldPriceChart() {
         </div>
       </div>
       
-      <div className="h-[400px] relative">
+      <div className="h-[300px] relative">
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#e0b44a]"></div>
