@@ -127,7 +127,10 @@ export default function Dashboard() {
               <img src="https://i.postimg.cc/L87SP2kp/gold-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
               <span>Deposit Funds</span>
             </button>
-            <button className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center transition-colors duration-200">
+            <button 
+              onClick={() => router.push('/withdraw')}
+              className="bg-black border border-[#2a2a2a] hover:bg-[#e0b44a] hover:text-black rounded-2xl p-6 w-40 flex flex-col items-center transition-colors duration-200"
+            >
               <img src="https://i.postimg.cc/0NKzK93g/withdraw-funds-image.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
               <span>Withdraw Funds</span>
             </button>
