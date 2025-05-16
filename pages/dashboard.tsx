@@ -24,7 +24,7 @@ export default function Dashboard() {
   }
 
   // Handle logout
-  const handleLogout = async () => {
+  const signOut = async () => {
     await supabase.auth.signOut()
     router.push('/login')
   }
@@ -93,7 +93,7 @@ export default function Dashboard() {
             {isMenuOpen && (
               <div className="absolute top-20 left-0 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
                 <button
-                  onClick={handleLogout}
+                  onClick={signOut}
                   className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 rounded-lg"
                 >
                   Logout
@@ -126,7 +126,7 @@ export default function Dashboard() {
           {isMenuOpen && (
             <div className="absolute top-24 left-0 right-0 bg-gray-800 z-50 md:hidden">
               <button
-                onClick={handleLogout}
+                onClick={signOut}
                 className="w-full text-left px-4 py-3 text-white hover:bg-gray-700"
               >
                 Logout
