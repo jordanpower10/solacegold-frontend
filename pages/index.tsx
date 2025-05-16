@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
+import GoldPriceChart from '../components/GoldPriceChart' // Make sure this path matches your file structure
 
 export default function Home() {
-  const [goldPrice, setGoldPrice] = useState<string>('Loading...')
+  const [goldPrice, setGoldPrice] = useState<number | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   let timeoutId: NodeJS.Timeout
 
@@ -13,12 +14,10 @@ export default function Home() {
         const data = await res.json()
         const price = data?.items?.[0]?.xauPrice
         if (price) {
-          setGoldPrice(`€${price.toFixed(2)} EUR`)
-        } else {
-          setGoldPrice('Unavailable')
+          setGoldPrice(price)
         }
       } catch {
-        setGoldPrice('Unavailable')
+        setGoldPrice(null)
       }
     }
 
@@ -26,6 +25,14 @@ export default function Home() {
     const interval = setInterval(updateGoldPrice, 60000)
     return () => clearInterval(interval)
   }, [])
+
+  const formatPrice = (price: number) => {
+    return `€${price.toFixed(2)} EUR`
+  }
+
+  const calculateDiscountedPrice = (price: number) => {
+    return price * 0.95 // 5% deduction
+  }
 
   return (
     <>
@@ -84,15 +91,34 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Live Gold Ticker */}
-        <section className="py-8 text-center mt-auto">
-          <div className="text-xl text-[#e0b44a] mb-2">Live Gold Price</div>
-          <div className="text-3xl font-bold text-[#e0b44a] animate-pulse">
-            {goldPrice}
+        {/* Chart Section */}
+        <section className="px-4 py-8 w-full max-w-4xl mx-auto">
+          <GoldPriceChart />
+        </section>
+
+        {/* Live Gold Price Section */}
+        <section className="py-8 text-center">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xl text-[#e0b44a] mb-2">Market Gold Price</div>
+              <div className="text-3xl font-bold text-[#e0b44a]">
+                {goldPrice ? formatPrice(goldPrice) : 'Loading...'}
+              </div>
+            </div>
+            
+            <div>
+              <div className="text-xl text-[#e0b44a] mb-2">Our Gold Price</div>
+              <div className="text-3xl font-bold text-green-400">
+                {goldPrice ? formatPrice(calculateDiscountedPrice(goldPrice)) : 'Loading...'}
+              </div>
+              <div className="text-sm text-green-400 mt-1">
+                (5% below market price)
+              </div>
+            </div>
           </div>
         </section>
 
-        <footer className="text-center text-sm text-gray-600 py-6 border-t border-gray-800">
+        <footer className="text-center text-sm text-gray-600 py-6 border-t border-gray-800 mt-auto">
           &copy; 2025 Solace Gold. All rights reserved.
         </footer>
       </div>
