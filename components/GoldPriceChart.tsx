@@ -168,7 +168,7 @@ export default function GoldPriceChart() {
   };
 
   return (
-    <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-3xl">
+    <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
         <h2 className="text-xl font-semibold text-[#e0b44a]">Gold Price Chart</h2>
         <div className="flex gap-2">

@@ -102,6 +102,7 @@ export default function Signup() {
             <div>
               <input 
                 type="date" 
+                placeholder="Date of Birth"
                 value={dob} 
                 onChange={e => setDob(e.target.value)} 
                 required 
@@ -113,11 +114,11 @@ export default function Signup() {
                 value={nationality} 
                 onChange={e => setNationality(e.target.value)} 
                 required 
-                className="input-style bg-[#1a1a1a]"
+                className="input-style bg-[#1a1a1a] text-gray-400"
               >
-                <option value="">Select Nationality</option>
+                <option value="" className="text-gray-400">Select Nationality</option>
                 {countries.map((country) => (
-                  <option key={country} value={country}>{country}</option>
+                  <option key={country} value={country} className="text-gray-400">{country}</option>
                 ))}
               </select>
             </div>
@@ -136,7 +137,7 @@ export default function Signup() {
                 value={countryCode} 
                 onChange={e => setCountryCode(e.target.value)} 
                 required 
-                className="w-20 input-style bg-[#1a1a1a] text-sm"
+                className="w-16 input-style bg-[#1a1a1a] text-gray-400 text-sm"
               >
                 {countryCodes.map((entry) => (
                   <option key={entry.code} value={entry.code}>{entry.code}</option>
@@ -226,16 +227,21 @@ export default function Signup() {
           border-radius: 0.5rem;
           background-color: #1a1a1a;
           border: 1px solid #2a2a2a;
-          color: white;
+          color: #666;
           outline: none;
           transition: all 0.2s;
         }
         .input-style:focus {
           border-color: #e0b44a;
           box-shadow: 0 0 0 1px #e0b44a;
+          color: white;
         }
         .input-style::placeholder {
           color: #666;
+        }
+        .input-style option {
+          color: #666;
+          background-color: #1a1a1a;
         }
       `}</style>
     </>

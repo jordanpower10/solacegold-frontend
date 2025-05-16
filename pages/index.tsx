@@ -90,8 +90,8 @@ export default function Home() {
         </section>
 
         {/* Chart Section */}
-        <section className="flex justify-center items-center px-4 py-8">
-          <div className="w-full max-w-4xl">
+        <section className="flex flex-col items-center justify-center px-4 py-8">
+          <div className="w-full max-w-4xl mx-auto">
             <GoldPriceChart />
           </div>
         </section>
