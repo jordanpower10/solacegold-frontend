@@ -135,7 +135,7 @@ export default function Signup() {
               <input 
                 id="dob"
                 type="date" 
-                placeholder="Date of Birth"
+                placeholder="Date Of Birth"
                 value={dob} 
                 onChange={e => setDob(e.target.value)} 
                 required 
