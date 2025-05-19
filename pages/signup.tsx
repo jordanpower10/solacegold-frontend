@@ -103,20 +103,14 @@ export default function Signup() {
         }])
       if (profileError) throw profileError
 
-      // Step 4: Create wallets
-      const { error: cashWalletError } = await supabase
+      // Step 4: Create wallets (both at once)
+      const { error: walletsError } = await supabase
         .from('wallets')
         .insert([
-          { user_id: user.id, wallet_type: 'cash', balance: 0 }
-        ])
-      if (cashWalletError) throw cashWalletError
-
-      const { error: goldWalletError } = await supabase
-        .from('wallets')
-        .insert([
+          { user_id: user.id, wallet_type: 'cash', balance: 0 },
           { user_id: user.id, wallet_type: 'gold', balance: 0 }
         ])
-      if (goldWalletError) throw goldWalletError
+      if (walletsError) throw walletsError
 
       alert('✅ Account created! Please check your email.')
       router.push('/login')
