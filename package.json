@@ -27,6 +27,7 @@
     "@types/react": "^19.1.4",
     "@types/react-chartjs-2": "^2.0.2",
     "@types/react-dom": "^19",
+    "@types/react-google-recaptcha": "^2.1.9",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
