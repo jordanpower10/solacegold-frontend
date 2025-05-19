@@ -28,13 +28,13 @@ export default function Withdraw() {
   const fetchBalance = async (userId: string) => {
     const { data: wallet, error } = await supabase
       .from('wallets')
-      .select('eur_balance')
+      .select('usd_balance')
       .eq('user_id', userId)
       .eq('wallet_type', 'cash')
       .single()
 
     if (wallet) {
-      setCurrentBalance(wallet.eur_balance || 0)
+      setCurrentBalance(wallet.usd_balance || 0)
     }
   }
 
@@ -69,11 +69,11 @@ export default function Withdraw() {
       if (walletError) throw walletError
 
       // Update wallet balance
-      const newBalance = (wallet.eur_balance || 0) - numAmount
+      const newBalance = (wallet.usd_balance || 0) - numAmount
       const { error: updateError } = await supabase
         .from('wallets')
         .update({ 
-          eur_balance: newBalance, 
+          usd_balance: newBalance, 
           balance: newBalance 
         })
         .eq('user_id', user.id)
@@ -94,7 +94,7 @@ export default function Withdraw() {
 
       if (transactionError) throw transactionError
 
-      setSuccess(`€${numAmount.toFixed(2)} has been withdrawn successfully`)
+      setSuccess(`$${numAmount.toFixed(2)} has been withdrawn successfully`)
       setAmount('')
       setCurrentBalance(newBalance)
     } catch (error: any) {
@@ -133,7 +133,7 @@ export default function Withdraw() {
                 Available Balance
               </p>
               <p className="text-xl text-white">
-                €{currentBalance.toLocaleString('de-DE')}
+                ${currentBalance.toLocaleString('en-US')}
               </p>
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function Withdraw() {
           <form className="mt-8 space-y-6" onSubmit={handleWithdraw}>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span className="text-gray-400">€</span>
+                <span className="text-gray-400">$</span>
               </div>
               <input
                 type="number"

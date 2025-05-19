@@ -62,7 +62,7 @@ export default function GoldPriceChart() {
           label: (context) => {
             // Add 5% margin to the displayed price
             const price = context.parsed.y * 1.05;
-            return `€${price.toFixed(2)}`;
+            return `$${price.toFixed(2)}`;
           },
         },
       },
@@ -94,7 +94,7 @@ export default function GoldPriceChart() {
           callback: (value) => {
             // Add 5% margin to the y-axis values
             const price = Number(value) * 1.05;
-            return `€${price.toFixed(0)}`;
+            return `$${price.toFixed(0)}`;
           },
         },
       },
@@ -124,7 +124,7 @@ export default function GoldPriceChart() {
     try {
       const days = getDaysFromTimeframe();
       const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/tether-gold/market_chart?vs_currency=eur&days=${days}&interval=daily`
+        `https://api.coingecko.com/api/v3/coins/tether-gold/market_chart?vs_currency=usd&days=${days}&interval=daily`
       );
       
       if (!response.ok) {
@@ -138,7 +138,7 @@ export default function GoldPriceChart() {
         labels: processedData.dates,
         datasets: [
           {
-            label: 'Gold Price (EUR/oz)',
+            label: 'Gold Price (USD/oz)',
             data: processedData.prices,
             borderColor: '#e0b44a',
             backgroundColor: 'rgba(224, 180, 74, 0.1)',

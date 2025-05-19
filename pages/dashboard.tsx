@@ -12,7 +12,7 @@ export default function Dashboard() {
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
-  const goldPrice = 2922.01
+  const goldPrice = 2375.00
   const dailyChangePercent = 1.42
 
   // Calculate full account value
@@ -136,8 +136,8 @@ export default function Dashboard() {
 
           {/* Top right account value */}
           <div className="absolute top-6 right-6 flex items-center space-x-1">
-            <span className="text-[#e0b44a] font-semibold text-lg">€</span>
-            <span className="text-[#e0b44a] font-semibold text-lg">{accountValue.toLocaleString('de-DE')}</span>
+            <span className="text-[#e0b44a] font-semibold text-lg">$</span>
+            <span className="text-[#e0b44a] font-semibold text-lg">{accountValue.toLocaleString('en-US')}</span>
           </div>
         </div>
 
@@ -149,7 +149,7 @@ export default function Dashboard() {
           {/* Balances */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 w-full max-w-2xl">
             <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col items-center">
-              <div className="text-2xl font-bold mb-1">€{cashBalance.toLocaleString('de-DE')}</div>
+              <div className="text-2xl font-bold mb-1">${cashBalance.toLocaleString('en-US')}</div>
               <div className="text-sm text-gray-400">Cash Balance</div>
             </div>
             <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col items-center">
@@ -196,11 +196,11 @@ export default function Dashboard() {
             <div className="space-y-3">
               <div className="flex justify-between items-center text-sm">
                 <span className="text-gray-400">Bought 0.1 oz</span>
-                <span className="text-[#e0b44a]">€290.20</span>
+                <span className="text-[#e0b44a]">$290.20</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-gray-400">Deposited</span>
-                <span className="text-[#e0b44a]">€500.00</span>
+                <span className="text-[#e0b44a]">$500.00</span>
               </div>
             </div>
           </div>

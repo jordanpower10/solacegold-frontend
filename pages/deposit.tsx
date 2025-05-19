@@ -49,11 +49,11 @@ export default function Deposit() {
       if (walletError) throw walletError
 
       // Update wallet balance
-      const newBalance = (wallet.eur_balance || 0) + numAmount
+      const newBalance = (wallet.usd_balance || 0) + numAmount
       const { error: updateError } = await supabase
         .from('wallets')
         .update({ 
-          eur_balance: newBalance, 
+          usd_balance: newBalance, 
           balance: newBalance 
         })
         .eq('user_id', user.id)
@@ -74,7 +74,7 @@ export default function Deposit() {
 
       if (transactionError) throw transactionError
 
-      setSuccess(`€${numAmount.toFixed(2)} has been deposited successfully`)
+      setSuccess(`$${numAmount.toFixed(2)} has been deposited successfully`)
       setAmount('')
     } catch (error: any) { // Type annotation for error
       console.error('❌ Deposit failed:', error)
@@ -115,7 +115,7 @@ export default function Deposit() {
           <form className="mt-8 space-y-6" onSubmit={handleDeposit}>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span className="text-gray-400">€</span>
+                <span className="text-gray-400">$</span>
               </div>
               <input
                 type="number"

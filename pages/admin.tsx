@@ -11,7 +11,7 @@ export default function AdminPage() {
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
-  const goldPrice = 2922.01 // Replace later with live gold price if you want!
+  const goldPrice = 2375.00 // Example USD price, update as needed
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -146,7 +146,7 @@ export default function AdminPage() {
 
           {/* Site total */}
           <div className="text-2xl font-semibold text-white mb-8">
-            Total Site Holdings: <span className="text-[#e0b44a]">€{siteValue.toLocaleString('de-DE')}</span>
+            Total Site Holdings: <span className="text-[#e0b44a]">${siteValue.toLocaleString('en-US')}</span>
           </div>
 
           {/* User Table */}
@@ -157,18 +157,18 @@ export default function AdminPage() {
                 <thead>
                   <tr className="text-left border-b border-[#333]">
                     <th className="py-2 px-3">Email</th>
-                    <th className="py-2 px-3">Cash (€)</th>
+                    <th className="py-2 px-3">Cash ($)</th>
                     <th className="py-2 px-3">Gold (oz)</th>
-                    <th className="py-2 px-3">Total Value (€)</th>
+                    <th className="py-2 px-3">Total Value ($)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((user) => (
                     <tr key={user.id} className="border-b border-[#2a2a2a] hover:bg-[#1d1d1d]">
                       <td className="py-3 px-3">{user.email}</td>
-                      <td className="py-3 px-3">€{user.cashBalance.toLocaleString('de-DE')}</td>
+                      <td className="py-3 px-3">${user.cashBalance.toLocaleString('en-US')}</td>
                       <td className="py-3 px-3">{user.goldBalance.toFixed(2)} oz</td>
-                      <td className="py-3 px-3 text-[#e0b44a]">€{user.totalValue.toLocaleString('de-DE')}</td>
+                      <td className="py-3 px-3 text-[#e0b44a]">${user.totalValue.toLocaleString('en-US')}</td>
                     </tr>
                   ))}
                 </tbody>

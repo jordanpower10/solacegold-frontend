@@ -11,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     async function updateGoldPrice() {
       try {
-        const res = await fetch('https://data-asg.goldprice.org/dbXRates/EUR')
+        const res = await fetch('https://data-asg.goldprice.org/dbXRates/USD')
         const data = await res.json()
         const price = data?.items?.[0]?.xauPrice
         if (price) {
@@ -29,7 +29,7 @@ export default function Home() {
   }, [])
 
   const formatPrice = (price: number) => {
-    return `€${price.toFixed(2)} EUR`
+    return `$${price.toFixed(2)} USD`
   }
 
   return (
