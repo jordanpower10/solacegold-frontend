@@ -49,6 +49,20 @@ export default function Signup() {
       alert('❌ Passwords do not match')
       return
     }
+    if (dob) {
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      if (age < 18 || age > 90) {
+        alert('❌ You must be between 18 and 90 years old to sign up.');
+        setLoading(false);
+        return;
+      }
+    }
     setLoading(true)
     const { error } = await supabase.auth.signUp({
       email,
@@ -70,6 +84,18 @@ export default function Signup() {
       alert('✅ Account created! Please check your email.')
       router.push('/login')
     }
+  }
+
+  // Helper functions for DOB min/max
+  function getMaxDob() {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 18);
+    return today.toISOString().split('T')[0];
+  }
+  function getMinDob() {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 90);
+    return today.toISOString().split('T')[0];
   }
 
   return (
@@ -106,6 +132,8 @@ export default function Signup() {
                 value={dob} 
                 onChange={e => setDob(e.target.value)} 
                 required 
+                min={getMinDob()} 
+                max={getMaxDob()} 
                 className="input-style text-gray-400" 
               />
             </div>
@@ -137,7 +165,7 @@ export default function Signup() {
                 value={countryCode} 
                 onChange={e => setCountryCode(e.target.value)} 
                 required 
-                className="w-16 input-style bg-[#1a1a1a] text-gray-400 text-sm"
+                className="w-20 input-style bg-[#1a1a1a] text-gray-400 text-sm flex-shrink-0"
               >
                 {countryCodes.map((entry) => (
                   <option key={entry.code} value={entry.code}>{entry.code}</option>
@@ -149,7 +177,7 @@ export default function Signup() {
                 value={phone} 
                 onChange={e => setPhone(e.target.value)} 
                 required 
-                className="flex-1 input-style" 
+                className="input-style flex-1 min-w-0" 
               />
             </div>
             <div>
