@@ -36,26 +36,6 @@ export default function GoldPriceChart() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Generate monthly ticks for the x-axis
-  function getMonthlyTicks(startDate: Date, endDate: Date) {
-    const ticks = [];
-    let current = new Date(startDate);
-    while (isBefore(current, endDate) || format(current, 'MMM yy') === format(endDate, 'MMM yy')) {
-      // 24th for 2024, 25th for 2025
-      const day = current.getFullYear() === 2024 ? 24 : 25;
-      const tickDate = setDate(startOfMonth(current), day);
-      if (isAfter(tickDate, endDate)) break;
-      ticks.push(format(tickDate, 'MMM yy'));
-      current = addMonths(current, 1);
-    }
-    return ticks;
-  }
-
-  // Find the first and last date in the data
-  const chartStartDate = chartData?.labels?.length ? new Date(chartData.labels[0] + ' 00:00:00') : new Date();
-  const chartEndDate = chartData?.labels?.length ? new Date(chartData.labels[chartData.labels.length - 1] + ' 00:00:00') : new Date();
-  const monthlyTicks = getMonthlyTicks(chartStartDate, chartEndDate);
-
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -98,13 +78,18 @@ export default function GoldPriceChart() {
         ticks: {
           color: '#666',
           maxRotation: 0,
-          autoSkip: false,
+          autoSkip: true,
+          maxTicksLimit: 12,
           callback: function(value, index, ticks) {
-            const label = String(this.getLabelForValue(Number(value)));
-            // Only show if this label matches a monthly tick
-            const labelMonthYear = format(new Date(label + ' 00:00:00'), 'MMM yy');
-            if (monthlyTicks.includes(labelMonthYear)) {
-              return labelMonthYear;
+            const label = this.getLabelForValue(Number(value));
+            // Only show the first data point of each month
+            if (!label) return '';
+            const date = new Date(label + 'T00:00:00');
+            if (index === 0) return format(date, 'MMM yy');
+            const prevLabel = this.getLabelForValue(Number(ticks[index - 1].value));
+            const prevDate = new Date(prevLabel + 'T00:00:00');
+            if (date.getMonth() !== prevDate.getMonth() || date.getFullYear() !== prevDate.getFullYear()) {
+              return format(date, 'MMM yy');
             }
             return '';
           },
