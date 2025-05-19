@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import ReCAPTCHA from 'react-google-recaptcha'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const countries = [
   "Austria", "Belgium", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany",
@@ -35,7 +37,7 @@ export default function Signup() {
   const router = useRouter()
   const [firstName, setFirstName] = useState('')
   const [surname, setSurname] = useState('')
-  const [dob, setDob] = useState('')
+  const [dob, setDob] = useState<Date | null>(null)
   const [address, setAddress] = useState('')
   const [countryCode, setCountryCode] = useState('+353')
   const [phone, setPhone] = useState('')
@@ -57,7 +59,7 @@ export default function Signup() {
       return
     }
     if (dob) {
-      const birthDate = new Date(dob);
+      const birthDate = dob;
       const today = new Date();
       let age = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
@@ -79,7 +81,7 @@ export default function Signup() {
           first_name: firstName,
           surname: surname,
           full_name: `${firstName} ${surname}`,
-          dob,
+          dob: dob ? dob.toISOString().split('T')[0] : '',
           address,
           phone: `${countryCode}${phone}`,
           nationality
@@ -99,12 +101,12 @@ export default function Signup() {
   function getMaxDob() {
     const today = new Date();
     today.setFullYear(today.getFullYear() - 18);
-    return today.toISOString().split('T')[0];
+    return today;
   }
   function getMinDob() {
     const today = new Date();
     today.setFullYear(today.getFullYear() - 90);
-    return today.toISOString().split('T')[0];
+    return today;
   }
 
   return (
@@ -143,16 +145,19 @@ export default function Signup() {
               />
             </div>
             <div>
-              <input 
+              <DatePicker
+                selected={dob}
+                onChange={date => setDob(date)}
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Date Of Birth"
+                maxDate={getMaxDob()}
+                minDate={getMinDob()}
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                className="input-style text-gray-400 placeholder-gray-400 w-full"
+                required
                 id="dob"
-                type="date" 
-                placeholder="Date Of Birth"
-                value={dob} 
-                onChange={e => setDob(e.target.value)} 
-                required 
-                min={getMinDob()} 
-                max={getMaxDob()} 
-                className="input-style text-gray-400 placeholder-gray-400" 
               />
             </div>
             <div>
