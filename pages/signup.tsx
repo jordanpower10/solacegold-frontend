@@ -144,7 +144,7 @@ export default function Signup() {
                 className="input-style flex-1" 
               />
             </div>
-            <div>
+            <div className="w-full">
               <DatePicker
                 selected={dob}
                 onChange={date => setDob(date)}
@@ -159,6 +159,7 @@ export default function Signup() {
                 popperClassName="date-picker-popper"
                 required
                 id="dob"
+                wrapperClassName="w-full"
               />
             </div>
             <div>
