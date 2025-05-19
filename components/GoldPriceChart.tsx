@@ -12,7 +12,7 @@ import {
   ChartOptions
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { format, fromUnixTime } from 'date-fns';
+import { format, fromUnixTime, addMonths, setDate, isAfter, isBefore, startOfMonth } from 'date-fns';
 
 ChartJS.register(
   CategoryScale,
@@ -35,6 +35,26 @@ export default function GoldPriceChart() {
   const [timeframe, setTimeframe] = useState('1Y');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Generate monthly ticks for the x-axis
+  function getMonthlyTicks(startDate: Date, endDate: Date) {
+    const ticks = [];
+    let current = new Date(startDate);
+    while (isBefore(current, endDate) || format(current, 'MMM yy') === format(endDate, 'MMM yy')) {
+      // 24th for 2024, 25th for 2025
+      const day = current.getFullYear() === 2024 ? 24 : 25;
+      const tickDate = setDate(startOfMonth(current), day);
+      if (isAfter(tickDate, endDate)) break;
+      ticks.push(format(tickDate, 'MMM yy'));
+      current = addMonths(current, 1);
+    }
+    return ticks;
+  }
+
+  // Find the first and last date in the data
+  const chartStartDate = chartData?.labels?.length ? new Date(chartData.labels[0] + ' 00:00:00') : new Date();
+  const chartEndDate = chartData?.labels?.length ? new Date(chartData.labels[chartData.labels.length - 1] + ' 00:00:00') : new Date();
+  const monthlyTicks = getMonthlyTicks(chartStartDate, chartEndDate);
 
   const options: ChartOptions<'line'> = {
     responsive: true,
@@ -80,13 +100,12 @@ export default function GoldPriceChart() {
           maxRotation: 0,
           autoSkip: false,
           callback: function(value, index, ticks) {
-            // Only show one tick per month, formatted as 'May 25', 'June 25', etc.
             const label = String(this.getLabelForValue(Number(value)));
-            const date = new Date(label + ' 00:00:00');
-            if (index === 0) return format(date, 'MMM yy');
-            if (index === ticks.length - 1) return format(date, 'MMM yy');
-            // Show only if it's the 25th of the month
-            if (label.includes('25')) return format(date, 'MMM dd');
+            // Only show if this label matches a monthly tick
+            const labelMonthYear = format(new Date(label + ' 00:00:00'), 'MMM yy');
+            if (monthlyTicks.includes(labelMonthYear)) {
+              return labelMonthYear;
+            }
             return '';
           },
         },
@@ -171,7 +190,7 @@ export default function GoldPriceChart() {
 
   const processChartData = (priceData: [number, number][]): PriceData => {
     return {
-      dates: priceData.map(([timestamp]) => format(fromUnixTime(timestamp / 1000), 'MMM dd')),
+      dates: priceData.map(([timestamp]) => format(fromUnixTime(timestamp / 1000), 'yyyy-MM-dd')),
       prices: priceData.map(([, price]) => price)
     };
   };
