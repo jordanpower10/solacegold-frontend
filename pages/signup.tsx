@@ -68,7 +68,7 @@ export default function Signup() {
     }
     setLoading(true)
     try {
-      // Step 1: Sign up the user
+      // SIMPLIFIED APPROACH: Just create the auth user and let triggers handle the rest
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
@@ -79,44 +79,23 @@ export default function Signup() {
             dob: dob ? dob.toISOString().split('T')[0] : '',
             address,
             phone_number: `${countryCode}${phone}`,
-            nationality
+            nationality,
+            role: 'user' // Add role directly to auth metadata
           }
         }
       })
 
-      if (signUpError) throw signUpError
-
-      // Step 2: Get the user data
-      const { data: { user }, error: userError } = await supabase.auth.getUser()
-      if (userError) throw userError
-      if (!user) throw new Error('No user found after signup')
-
-      // Step 3: Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert([{
-          id: user.id,
-          first_name: firstName,
-          last_name: surname,
-          email: email,
-          role: 'user'
-        }])
-      if (profileError) throw profileError
-
-      // Step 4: Create wallets (both at once)
-      const { error: walletsError } = await supabase
-        .from('wallets')
-        .insert([
-          { user_id: user.id, wallet_type: 'cash', balance: 0 },
-          { user_id: user.id, wallet_type: 'gold', balance: 0 }
-        ])
-      if (walletsError) throw walletsError
-
+      if (signUpError) {
+        console.error('Signup error:', signUpError)
+        throw signUpError
+      }
+      
+      // Success - don't try to create profiles or wallets manually
       alert('✅ Account created! Please check your email.')
       router.push('/login')
     } catch (error: any) {
       console.error('Signup error:', error)
-      alert(`❌ ${error.message || 'An error occurred during signup'}`)
+      alert(`❌ ${error.message || 'Database error saving new user'}`)
     } finally {
       setLoading(false)
     }
