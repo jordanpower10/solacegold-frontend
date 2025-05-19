@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
-import ReCAPTCHA from 'react-google-recaptcha'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -46,14 +45,9 @@ export default function Signup() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [recaptchaToken, setRecaptchaToken] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!recaptchaToken) {
-      alert('❌ Please complete the CAPTCHA')
-      return
-    }
     if (password !== confirmPassword) {
       alert('❌ Passwords do not match')
       return
@@ -259,13 +253,6 @@ export default function Signup() {
                   I agree to the <a href="/kyc.pdf" target="_blank" className="text-[#e0b44a] hover:text-[#f0c45a] underline">KYC checks</a>
                 </label>
               </div>
-            </div>
-            <div className="flex justify-center mt-4">
-              <ReCAPTCHA
-                sitekey="YOUR_RECAPTCHA_SITE_KEY"
-                onChange={(token: string | null) => setRecaptchaToken(token || '')}
-                theme="dark"
-              />
             </div>
             <button 
               type="submit" 

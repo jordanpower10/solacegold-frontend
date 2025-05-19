@@ -78,8 +78,17 @@ export default function GoldPriceChart() {
         ticks: {
           color: '#666',
           maxRotation: 0,
-          autoSkip: true,
-          maxTicksLimit: 6,
+          autoSkip: false,
+          callback: function(value, index, ticks) {
+            // Only show one tick per month, formatted as 'May 25', 'June 25', etc.
+            const label = String(this.getLabelForValue(Number(value)));
+            const date = new Date(label + ' 00:00:00');
+            if (index === 0) return format(date, 'MMM yy');
+            if (index === ticks.length - 1) return format(date, 'MMM yy');
+            // Show only if it's the 25th of the month
+            if (label.includes('25')) return format(date, 'MMM dd');
+            return '';
+          },
         },
       },
       y: {
@@ -162,7 +171,7 @@ export default function GoldPriceChart() {
 
   const processChartData = (priceData: [number, number][]): PriceData => {
     return {
-      dates: priceData.map(([timestamp]) => format(fromUnixTime(timestamp / 1000), 'MMM d')),
+      dates: priceData.map(([timestamp]) => format(fromUnixTime(timestamp / 1000), 'MMM dd')),
       prices: priceData.map(([, price]) => price)
     };
   };
