@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 const countries = [
   "Austria", "Belgium", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany",
@@ -42,9 +43,14 @@ export default function Signup() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!recaptchaToken) {
+      alert('❌ Please complete the CAPTCHA')
+      return
+    }
     if (password !== confirmPassword) {
       alert('❌ Passwords do not match')
       return
@@ -126,9 +132,10 @@ export default function Signup() {
               />
             </div>
             <div>
+              <label htmlFor="dob" className="block text-gray-400 text-sm mb-1">Date of Birth</label>
               <input 
+                id="dob"
                 type="date" 
-                placeholder="Date of Birth"
                 value={dob} 
                 onChange={e => setDob(e.target.value)} 
                 required 
@@ -165,7 +172,7 @@ export default function Signup() {
                 value={countryCode} 
                 onChange={e => setCountryCode(e.target.value)} 
                 required 
-                className="w-20 input-style bg-[#1a1a1a] text-gray-400 text-sm flex-shrink-0"
+                className="w-14 input-style bg-[#1a1a1a] text-gray-400 text-sm flex-shrink-0"
               >
                 {countryCodes.map((entry) => (
                   <option key={entry.code} value={entry.code}>{entry.code}</option>
@@ -233,6 +240,13 @@ export default function Signup() {
                   I agree to the <a href="/kyc.pdf" target="_blank" className="text-[#e0b44a] hover:text-[#f0c45a] underline">KYC checks</a>
                 </label>
               </div>
+            </div>
+            <div className="flex justify-center mt-4">
+              <ReCAPTCHA
+                sitekey="YOUR_RECAPTCHA_SITE_KEY"
+                onChange={(token: string | null) => setRecaptchaToken(token || '')}
+                theme="dark"
+              />
             </div>
             <button 
               type="submit" 
