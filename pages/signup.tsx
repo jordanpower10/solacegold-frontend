@@ -290,6 +290,9 @@ export default function Signup() {
           color: #666;
           outline: none;
           transition: all 0.2s;
+          font-size: 1rem;
+          height: 48px;
+          box-sizing: border-box;
         }
         .input-style:focus {
           border-color: #e0b44a;
@@ -312,6 +315,11 @@ export default function Signup() {
           background-color: #1a1a1a;
           border: 1px solid #2a2a2a;
           color: #666;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          height: 48px;
+          padding: 0.75rem 1rem;
+          box-sizing: border-box;
         }
         .react-datepicker__input-container input.input-style:focus {
           border-color: #e0b44a;
