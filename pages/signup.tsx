@@ -33,7 +33,8 @@ const countryCodes = [
 
 export default function Signup() {
   const router = useRouter()
-  const [name, setName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [surname, setSurname] = useState('')
   const [dob, setDob] = useState('')
   const [address, setAddress] = useState('')
   const [countryCode, setCountryCode] = useState('+353')
@@ -75,7 +76,9 @@ export default function Signup() {
       password,
       options: {
         data: {
-          full_name: name,
+          first_name: firstName,
+          surname: surname,
+          full_name: `${firstName} ${surname}`,
           dob,
           address,
           phone: `${countryCode}${phone}`,
@@ -121,14 +124,22 @@ export default function Signup() {
             Create your account
           </h2>
           <form className="space-y-5" onSubmit={handleSubmit}>
-            <div>
+            <div className="flex flex-col sm:flex-row gap-2">
               <input 
                 type="text" 
-                placeholder="Full Name" 
-                value={name} 
-                onChange={e => setName(e.target.value)} 
+                placeholder="First Name" 
+                value={firstName} 
+                onChange={e => setFirstName(e.target.value)} 
                 required 
-                className="input-style" 
+                className="input-style flex-1" 
+              />
+              <input 
+                type="text" 
+                placeholder="Surname" 
+                value={surname} 
+                onChange={e => setSurname(e.target.value)} 
+                required 
+                className="input-style flex-1" 
               />
             </div>
             <div>
