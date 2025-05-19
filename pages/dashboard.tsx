@@ -44,15 +44,13 @@ export default function Dashboard() {
 
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('first_name, full_name')
+        .select('first_name, last_name')
         .eq('id', userId)
         .single()
 
-      setUserName(profileData?.full_name || 'User')
+      setUserName(profileData?.first_name || 'User')
       if (profileData?.first_name) {
         setFirstName(profileData.first_name)
-      } else if (profileData?.full_name) {
-        setFirstName(profileData.full_name.split(' ')[0])
       }
 
       const { data: wallets } = await supabase

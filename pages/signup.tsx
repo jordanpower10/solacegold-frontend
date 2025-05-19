@@ -74,7 +74,6 @@ export default function Signup() {
         data: {
           first_name: firstName,
           last_name: surname,
-          full_name: `${firstName} ${surname}`,
           dob: dob ? dob.toISOString().split('T')[0] : '',
           address,
           phone_number: `${countryCode}${phone}`,
