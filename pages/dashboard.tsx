@@ -6,9 +6,11 @@ import GoldPriceChart from '../components/GoldPriceChart'
 
 export default function Dashboard() {
   const [userName, setUserName] = useState('User')
+  const [firstName, setFirstName] = useState('User')
   const [cashBalance, setCashBalance] = useState(0)
   const [goldBalance, setGoldBalance] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [transactions, setTransactions] = useState<any[]>([])
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
@@ -47,6 +49,9 @@ export default function Dashboard() {
         .single()
 
       setUserName(profileData?.full_name || 'User')
+      if (profileData?.full_name) {
+        setFirstName(profileData.full_name.split(' ')[0])
+      }
 
       const { data: wallets } = await supabase
         .from('wallets')
@@ -60,6 +65,14 @@ export default function Dashboard() {
           setGoldBalance(wallet.balance)
         }
       })
+
+      // Fetch transactions
+      const { data: txs } = await supabase
+        .from('transactions')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+      setTransactions(txs || [])
     }
 
     fetchData()
@@ -143,16 +156,18 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <div className="flex flex-col items-center text-center py-10 px-4">
-          <h1 className="text-3xl font-bold mb-2">Hi {userName},</h1>
+          <h1 className="text-3xl font-bold mb-2">Hi {firstName},</h1>
           <p className="text-gray-400 mb-8 text-lg">Your Balance</p>
 
           {/* Balances */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 w-full max-w-2xl">
-            <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col items-center">
+          <div className="flex flex-col md:flex-row gap-8 mb-10 w-full max-w-2xl justify-center items-center">
+            <div className="bg-[#121212] border border-[#2a2a2a] flex flex-col items-center justify-center"
+              style={{ width: 160, height: 160, borderRadius: '50%' }}>
               <div className="text-2xl font-bold mb-1">${cashBalance.toLocaleString('en-US')}</div>
               <div className="text-sm text-gray-400">Cash Balance</div>
             </div>
-            <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 flex flex-col items-center">
+            <div className="bg-[#121212] border border-[#2a2a2a] flex flex-col items-center justify-center"
+              style={{ width: 160, height: 160, borderRadius: '50%' }}>
               <div className="text-2xl font-bold mb-1">{goldBalance.toFixed(2)} oz</div>
               <div className="text-sm text-gray-400">Gold Balance</div>
             </div>
@@ -193,16 +208,18 @@ export default function Dashboard() {
           {/* Recent Transactions */}
           <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
             <h2 className="text-xl font-semibold mb-4 text-left">Recent Transactions</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-400">Bought 0.1 oz</span>
-                <span className="text-[#e0b44a]">$290.20</span>
+            {transactions.length > 0 ? (
+              <div className="space-y-3">
+                {transactions.map((tx) => (
+                  <div key={tx.id} className="flex justify-between items-center text-sm">
+                    <span className="text-gray-400">{tx.type.charAt(0).toUpperCase() + tx.type.slice(1)} {tx.amount ? `$${tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}` : ''}</span>
+                    <span className="text-[#e0b44a]">{new Date(tx.created_at).toLocaleDateString()}</span>
+                  </div>
+                ))}
               </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-400">Deposited</span>
-                <span className="text-[#e0b44a]">$500.00</span>
-              </div>
-            </div>
+            ) : (
+              <div className="text-gray-500 text-center">No recent transactions.</div>
+            )}
           </div>
 
           {/* Gold Price Chart */}
