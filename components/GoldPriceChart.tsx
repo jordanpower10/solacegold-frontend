@@ -41,6 +41,17 @@ function getMonthLabels(start: Date, end: Date) {
   return labels;
 }
 
+// Helper to get all months between two dates (first of each month)
+function getMonthTicks(start: Date, end: Date) {
+  const ticks = [];
+  let current = new Date(start.getFullYear(), start.getMonth(), 1);
+  while (current <= end) {
+    ticks.push(format(current, 'yyyy-MM-01'));
+    current.setMonth(current.getMonth() + 1);
+  }
+  return ticks;
+}
+
 export default function GoldPriceChart() {
   const [chartData, setChartData] = useState<any>(null);
   const [timeframe, setTimeframe] = useState('1Y');
@@ -89,19 +100,7 @@ export default function GoldPriceChart() {
         ticks: {
           color: '#666',
           maxRotation: 0,
-          autoSkip: true,
-          callback: function(value, index, ticks) {
-            const label = this.getLabelForValue(Number(value));
-            if (!label) return '';
-            const date = new Date(label);
-            if (index === 0) return format(date, 'MMM');
-            const prevLabel = this.getLabelForValue(Number(ticks[index - 1].value));
-            const prevDate = new Date(prevLabel);
-            if (date.getMonth() !== prevDate.getMonth() || date.getFullYear() !== prevDate.getFullYear()) {
-              return format(date, 'MMM');
-            }
-            return '';
-          },
+          display: false,
         },
       },
       y: {
@@ -193,6 +192,7 @@ export default function GoldPriceChart() {
   const chartStartDate = chartData?.labels?.length ? new Date(chartData.labels[0]) : new Date();
   const chartEndDate = chartData?.labels?.length ? new Date(chartData.labels[chartData.labels.length - 1]) : new Date();
   const monthLabels = getMonthLabels(chartStartDate, chartEndDate);
+  const monthTicks = getMonthTicks(chartStartDate, chartEndDate);
 
   return (
     <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full">

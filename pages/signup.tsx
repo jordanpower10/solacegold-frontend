@@ -73,11 +73,11 @@ export default function Signup() {
       options: {
         data: {
           first_name: firstName,
-          surname: surname,
+          last_name: surname,
           full_name: `${firstName} ${surname}`,
           dob: dob ? dob.toISOString().split('T')[0] : '',
           address,
-          phone: `${countryCode}${phone}`,
+          phone_number: `${countryCode}${phone}`,
           nationality
         }
       }
