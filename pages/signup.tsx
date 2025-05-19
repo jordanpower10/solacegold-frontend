@@ -132,16 +132,16 @@ export default function Signup() {
               />
             </div>
             <div>
-              <label htmlFor="dob" className="block text-gray-400 text-sm mb-1">Date of Birth</label>
               <input 
                 id="dob"
                 type="date" 
+                placeholder="Date of Birth"
                 value={dob} 
                 onChange={e => setDob(e.target.value)} 
                 required 
                 min={getMinDob()} 
                 max={getMaxDob()} 
-                className="input-style text-gray-400" 
+                className="input-style text-gray-400 placeholder-gray-400" 
               />
             </div>
             <div>
@@ -172,7 +172,7 @@ export default function Signup() {
                 value={countryCode} 
                 onChange={e => setCountryCode(e.target.value)} 
                 required 
-                className="w-14 input-style bg-[#1a1a1a] text-gray-400 text-sm flex-shrink-0"
+                className="input-style w-28 max-w-[90px] bg-[#1a1a1a] text-gray-400 text-sm flex-shrink-0"
               >
                 {countryCodes.map((entry) => (
                   <option key={entry.code} value={entry.code}>{entry.code}</option>
@@ -185,6 +185,7 @@ export default function Signup() {
                 onChange={e => setPhone(e.target.value)} 
                 required 
                 className="input-style flex-1 min-w-0" 
+                style={{ minWidth: 0 }}
               />
             </div>
             <div>
