@@ -82,15 +82,17 @@ export default function GoldPriceChart() {
           maxTicksLimit: 12,
           callback: function(value, index, ticks) {
             const label = this.getLabelForValue(Number(value));
-            // Only show the first data point of each month
             if (!label) return '';
             const date = new Date(label + 'T00:00:00');
+            // Show a tick for the first data point of each month
             if (index === 0) return format(date, 'MMM yy');
             const prevLabel = this.getLabelForValue(Number(ticks[index - 1].value));
             const prevDate = new Date(prevLabel + 'T00:00:00');
             if (date.getMonth() !== prevDate.getMonth() || date.getFullYear() !== prevDate.getFullYear()) {
               return format(date, 'MMM yy');
             }
+            // Show a tick for the last data point if it's a new month
+            if (index === ticks.length - 1) return format(date, 'MMM yy');
             return '';
           },
         },
