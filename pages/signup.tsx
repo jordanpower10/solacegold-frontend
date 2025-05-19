@@ -155,7 +155,8 @@ export default function Signup() {
                 showMonthDropdown
                 showYearDropdown
                 dropdownMode="select"
-                className="input-style text-gray-400 placeholder-gray-400 w-full"
+                className="input-style w-full"
+                popperClassName="date-picker-popper"
                 required
                 id="dob"
               />
@@ -301,6 +302,24 @@ export default function Signup() {
         .input-style option {
           color: #666;
           background-color: #1a1a1a;
+        }
+      `}</style>
+      <style jsx global>{`
+        .input-style::placeholder {
+          color: #666;
+        }
+        .react-datepicker__input-container input.input-style {
+          background-color: #1a1a1a;
+          border: 1px solid #2a2a2a;
+          color: #666;
+        }
+        .react-datepicker__input-container input.input-style:focus {
+          border-color: #e0b44a;
+          box-shadow: 0 0 0 1px #e0b44a;
+          color: white;
+        }
+        .date-picker-popper {
+          z-index: 50;
         }
       `}</style>
     </>
