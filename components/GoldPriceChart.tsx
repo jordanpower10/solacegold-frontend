@@ -89,13 +89,18 @@ export default function GoldPriceChart() {
         ticks: {
           color: '#666',
           maxRotation: 0,
-          autoSkip: false,
-          callback: function(value) {
+          autoSkip: true,
+          callback: function(value, index, ticks) {
             const label = this.getLabelForValue(Number(value));
             if (!label) return '';
             const date = new Date(label);
-            const monthLabel = format(date, 'MMM yy');
-            return monthLabels.includes(monthLabel) ? monthLabel : '';
+            if (index === 0) return format(date, 'MMM');
+            const prevLabel = this.getLabelForValue(Number(ticks[index - 1].value));
+            const prevDate = new Date(prevLabel);
+            if (date.getMonth() !== prevDate.getMonth() || date.getFullYear() !== prevDate.getFullYear()) {
+              return format(date, 'MMM');
+            }
+            return '';
           },
         },
       },
