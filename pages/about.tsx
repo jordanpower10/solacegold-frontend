@@ -1,64 +1,61 @@
 import Head from 'next/head'
 
-export default function About() {
+export default function HowItWorks() {
   return (
     <>
       <Head>
-        <title>About – Solace Gold</title>
+        <title>How it Works – Solace Gold</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans">
-
-        {/* Header Section */}
-        <section className="text-center px-6 pt-20 pb-12 max-w-3xl mx-auto">
-          <div className="flex justify-center mb-6">
+      <div className="min-h-screen bg-[#0d0d0d] px-4 flex flex-col items-center justify-center text-white font-sans py-10">
+        {/* Logo */}
+        <div className="mb-6">
+          <a href="/">
             <img
               src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png"
               alt="Solace Gold Logo"
-              className="w-40 sm:w-48 md:w-56 lg:w-64 mix-blend-lighten"
+              className="w-32 h-auto hover:opacity-80 transition"
             />
-          </div>
-          <h1 className="text-5xl font-bold mb-4">
-            <span className="text-[#e0b44a]">About</span> Solace Gold
-          </h1>
-          <p className="text-gray-400 text-lg">
-            We believe gold should be easy to own. That’s why we’ve stripped away the vaults, the wait, and the friction — and built a platform focused on pure value.
-          </p>
-        </section>
+          </a>
+        </div>
 
-        {/* Divider */}
-        <div className="h-px bg-[#2a2a2a] my-8" />
+        {/* Title */}
+        <h1 className="text-3xl font-bold text-[#e0b44a] mb-2 text-center">How it Works</h1>
+        <p className="text-gray-300 text-center max-w-lg mb-10">
+          Safe and secure digital ownership of physical gold.
+        </p>
 
-        {/* What We Do and Why Solace */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-12 px-6 py-12 max-w-6xl mx-auto">
-          <div>
-            <h2 className="text-2xl font-semibold mb-4 text-[#e0b44a]">What We Do</h2>
-            <p className="text-gray-300 leading-relaxed">
-              Solace Gold offers a modern way to own fully-backed gold — without the burden of physical storage. In just a few clicks, customers can secure real gold at full value, verified and insured at the source, and instantly reflected in their account.
+        {/* Process Graphic */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-10 text-center text-[#e0b44a]">
+
+          <div className="max-w-xs">
+            <img src="/secure-icon.png" alt="Secure Funds Icon" className="mx-auto w-14 mb-4" />
+            <h2 className="font-bold text-xl mb-1">Funds are held securely</h2>
+            <p className="text-sm text-gray-300">
+              Solace Gold’s account holds outside funds. Accounts are kept separate from company finances.
             </p>
           </div>
-          <div>
-            <h2 className="text-2xl font-semibold mb-4 text-[#e0b44a]">Why Solace?</h2>
-            <p className="text-gray-300 leading-relaxed">
-              Simplicity, speed, and trust. Our platform is designed to feel effortless, but behind the scenes, we partner with top-tier providers to ensure every ounce is traceable, secure, and backed 1:1. Whether you’re buying your first gram or building long-term value, Solace is built for you.
+
+          <div className="max-w-xs">
+            <img src="/gold-bars-icon.png" alt="Gold Bars Icon" className="mx-auto w-14 mb-4" />
+            <h2 className="font-bold text-xl mb-1">Allocated gold</h2>
+            <p className="text-sm text-gray-300">
+              Purchase’s funds are used to acquire physical gold, stored in a secure vault. Title passes to the customer.
             </p>
           </div>
-        </section>
 
-        {/* Divider */}
-        <div className="h-px bg-[#2a2a2a] my-8" />
+          <div className="max-w-xs">
+            <img src="/insurance-icon.png" alt="Insurance Icon" className="mx-auto w-14 mb-4" />
+            <h2 className="font-bold text-xl mb-1">Fully insured</h2>
+            <p className="text-sm text-gray-300">
+              All gold holdings are insured for added protection against loss, theft, or damage.
+            </p>
+          </div>
+        </div>
 
-        {/* Final Statement */}
-        <section className="text-center px-6 pb-16 max-w-3xl mx-auto">
-          <h3 className="text-xl font-medium text-gray-400">
-            Real gold. Modern access. <span className="text-[#e0b44a]">No compromises.</span>
-          </h3>
-        </section>
-
-        <footer className="text-center text-sm text-gray-600 py-6 border-t border-gray-800">
-          &copy; 2025 Solace Gold. All rights reserved.
-        </footer>
+        {/* Footer */}
+        <p className="text-gray-500 mt-12 text-sm">solacegold.com</p>
       </div>
     </>
   )
