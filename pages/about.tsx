@@ -27,45 +27,66 @@ export default function HowItWorks() {
         </p>
 
         {/* Process Diagram */}
-        <div className="w-72 h-72 relative mb-16">
+        <div className="w-96 h-96 relative mb-16">
           {/* Dollar Icon */}
-          <div className="absolute left-0 bottom-0 w-20 h-20 border-2 border-[#e0b44a] rounded-lg flex items-center justify-center">
-            <span className="text-[#e0b44a] text-3xl">$</span>
+          <div className="absolute left-0 bottom-0 w-24 h-24 border-2 border-[#e0b44a] rounded-lg flex items-center justify-center">
+            <span className="text-[#e0b44a] text-4xl">$</span>
           </div>
 
           {/* Shield Icon */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-20 border-2 border-[#e0b44a] rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10 text-[#e0b44a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-24 border-2 border-[#e0b44a] rounded-full flex items-center justify-center">
+            <svg className="w-12 h-12 text-[#e0b44a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
           </div>
 
           {/* Gold Bars Icon */}
-          <div className="absolute right-0 bottom-0 w-20 h-20 border-2 border-[#e0b44a] flex items-center justify-center">
-            <svg className="w-10 h-10 text-[#e0b44a]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M4 8h16v3H4zm0 5h16v3H4z" />
+          <div className="absolute right-0 bottom-0 w-24 h-24 border-2 border-[#e0b44a] flex items-center justify-center">
+            <svg className="w-12 h-12 text-[#e0b44a]" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12 3L2 12h3v8h14v-8h3L12 3M7 18v-7.8l5-4.5 5 4.5V18H7z"/>
             </svg>
           </div>
 
           {/* Arrows */}
-          <div className="absolute inset-0">
-            <svg className="w-full h-full" viewBox="0 0 300 300">
-              <path
-                d="M60 200 L150 50 L240 200"
-                fill="none"
-                stroke="#e0b44a"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-              <path
-                d="M240 200 L60 200"
-                fill="none"
-                stroke="#e0b44a"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400">
+            {/* Left to Top Arrow */}
+            <path
+              d="M100 300 L200 100"
+              fill="none"
+              stroke="#e0b44a"
+              strokeWidth="2"
+              markerEnd="url(#arrowhead)"
+            />
+            {/* Top to Right Arrow */}
+            <path
+              d="M200 100 L300 300"
+              fill="none"
+              stroke="#e0b44a"
+              strokeWidth="2"
+              markerEnd="url(#arrowhead)"
+            />
+            {/* Right to Left Arrow */}
+            <path
+              d="M300 300 L100 300"
+              fill="none"
+              stroke="#e0b44a"
+              strokeWidth="2"
+              markerEnd="url(#arrowhead)"
+            />
+            {/* Arrow Definitions */}
+            <defs>
+              <marker
+                id="arrowhead"
+                markerWidth="10"
+                markerHeight="7"
+                refX="9"
+                refY="3.5"
+                orient="auto"
+              >
+                <polygon points="0 0, 10 3.5, 0 7" fill="#e0b44a" />
+              </marker>
+            </defs>
+          </svg>
         </div>
 
         {/* Process Descriptions */}
