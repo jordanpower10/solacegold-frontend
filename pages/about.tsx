@@ -29,7 +29,7 @@ export default function HowItWorks() {
         {/* Process Diagram Image */}
         <div className="mb-16">
           <img
-            src="https://i.postimg.cc/T1rK7KKC/about-page.png"
+            src="https://i.postimg.cc/Sx9vZqdj/transparent-about.png"
             alt="How it Works Process"
             className="w-96 h-auto"
           />
