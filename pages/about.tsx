@@ -8,9 +8,9 @@ export default function HowItWorks() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen bg-[#0d0d0d] px-4 flex flex-col items-center justify-center text-white font-sans py-10">
+      <div className="min-h-screen bg-black px-4 flex flex-col items-center justify-center text-white font-sans py-10">
         {/* Logo */}
-        <div className="mb-6">
+        <div className="mb-12">
           <a href="/">
             <img
               src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png"
@@ -21,41 +21,73 @@ export default function HowItWorks() {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-[#e0b44a] mb-2 text-center">How it Works</h1>
-        <p className="text-gray-300 text-center max-w-lg mb-10">
+        <h1 className="text-5xl font-bold text-[#FFD700] mb-6">How it Works</h1>
+        <p className="text-2xl text-gray-300 text-center max-w-2xl mb-16">
           Safe and secure digital ownership of physical gold.
         </p>
 
         {/* Process Graphic */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-10 text-center text-[#e0b44a]">
+        <div className="relative w-full max-w-2xl mb-16">
+          <div className="flex justify-center items-center">
+            {/* Circular Process Icons */}
+            <div className="relative">
+              {/* Process Circle */}
+              <div className="flex justify-between items-center gap-20">
+                {/* Dollar Icon */}
+                <div className="w-24 h-24 border-2 border-[#FFD700] rounded-lg flex items-center justify-center">
+                  <span className="text-[#FFD700] text-4xl">$</span>
+                </div>
 
-          <div className="max-w-xs">
-            <img src="/secure-icon.png" alt="Secure Funds Icon" className="mx-auto w-14 mb-4" />
-            <h2 className="font-bold text-xl mb-1">Funds are held securely</h2>
-            <p className="text-sm text-gray-300">
-              Solace Gold’s account holds outside funds. Accounts are kept separate from company finances.
+                {/* Shield Icon */}
+                <div className="w-24 h-24 border-2 border-[#FFD700] rounded-full flex items-center justify-center">
+                  <svg className="w-12 h-12 text-[#FFD700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+
+                {/* Gold Bars Icon */}
+                <div className="w-24 h-24 border-2 border-[#FFD700] flex items-center justify-center">
+                  <svg className="w-12 h-12 text-[#FFD700]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M4 8h16v3H4zm0 5h16v3H4z" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Connecting Arrows */}
+              <div className="absolute inset-0 flex justify-center items-center">
+                <div className="w-full h-full border-2 border-[#FFD700] rounded-full opacity-20"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Process Descriptions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Funds are held securely</h2>
+            <p className="text-gray-300">
+              Solace Gold's account holds outside funds. Accounts are kept separate from company finances.
             </p>
           </div>
 
-          <div className="max-w-xs">
-            <img src="/gold-bars-icon.png" alt="Gold Bars Icon" className="mx-auto w-14 mb-4" />
-            <h2 className="font-bold text-xl mb-1">Allocated gold</h2>
-            <p className="text-sm text-gray-300">
-              Purchase’s funds are used to acquire physical gold, stored in a secure vault. Title passes to the customer.
-            </p>
-          </div>
-
-          <div className="max-w-xs">
-            <img src="/insurance-icon.png" alt="Insurance Icon" className="mx-auto w-14 mb-4" />
-            <h2 className="font-bold text-xl mb-1">Fully insured</h2>
-            <p className="text-sm text-gray-300">
-              All gold holdings are insured for added protection against loss, theft, or damage.
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Allocated gold</h2>
+            <p className="text-gray-300">
+              Purchase's funds are used to acquire physical gold, stored in a secure vault. Title passes to the customer.
             </p>
           </div>
         </div>
 
+        {/* Fully Insured Section */}
+        <div className="text-center mt-12 max-w-2xl">
+          <h2 className="text-2xl font-bold text-[#FFD700] mb-4">Fully insured</h2>
+          <p className="text-gray-300">
+            All gold holdings are insured for an added protection against loss, theft, or damage.
+          </p>
+        </div>
+
         {/* Footer */}
-        <p className="text-gray-500 mt-12 text-sm">solacegold.com</p>
+        <p className="text-gray-500 mt-16 text-lg">solacegold.com</p>
       </div>
     </>
   )
