@@ -200,7 +200,7 @@ export default function Dashboard() {
               onClick={() => router.push('/sell')}
               className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
             >
-              <img src="https://i.postimg.cc/2yF4qc7k/Chat-GPT-Image-May-26-2025-11-02-12-PM.png" alt="Sell Gold Icon" className="w-10 h-10 mb-2" />
+              <img src="https://i.postimg.cc/2yF4qc7k/Chat-GPT-Image-May-26-2025-11-02-12-PM.png" alt="Sell Gold Icon" className="w-10 h-10 mb-1" />
               <span className="text-sm">Sell Gold</span>
             </button>
           </div>
