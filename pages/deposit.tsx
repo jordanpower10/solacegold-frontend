@@ -111,42 +111,114 @@ export default function Deposit() {
     }
   }
 
-  const startKycVerification = () => {
+  // Handle KYC verification button click
+  const handleKycVerification = () => {
     if (verificationUrl) {
       window.location.href = verificationUrl
     }
   }
 
-  // Show KYC status messages
-  const renderKycMessage = () => {
-    if (!kycStatus && verificationUrl) {
+  // Render different content based on KYC status
+  const renderContent = () => {
+    if (!kycStatus) {
       return (
-        <div className="p-4 bg-blue-900/20 border border-blue-900 rounded-lg mb-6">
-          <p className="text-blue-500 text-sm text-center">
-            Please complete KYC verification to deposit funds
-          </p>
+        <div className="text-center">
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-4 text-[#e0b44a]">KYC Verification Required</h3>
+            <p className="text-gray-400 mb-6">
+              To deposit funds, you need to complete the KYC verification process first.
+            </p>
+            <button
+              onClick={handleKycVerification}
+              className="w-full bg-gradient-to-r from-[#e0b44a] to-[#c4963c] text-black font-bold py-4 px-6 rounded-lg shadow-lg hover:from-[#e5bc5c] hover:to-[#cca04a] transition-all duration-200"
+            >
+              Complete KYC Verification
+            </button>
+          </div>
         </div>
       )
     }
+
     if (kycStatus === 'pending') {
       return (
-        <div className="p-4 bg-yellow-900/20 border border-yellow-900 rounded-lg mb-6">
-          <p className="text-yellow-500 text-sm text-center">
-            KYC Pending, please wait
-          </p>
+        <div className="text-center">
+          <div className="p-6 bg-yellow-900/20 border border-yellow-900 rounded-lg mb-6">
+            <h3 className="text-xl font-semibold mb-2 text-yellow-500">KYC Verification Pending</h3>
+            <p className="text-gray-400">
+              Your KYC verification is currently being reviewed. Please check back later.
+            </p>
+          </div>
         </div>
       )
     }
+
     if (kycStatus === 'rejected') {
       return (
-        <div className="p-4 bg-red-900/20 border border-red-900 rounded-lg mb-6">
-          <p className="text-red-500 text-sm text-center">
-            KYC check Rejected, please contact us at kyc@solacegold.com
-          </p>
+        <div className="text-center">
+          <div className="p-6 bg-red-900/20 border border-red-900 rounded-lg mb-6">
+            <h3 className="text-xl font-semibold mb-2 text-red-500">KYC Verification Rejected</h3>
+            <p className="text-gray-400">
+              Your KYC verification was not approved. Please contact us at{' '}
+              <a href="mailto:kyc@solacegold.com" className="text-[#e0b44a] hover:underline">
+                kyc@solacegold.com
+              </a>
+              {' '}for assistance.
+            </p>
+          </div>
         </div>
       )
     }
-    return null
+
+    // KYC is approved, show deposit form
+    return (
+      <form className="mt-8 space-y-6" onSubmit={handleDeposit}>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <span className="text-gray-400">$</span>
+          </div>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="0.00"
+            step="0.01"
+            min="0"
+            className="w-full pl-8 pr-4 py-3 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e0b44a] focus:border-transparent transition-all"
+            required
+          />
+        </div>
+
+        {error && (
+          <div className="p-4 bg-red-900/20 border border-red-900 rounded-lg">
+            <p className="text-red-500 text-sm text-center">{error}</p>
+          </div>
+        )}
+
+        {success && (
+          <div className="p-4 bg-green-900/20 border border-green-900 rounded-lg">
+            <p className="text-green-500 text-sm text-center">{success}</p>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-gradient-to-r from-[#e0b44a] to-[#c4963c] text-black font-bold py-3 px-4 rounded-lg shadow-lg hover:from-[#e5bc5c] hover:to-[#cca04a] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? (
+            <span className="flex items-center justify-center">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processing...
+            </span>
+          ) : (
+            'Deposit Funds'
+          )}
+        </button>
+      </form>
+    )
   }
 
   return (
@@ -173,71 +245,13 @@ export default function Deposit() {
               Deposit Funds
             </h2>
             <p className="text-center text-gray-400 text-sm">
-              Enter the amount you wish to deposit to your cash wallet
+              {kycStatus === 'approved' 
+                ? 'Enter the amount you wish to deposit to your cash wallet'
+                : 'Complete KYC verification to deposit funds'}
             </p>
           </div>
 
-          {renderKycMessage()}
-
-          {!kycStatus && verificationUrl ? (
-            <div className="mt-8">
-              <button
-                onClick={startKycVerification}
-                className="w-full bg-gradient-to-r from-[#e0b44a] to-[#c4963c] text-black font-bold py-3 px-4 rounded-lg shadow-lg hover:from-[#e5bc5c] hover:to-[#cca04a] transition-all duration-200"
-              >
-                Complete KYC Verification
-              </button>
-            </div>
-          ) : (
-            <form className="mt-8 space-y-6" onSubmit={handleDeposit}>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <span className="text-gray-400">$</span>
-                </div>
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="0.00"
-                  step="0.01"
-                  min="0"
-                  className="w-full pl-8 pr-4 py-3 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e0b44a] focus:border-transparent transition-all"
-                  required
-                  disabled={kycStatus !== 'approved'}
-                />
-              </div>
-
-              {error && (
-                <div className="p-4 bg-red-900/20 border border-red-900 rounded-lg">
-                  <p className="text-red-500 text-sm text-center">{error}</p>
-                </div>
-              )}
-
-              {success && (
-                <div className="p-4 bg-green-900/20 border border-green-900 rounded-lg">
-                  <p className="text-green-500 text-sm text-center">{success}</p>
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading || kycStatus !== 'approved'}
-                className="w-full bg-gradient-to-r from-[#e0b44a] to-[#c4963c] text-black font-bold py-3 px-4 rounded-lg shadow-lg hover:from-[#e5bc5c] hover:to-[#cca04a] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Processing...
-                  </span>
-                ) : (
-                  'Deposit Funds'
-                )}
-              </button>
-            </form>
-          )}
+          {renderContent()}
 
           <div className="flex justify-center mt-6">
             <a 
