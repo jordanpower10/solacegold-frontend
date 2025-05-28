@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { User } from '@supabase/supabase-js'
+import { getVerificationUrl } from '../lib/sumsubClient'
 
 export default function Deposit() {
   const router = useRouter()
@@ -11,15 +12,41 @@ export default function Deposit() {
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [kycStatus, setKycStatus] = useState<string | null>(null)
+  const [verificationUrl, setVerificationUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
         router.push('/login')
-      } else {
-        setUser(session.user)
+        return
       }
-    })
+      setUser(session.user)
+      
+      // Fetch KYC status
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('kyc_status')
+        .eq('id', session.user.id)
+        .single()
+
+      if (!profileError && profile) {
+        setKycStatus(profile.kyc_status)
+        
+        // If not KYC'd, get verification URL
+        if (!profile.kyc_status) {
+          try {
+            const url = await getVerificationUrl(session.user.id)
+            setVerificationUrl(url)
+          } catch (error) {
+            console.error('Error getting verification URL:', error)
+          }
+        }
+      }
+    }
+
+    checkSession()
   }, [])
 
   const handleDeposit = async (e: React.FormEvent) => {
@@ -29,6 +56,22 @@ export default function Deposit() {
     setSuccess('')
 
     try {
+      // Check KYC status first
+      if (!kycStatus && verificationUrl) {
+        // Redirect to SumSub if not KYC'd
+        window.location.href = verificationUrl
+        return
+      }
+
+      if (kycStatus === 'pending') {
+        throw new Error('KYC Pending, please wait')
+      }
+
+      if (kycStatus === 'rejected') {
+        throw new Error('KYC check Rejected, please contact us at kyc@solacegold.com')
+      }
+
+      // If KYC is approved, proceed with deposit
       const numAmount = parseFloat(amount)
       if (isNaN(numAmount) || numAmount <= 0) {
         throw new Error('Please enter a valid amount')
@@ -76,12 +119,44 @@ export default function Deposit() {
 
       setSuccess(`$${numAmount.toFixed(2)} has been deposited successfully`)
       setAmount('')
-    } catch (error: any) { // Type annotation for error
+    } catch (error: any) {
       console.error('❌ Deposit failed:', error)
       setError(error.message || 'Failed to process deposit')
     } finally {
       setLoading(false)
     }
+  }
+
+  // Show KYC status messages
+  const renderKycMessage = () => {
+    if (!kycStatus && verificationUrl) {
+      return (
+        <div className="p-4 bg-blue-900/20 border border-blue-900 rounded-lg mb-6">
+          <p className="text-blue-500 text-sm text-center">
+            Please complete KYC verification to deposit funds
+          </p>
+        </div>
+      )
+    }
+    if (kycStatus === 'pending') {
+      return (
+        <div className="p-4 bg-yellow-900/20 border border-yellow-900 rounded-lg mb-6">
+          <p className="text-yellow-500 text-sm text-center">
+            KYC Pending, please wait
+          </p>
+        </div>
+      )
+    }
+    if (kycStatus === 'rejected') {
+      return (
+        <div className="p-4 bg-red-900/20 border border-red-900 rounded-lg mb-6">
+          <p className="text-red-500 text-sm text-center">
+            KYC check Rejected, please contact us at kyc@solacegold.com
+          </p>
+        </div>
+      )
+    }
+    return null
   }
 
   return (
@@ -112,6 +187,8 @@ export default function Deposit() {
             </p>
           </div>
 
+          {renderKycMessage()}
+
           <form className="mt-8 space-y-6" onSubmit={handleDeposit}>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -126,6 +203,7 @@ export default function Deposit() {
                 min="0"
                 className="w-full pl-8 pr-4 py-3 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e0b44a] focus:border-transparent transition-all"
                 required
+                disabled={kycStatus !== 'approved'}
               />
             </div>
 
@@ -143,7 +221,7 @@ export default function Deposit() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || kycStatus !== 'approved'}
               className="w-full bg-gradient-to-r from-[#e0b44a] to-[#c4963c] text-black font-bold py-3 px-4 rounded-lg shadow-lg hover:from-[#e5bc5c] hover:to-[#cca04a] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
@@ -155,7 +233,7 @@ export default function Deposit() {
                   Processing...
                 </span>
               ) : (
-                'Deposit Funds'
+                !kycStatus ? 'Complete KYC Verification' : kycStatus === 'approved' ? 'Deposit Funds' : 'KYC Required'
               )}
             </button>
 
