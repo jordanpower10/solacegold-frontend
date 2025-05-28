@@ -221,7 +221,7 @@ export default function Deposit() {
 
             <button
               type="submit"
-              disabled={loading || kycStatus !== 'approved'}
+              disabled={loading || (kycStatus === 'pending' || kycStatus === 'rejected')}
               className="w-full bg-gradient-to-r from-[#e0b44a] to-[#c4963c] text-black font-bold py-3 px-4 rounded-lg shadow-lg hover:from-[#e5bc5c] hover:to-[#cca04a] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
