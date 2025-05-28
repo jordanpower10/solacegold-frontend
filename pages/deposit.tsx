@@ -125,9 +125,6 @@ export default function Deposit() {
         <div className="text-center">
           <div className="mb-8">
             <h3 className="text-xl font-semibold mb-4 text-[#e0b44a]">KYC Verification Required</h3>
-            <p className="text-gray-400 mb-6">
-              To deposit funds, you need to complete the KYC verification process first.
-            </p>
             <button
               onClick={handleKycVerification}
               className="w-full bg-gradient-to-r from-[#e0b44a] to-[#c4963c] text-black font-bold py-4 px-6 rounded-lg shadow-lg hover:from-[#e5bc5c] hover:to-[#cca04a] transition-all duration-200"
