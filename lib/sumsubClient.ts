@@ -2,7 +2,7 @@ import crypto from 'crypto'
 
 const SUMSUB_APP_TOKEN = process.env.NEXT_PUBLIC_SUMSUB_APP_TOKEN || ''
 const SUMSUB_SECRET_KEY = process.env.SUMSUB_SECRET_KEY || ''
-const SUMSUB_BASE_URL = 'https://api.sumsub.com'
+const SUMSUB_BASE_URL = 'https://test-api.sumsub.com'  // Using sandbox API endpoint
 
 // Generate signature for SumSub API requests
 const generateSignature = (ts: number, method: string, path: string, body: string = '') => {
@@ -45,8 +45,8 @@ export const createAccessToken = async (userId: string, levelName = 'basic-kyc-l
 export const getVerificationUrl = async (userId: string): Promise<string> => {
   try {
     const accessToken = await createAccessToken(userId)
-    // Using the production URL since we have production credentials
-    return `https://id.sumsub.com/idensic/l/#/access-token/${accessToken}`
+    // Using the sandbox environment URL
+    return `https://test-api.sumsub.com/idensic/l/#/access-token/${accessToken}`
   } catch (error) {
     console.error('Error getting verification URL:', error)
     throw error
