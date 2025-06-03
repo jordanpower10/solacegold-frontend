@@ -111,55 +111,68 @@ export default function Signup() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen bg-[#0d0d0d] px-4 py-8 flex items-center justify-center font-sans">
-        <div className="w-full max-w-md bg-[#121212] p-8 rounded-lg shadow-md">
-          <div className="flex justify-center mb-6">
+      <div className="min-h-screen bg-black px-4 flex items-center justify-center font-sans">
+        <div className="w-full max-w-md bg-[#121212] p-8 rounded-2xl border border-[#2a2a2a]">
+          <div className="flex justify-center mb-8">
             <a href="/">
               <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-32 h-auto" />
             </a>
           </div>
-          <h2 className="text-2xl font-bold text-center mb-6 text-[#e0b44a]">
+          <h2 className="text-2xl font-bold text-center mb-8 text-[#e0b44a]">
             Create your account
           </h2>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <input 
-                  type="text" 
-                  placeholder="First Name" 
-                  value={firstName} 
-                  onChange={e => setFirstName(e.target.value)} 
-                  required 
-                  className="input-style" 
-                />
-              </div>
-              <div>
-                <input 
-                  type="text" 
-                  placeholder="Surname" 
-                  value={surname} 
-                  onChange={e => setSurname(e.target.value)} 
-                  required 
-                  className="input-style" 
-                />
-              </div>
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input 
+                type="text" 
+                placeholder="First Name" 
+                value={firstName} 
+                onChange={e => setFirstName(e.target.value)} 
+                required 
+                className="input-style flex-1" 
+              />
+              <input 
+                type="text" 
+                placeholder="Surname" 
+                value={surname} 
+                onChange={e => setSurname(e.target.value)} 
+                required 
+                className="input-style flex-1" 
+              />
+            </div>
+
+            <div className="w-full">
+              <DatePicker
+                selected={dob}
+                onChange={date => setDob(date)}
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Date Of Birth"
+                maxDate={getMaxDob()}
+                minDate={getMinDob()}
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                className="input-style w-full"
+                popperClassName="date-picker-popper"
+                required
+                id="dob"
+                wrapperClassName="w-full"
+              />
             </div>
 
             <div>
-              <DatePicker
-                selected={dob}
-                onChange={(date) => setDob(date)}
-                dateFormat="dd/MM/yyyy"
-                maxDate={getMaxDob()}
-                minDate={getMinDob()}
-                showYearDropdown
-                scrollableYearDropdown
-                yearDropdownItemNumber={72}
-                placeholderText="Date of Birth"
-                className="input-style w-full"
-                required
-              />
+              <select 
+                value={nationality} 
+                onChange={e => setNationality(e.target.value)} 
+                required 
+                className="input-style bg-[#1a1a1a] text-gray-400"
+              >
+                <option value="" className="text-gray-400">Select Nationality</option>
+                {countries.map((country) => (
+                  <option key={country} value={country} className="text-gray-400">{country}</option>
+                ))}
+              </select>
             </div>
 
             <div>
@@ -173,31 +186,26 @@ export default function Signup() {
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-1">
-                <select 
-                  value={countryCode} 
-                  onChange={e => setCountryCode(e.target.value)}
-                  className="input-style"
-                  required
-                >
-                  {countryCodes.map(country => (
-                    <option key={country.code} value={country.code}>
-                      {country.code}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="col-span-2">
-                <input 
-                  type="tel" 
-                  placeholder="Phone Number" 
-                  value={phone} 
-                  onChange={e => setPhone(e.target.value)} 
-                  required 
-                  className="input-style" 
-                />
-              </div>
+            <div className="flex gap-2">
+              <select 
+                value={countryCode} 
+                onChange={e => setCountryCode(e.target.value)}
+                required
+                className="input-style w-28 max-w-[90px] bg-[#1a1a1a] text-gray-400 text-sm flex-shrink-0"
+              >
+                {countryCodes.map((entry) => (
+                  <option key={entry.code} value={entry.code}>{entry.code}</option>
+                ))}
+              </select>
+              <input 
+                type="tel" 
+                placeholder="Phone Number" 
+                value={phone} 
+                onChange={e => setPhone(e.target.value)} 
+                required 
+                className="input-style flex-1 min-w-0" 
+                style={{ minWidth: 0 }}
+              />
             </div>
 
             <div>
@@ -212,25 +220,9 @@ export default function Signup() {
             </div>
 
             <div>
-              <select 
-                value={nationality} 
-                onChange={e => setNationality(e.target.value)}
-                className="input-style"
-                required
-              >
-                <option value="">Select Nationality</option>
-                {countries.map(country => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
               <input 
                 type="password" 
-                placeholder="Password" 
+                placeholder="Create Password" 
                 value={password} 
                 onChange={e => setPassword(e.target.value)} 
                 required 
@@ -278,21 +270,70 @@ export default function Signup() {
 
             <button
               type="submit"
-              className="w-full bg-[#e0b44a] text-black font-bold py-2 rounded shadow-gold hover:bg-yellow-400 transition"
+              className="w-full mt-6 bg-[#e0b44a] text-black font-bold py-3 px-4 rounded-lg hover:bg-[#f0c45a] transition-colors duration-200"
               disabled={loading}
             >
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
 
-            <p className="text-sm text-center text-gray-500">
+            <p className="text-sm text-center text-gray-500 mt-6">
               Already have an account?{' '}
-              <a href="/login" className="text-[#e0b44a] underline">
-                Log in
-              </a>
+              <a href="/login" className="text-[#e0b44a] hover:text-[#f0c45a] underline">Log in</a>
             </p>
           </form>
         </div>
       </div>
+
+      <style jsx>{`
+        .input-style {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border-radius: 0.5rem;
+          background-color: #1a1a1a;
+          border: 1px solid #2a2a2a;
+          color: #666;
+          outline: none;
+          transition: all 0.2s;
+          font-size: 1rem;
+          height: 48px;
+          box-sizing: border-box;
+        }
+        .input-style:focus {
+          border-color: #e0b44a;
+          box-shadow: 0 0 0 1px #e0b44a;
+          color: white;
+        }
+        .input-style::placeholder {
+          color: #666;
+        }
+        .input-style option {
+          color: #666;
+          background-color: #1a1a1a;
+        }
+      `}</style>
+      <style jsx global>{`
+        .input-style::placeholder {
+          color: #666;
+        }
+        .react-datepicker__input-container input.input-style {
+          background-color: #1a1a1a;
+          border: 1px solid #2a2a2a;
+          color: #666;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          height: 48px;
+          padding: 0.75rem 1rem;
+          box-sizing: border-box;
+        }
+        .react-datepicker__input-container input.input-style:focus {
+          border-color: #e0b44a;
+          box-shadow: 0 0 0 1px #e0b44a;
+          color: white;
+        }
+        .date-picker-popper {
+          z-index: 50;
+        }
+      `}</style>
     </>
   )
 }
