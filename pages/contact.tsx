@@ -1,20 +1,56 @@
 import Head from 'next/head'
 import { useState } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function Contact() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // This will be replaced with your real API later
-    setStatus('✅ Message sent successfully!')
-    setName('')
-    setEmail('')
-    setMessage('')
+    if (!recaptchaToken) {
+      setError('Please complete the reCAPTCHA verification')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      // Verify reCAPTCHA first
+      const verifyResponse = await fetch('/api/verify-recaptcha', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: recaptchaToken }),
+      });
+
+      const verifyData = await verifyResponse.json();
+
+      if (!verifyResponse.ok || !verifyData.success) {
+        throw new Error('reCAPTCHA verification failed');
+      }
+
+      // This will be replaced with your real API later
+      setStatus('✅ Message sent successfully!')
+      setName('')
+      setEmail('')
+      setMessage('')
+      setError('')
+    } catch (error: any) {
+      console.error('Contact form error:', error)
+      setError(error.message || 'An error occurred while sending your message')
+      setStatus('')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -66,11 +102,22 @@ export default function Contact() {
               className="w-full px-4 py-2 rounded bg-[#1c1c1c] text-white border border-[#2a2a2a] focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
             ></textarea>
 
+            <div className="flex justify-center my-4">
+              <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                onChange={setRecaptchaToken}
+                theme="dark"
+              />
+            </div>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+
             <button
               type="submit"
               className="w-full bg-[#e0b44a] text-black font-bold py-2 rounded hover:bg-yellow-400 transition"
+              disabled={loading}
             >
-              Send Message
+              {loading ? 'Sending...' : 'Send Message'}
             </button>
           </form>
 
