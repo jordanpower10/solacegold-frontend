@@ -1,12 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 async function verifyRecaptcha(token: string) {
+  const params = new URLSearchParams({
+    secret: process.env.RECAPTCHA_SECRET_KEY || '',
+    response: token
+  });
+
   const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: `secret=${process.env.6LdbBVYrAAAAABkhQhVw0zKo3d2kt4xx2GJcaONL}&response=${token}`,
+    body: params.toString(),
   });
 
   const data = await response.json();
