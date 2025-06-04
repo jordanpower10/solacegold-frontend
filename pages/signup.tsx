@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 const countries = [
   "Austria", "Belgium", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany",
@@ -46,6 +47,7 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,11 +57,31 @@ export default function Signup() {
       return
     }
 
+    if (!recaptchaToken) {
+      setError('Please complete the reCAPTCHA verification')
+      return
+    }
+
     setLoading(true)
     setError('')
 
     try {
-      // SIMPLIFIED APPROACH: Just create the auth user and let triggers handle the rest
+      // Verify reCAPTCHA first
+      const verifyResponse = await fetch('/api/verify-recaptcha', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: recaptchaToken }),
+      });
+
+      const verifyData = await verifyResponse.json();
+
+      if (!verifyResponse.ok || !verifyData.success) {
+        throw new Error('reCAPTCHA verification failed');
+      }
+
+      // Proceed with signup if reCAPTCHA verification succeeded
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
@@ -71,7 +93,7 @@ export default function Signup() {
             address,
             phone_number: `${countryCode}${phone}`,
             nationality,
-            role: 'user' // Add role directly to auth metadata
+            role: 'user'
           }
         }
       })
@@ -81,12 +103,11 @@ export default function Signup() {
         throw signUpError
       }
       
-      // Success - don't try to create profiles or wallets manually
       alert('✅ Account created! Please check your email.')
       router.push('/login')
     } catch (error: any) {
       console.error('Signup error:', error)
-      alert(`❌ ${error.message || 'Database error saving new user'}`)
+      alert(`❌ ${error.message || 'Error during signup process'}`)
     } finally {
       setLoading(false)
     }
@@ -266,14 +287,22 @@ export default function Signup() {
               </div>
             </div>
 
+            <div className="flex justify-center my-4">
+              <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                onChange={setRecaptchaToken}
+                theme="dark"
+              />
+            </div>
+
             {error && <p className="text-red-500 text-sm">{error}</p>}
 
             <button
               type="submit"
-              className="w-full mt-6 bg-[#e0b44a] text-black font-bold py-3 px-4 rounded-lg hover:bg-[#f0c45a] transition-colors duration-200"
               disabled={loading}
+              className="w-full bg-[#e0b44a] text-black py-3 px-4 rounded-lg font-medium hover:bg-[#c4a043] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
 
             <p className="text-sm text-center text-gray-500 mt-6">
