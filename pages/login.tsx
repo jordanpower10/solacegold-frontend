@@ -25,25 +25,6 @@ export default function Login() {
     setError('')
 
     try {
-      // Get client IP (this will be replaced with the actual IP on the server)
-      const ipResponse = await fetch('https://api.ipify.org?format=json')
-      const { ip } = await ipResponse.json()
-
-      // Check rate limit before attempting login
-      const rateLimitResponse = await fetch('/api/rate-limit-auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, ip }),
-      })
-
-      const rateLimitData = await rateLimitResponse.json()
-
-      if (!rateLimitResponse.ok) {
-        throw new Error(rateLimitData.message || 'Rate limit exceeded')
-      }
-
       // Proceed with login
       const { data, error: loginError } = await supabase.auth.signInWithPassword({
         email,
@@ -60,9 +41,8 @@ export default function Login() {
     } catch (error: any) {
       console.error('Login error:', error)
       setError(error.message || 'An error occurred during login')
-    } finally {
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   return (
