@@ -67,6 +67,7 @@ export default function TestPage2() {
   const [isGlobalView, setIsGlobalView] = useState(true)
   const [leaderboardRank, setLeaderboardRank] = useState(0)
   const [globalPercentile, setGlobalPercentile] = useState(0)
+  const [globeSize, setGlobeSize] = useState(300)
   const globeRef = useRef<any>(null)
   const router = useRouter()
 
@@ -75,6 +76,18 @@ export default function TestPage2() {
     points: [],
     arcs: []
   })
+
+  // Handle window resize
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setGlobeSize(window.innerWidth < 640 ? 280 : 300)
+      }
+      handleResize() // Set initial size
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   useEffect(() => {
     // Fetch user's gold balance and rank
@@ -148,15 +161,15 @@ export default function TestPage2() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-[#1a1a1a] text-white font-sans">
-        {/* Globe Container - Now smaller and positioned above the box */}
+      <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-[#1a1a1a] text-white font-sans py-8">
+        {/* Globe Container */}
         <div className="w-full flex justify-center mb-8">
-          <div className="w-[300px] h-[300px] relative">
+          <div className={`w-[${globeSize}px] h-[${globeSize}px] relative`}>
             {typeof window !== 'undefined' && (
               <Globe
                 ref={globeRef}
-                width={300}
-                height={300}
+                width={globeSize}
+                height={globeSize}
                 globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
                 pointsData={globeData.points}
                 pointColor="color"
@@ -173,14 +186,14 @@ export default function TestPage2() {
         </div>
 
         {/* Rankings Widget */}
-        <div className="max-w-2xl mx-auto p-8">
-          <div className="bg-[#121212] rounded-2xl border border-[#2a2a2a] p-8 shadow-xl">
+        <div className="max-w-2xl mx-auto px-4">
+          <div className="bg-[#121212] rounded-2xl border border-[#2a2a2a] p-4 sm:p-8 shadow-xl">
             {/* Toggle Switch */}
             <div className="flex justify-center mb-8">
-              <div className="bg-[#1a1a1a] p-1 rounded-xl">
+              <div className="bg-[#1a1a1a] p-1 rounded-xl flex flex-col sm:flex-row w-full sm:w-auto">
                 <button
                   onClick={() => setIsGlobalView(true)}
-                  className={`px-4 py-2 rounded-lg transition-all ${
+                  className={`px-4 py-2 rounded-lg transition-all mb-2 sm:mb-0 sm:mr-2 ${
                     isGlobalView
                       ? 'bg-[#e0b44a] text-black font-semibold'
                       : 'text-gray-400 hover:text-white'
@@ -205,19 +218,19 @@ export default function TestPage2() {
             <div className="text-center">
               {isGlobalView ? (
                 <>
-                  <p className="text-4xl font-bold text-[#e0b44a] mb-4">
+                  <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
                     Top {(100 - globalPercentile).toFixed(1)}%
                   </p>
-                  <p className="text-gray-400">
+                  <p className="text-sm sm:text-base text-gray-400">
                     You are in the top {(100 - globalPercentile).toFixed(1)}% of global gold holders
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="text-4xl font-bold text-[#e0b44a] mb-4">
+                  <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
                     #{leaderboardRank}
                   </p>
-                  <p className="text-gray-400">
+                  <p className="text-sm sm:text-base text-gray-400">
                     Your rank on the SolaceGold leaderboard
                   </p>
                 </>
