@@ -48,6 +48,20 @@ interface GlobeData {
   arcs: GlobeArc[]
 }
 
+// Major gold producing/holding locations (approximate coordinates)
+const GOLD_LOCATIONS = [
+  { lat: 37.7749, lng: -122.4194, name: 'San Francisco', size: 0.8 }, // COMEX
+  { lat: 51.5074, lng: -0.1278, name: 'London', size: 1 }, // LBMA
+  { lat: 35.6762, lng: 139.6503, name: 'Tokyo', size: 0.7 }, // Japan
+  { lat: -33.8688, lng: 151.2093, name: 'Sydney', size: 0.6 }, // Australia
+  { lat: 47.3769, lng: 8.5417, name: 'Zurich', size: 0.9 }, // Switzerland
+  { lat: 40.7128, lng: -74.0060, name: 'New York', size: 0.8 }, // NYSE
+  { lat: 26.2285, lng: 50.5860, name: 'Dubai', size: 0.7 }, // UAE
+  { lat: -26.2041, lng: 28.0473, name: 'Johannesburg', size: 0.8 }, // South Africa
+  { lat: 39.9042, lng: 116.4074, name: 'Beijing', size: 0.9 }, // China
+  { lat: 19.0760, lng: 72.8777, name: 'Mumbai', size: 0.7 }, // India
+];
+
 export default function TestPage2() {
   const [goldBalance, setGoldBalance] = useState(0)
   const [isGlobalView, setIsGlobalView] = useState(true)
@@ -113,28 +127,18 @@ export default function TestPage2() {
 
   // Initialize globe data
   const initGlobeData = () => {
-    // Create random points around the globe
-    const points: GlobePoint[] = Array.from({ length: 100 }, () => ({
-      lat: (Math.random() - 0.5) * 180,
-      lng: (Math.random() - 0.5) * 360,
-      size: Math.random() / 3,
-      color: '#e0b44a'
-    }))
+    const points = GOLD_LOCATIONS.map(location => ({
+      lat: location.lat,
+      lng: location.lng,
+      size: location.size,
+      color: '#ffd700',
+      name: location.name
+    }));
 
-    // Create arcs connecting points
-    const arcs: GlobeArc[] = Array.from({ length: 50 }, () => {
-      const startPoint = points[Math.floor(Math.random() * points.length)]
-      const endPoint = points[Math.floor(Math.random() * points.length)]
-      return {
-        startLat: startPoint.lat,
-        startLng: startPoint.lng,
-        endLat: endPoint.lat,
-        endLng: endPoint.lng,
-        color: '#e0b44a'
-      }
-    })
-
-    setGlobeData({ points, arcs })
+    setGlobeData({ 
+      points,
+      arcs: [] // We're not using arcs anymore
+    });
   }
 
   return (
@@ -145,34 +149,32 @@ export default function TestPage2() {
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-[#1a1a1a] text-white font-sans">
-        {/* Globe Container */}
-        <div className="w-full h-[400px] relative">
-          {typeof window !== 'undefined' && (
-            <Globe
-              ref={globeRef}
-              globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-              pointsData={globeData.points}
-              pointColor="color"
-              pointAltitude={0.1}
-              pointRadius="size"
-              arcsData={globeData.arcs}
-              arcColor="color"
-              arcDashLength={1}
-              arcDashGap={0.5}
-              arcDashAnimateTime={2000}
-              backgroundColor="rgba(0,0,0,0)"
-            />
-          )}
+        {/* Globe Container - Now smaller and positioned above the box */}
+        <div className="w-full flex justify-center mb-8">
+          <div className="w-[300px] h-[300px] relative">
+            {typeof window !== 'undefined' && (
+              <Globe
+                ref={globeRef}
+                width={300}
+                height={300}
+                globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                pointsData={globeData.points}
+                pointColor="color"
+                pointAltitude={0.1}
+                pointRadius="size"
+                pointsMerge={true}
+                pointLabel="name"
+                backgroundColor="rgba(0,0,0,0)"
+                atmosphereColor="#ffd70030"
+                atmosphereAltitude={0.25}
+              />
+            )}
+          </div>
         </div>
 
         {/* Rankings Widget */}
         <div className="max-w-2xl mx-auto p-8">
           <div className="bg-[#121212] rounded-2xl border border-[#2a2a2a] p-8 shadow-xl">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-[#e0b44a] mb-2">Your Gold Holdings</h2>
-              <p className="text-2xl font-semibold">{goldBalance.toFixed(2)} oz</p>
-            </div>
-
             {/* Toggle Switch */}
             <div className="flex justify-center mb-8">
               <div className="bg-[#1a1a1a] p-1 rounded-xl">
@@ -220,22 +222,6 @@ export default function TestPage2() {
                   </p>
                 </>
               )}
-            </div>
-
-            {/* Additional Stats */}
-            <div className="mt-8 grid grid-cols-2 gap-4">
-              <div className="bg-[#1a1a1a] p-4 rounded-xl border border-[#2a2a2a]">
-                <p className="text-sm text-gray-400 mb-1">Value in USD</p>
-                <p className="text-xl font-semibold">
-                  ${(goldBalance * 2375).toLocaleString('en-US')}
-                </p>
-              </div>
-              <div className="bg-[#1a1a1a] p-4 rounded-xl border border-[#2a2a2a]">
-                <p className="text-sm text-gray-400 mb-1">Weight in Grams</p>
-                <p className="text-xl font-semibold">
-                  {(goldBalance * 31.1035).toFixed(2)}g
-                </p>
-              </div>
             </div>
           </div>
         </div>
