@@ -28,39 +28,66 @@ const GLOBAL_STATS = {
   }
 }
 
-interface GlobePoint {
-  lat: number
-  lng: number
-  size: number
-  color: string
-}
+// Major gold regions (approximate coordinates with area coverage)
+const GOLD_REGIONS = [
+  {
+    // North America (COMEX/NYSE region)
+    coordinates: [
+      [45, -130], [45, -70],
+      [30, -70], [30, -130]
+    ],
+    name: 'North America'
+  },
+  {
+    // Western Europe (London/Zurich)
+    coordinates: [
+      [55, -10], [55, 10],
+      [45, 10], [45, -10]
+    ],
+    name: 'Western Europe'
+  },
+  {
+    // East Asia (Tokyo/Shanghai)
+    coordinates: [
+      [45, 115], [45, 145],
+      [30, 145], [30, 115]
+    ],
+    name: 'East Asia'
+  },
+  {
+    // Middle East (Dubai)
+    coordinates: [
+      [30, 45], [30, 60],
+      [20, 60], [20, 45]
+    ],
+    name: 'Middle East'
+  },
+  {
+    // South Africa
+    coordinates: [
+      [-20, 15], [-20, 35],
+      [-30, 35], [-30, 15]
+    ],
+    name: 'South Africa'
+  },
+  {
+    // Australia
+    coordinates: [
+      [-25, 115], [-25, 155],
+      [-35, 155], [-35, 115]
+    ],
+    name: 'Australia'
+  }
+];
 
-interface GlobeArc {
-  startLat: number
-  startLng: number
-  endLat: number
-  endLng: number
-  color: string
+interface GlobePolygon {
+  coordinates: number[][];
+  name: string;
 }
 
 interface GlobeData {
-  points: GlobePoint[]
-  arcs: GlobeArc[]
+  polygons: GlobePolygon[];
 }
-
-// Major gold producing/holding locations (approximate coordinates)
-const GOLD_LOCATIONS = [
-  { lat: 37.7749, lng: -122.4194, name: 'San Francisco', size: 0.8 }, // COMEX
-  { lat: 51.5074, lng: -0.1278, name: 'London', size: 1 }, // LBMA
-  { lat: 35.6762, lng: 139.6503, name: 'Tokyo', size: 0.7 }, // Japan
-  { lat: -33.8688, lng: 151.2093, name: 'Sydney', size: 0.6 }, // Australia
-  { lat: 47.3769, lng: 8.5417, name: 'Zurich', size: 0.9 }, // Switzerland
-  { lat: 40.7128, lng: -74.0060, name: 'New York', size: 0.8 }, // NYSE
-  { lat: 26.2285, lng: 50.5860, name: 'Dubai', size: 0.7 }, // UAE
-  { lat: -26.2041, lng: 28.0473, name: 'Johannesburg', size: 0.8 }, // South Africa
-  { lat: 39.9042, lng: 116.4074, name: 'Beijing', size: 0.9 }, // China
-  { lat: 19.0760, lng: 72.8777, name: 'Mumbai', size: 0.7 }, // India
-];
 
 export default function TestPage2() {
   const [goldBalance, setGoldBalance] = useState(0)
@@ -73,8 +100,7 @@ export default function TestPage2() {
 
   // Globe data
   const [globeData, setGlobeData] = useState<GlobeData>({
-    points: [],
-    arcs: []
+    polygons: []
   })
 
   // Handle window resize
@@ -140,17 +166,8 @@ export default function TestPage2() {
 
   // Initialize globe data
   const initGlobeData = () => {
-    const points = GOLD_LOCATIONS.map(location => ({
-      lat: location.lat,
-      lng: location.lng,
-      size: location.size,
-      color: '#ffd700',
-      name: location.name
-    }));
-
     setGlobeData({ 
-      points,
-      arcs: [] // We're not using arcs anymore
+      polygons: GOLD_REGIONS
     });
   }
 
@@ -171,12 +188,11 @@ export default function TestPage2() {
                 width={globeSize}
                 height={globeSize}
                 globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-                pointsData={globeData.points}
-                pointColor="color"
-                pointAltitude={0.1}
-                pointRadius="size"
-                pointsMerge={true}
-                pointLabel="name"
+                hexPolygonsData={globeData.polygons}
+                hexPolygonResolution={3}
+                hexPolygonMargin={0.3}
+                hexPolygonColor={() => `rgba(255, 215, 0, 0.15)`}
+                hexPolygonLabel={(d: any) => (d as GlobePolygon).name}
                 backgroundColor="rgba(0,0,0,0)"
                 atmosphereColor="#ffd70030"
                 atmosphereAltitude={0.25}
