@@ -207,7 +207,7 @@ export default function Dashboard() {
           </div>
 
           {/* Gold Globe */}
-          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
+          <div className="w-full max-w-2xl mb-10">
             <GoldGlobe />
           </div>
 

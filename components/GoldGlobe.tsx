@@ -174,7 +174,7 @@ export default function GoldGlobe() {
             hexPolygonMargin={0.3}
             hexPolygonColor={() => `rgba(255, 215, 0, 0.15)`}
             hexPolygonLabel={(d: any) => (d as GlobePolygon).name}
-            backgroundColor="rgba(0,0,0,0)"
+            backgroundColor="#000000"
             atmosphereColor="#ffd70030"
             atmosphereAltitude={0.25}
           />
@@ -208,7 +208,7 @@ export default function GoldGlobe() {
       </div>
 
       {/* Ranking Display */}
-      <div className="text-center">
+      <div className="text-center bg-[#121212] rounded-2xl px-8 py-4">
         {isGlobalView ? (
           <>
             <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
