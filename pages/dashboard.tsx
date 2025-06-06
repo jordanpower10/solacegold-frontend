@@ -208,7 +208,6 @@ export default function Dashboard() {
 
           {/* Gold Globe */}
           <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
-            <h2 className="text-xl font-semibold mb-4 text-left">Global Gold Markets</h2>
             <GoldGlobe />
           </div>
 
