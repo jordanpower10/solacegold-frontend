@@ -2,8 +2,18 @@ import Head from 'next/head'
 import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
-import Globe from 'react-globe.gl'
+import dynamic from 'next/dynamic'
 import * as d3 from 'd3'
+
+// Dynamically import the Globe component with SSR disabled
+const Globe = dynamic(() => import('react-globe.gl'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] flex items-center justify-center bg-[#0d0d0d]">
+      <div className="text-[#e0b44a]">Loading Globe...</div>
+    </div>
+  )
+})
 
 // Global statistics for gold holdings (approximate values)
 const GLOBAL_STATS = {
@@ -84,7 +94,10 @@ export default function TestPage2() {
     }
 
     fetchUserData()
-    initGlobeData()
+    // Only initialize globe data in browser environment
+    if (typeof window !== 'undefined') {
+      initGlobeData()
+    }
   }, [router])
 
   // Calculate global percentile based on gold balance
@@ -134,20 +147,22 @@ export default function TestPage2() {
       <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-[#1a1a1a] text-white font-sans">
         {/* Globe Container */}
         <div className="w-full h-[400px] relative">
-          <Globe
-            ref={globeRef}
-            globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-            pointsData={globeData.points}
-            pointColor="color"
-            pointAltitude={0.1}
-            pointRadius="size"
-            arcsData={globeData.arcs}
-            arcColor="color"
-            arcDashLength={1}
-            arcDashGap={0.5}
-            arcDashAnimateTime={2000}
-            backgroundColor="rgba(0,0,0,0)"
-          />
+          {typeof window !== 'undefined' && (
+            <Globe
+              ref={globeRef}
+              globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+              pointsData={globeData.points}
+              pointColor="color"
+              pointAltitude={0.1}
+              pointRadius="size"
+              arcsData={globeData.arcs}
+              arcColor="color"
+              arcDashLength={1}
+              arcDashGap={0.5}
+              arcDashAnimateTime={2000}
+              backgroundColor="rgba(0,0,0,0)"
+            />
+          )}
         </div>
 
         {/* Rankings Widget */}
