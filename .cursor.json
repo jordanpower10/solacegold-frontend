@@ -1,0 +1,29 @@
+{
+    "rules": [
+      {
+        "pattern": ".*\\.tsx$",
+        "instruction": "Use Tailwind CSS only. Maintain SolaceGold’s black-and-gold premium style. Do not restructure layout or change spacing unless explicitly asked."
+      },
+      {
+        "pattern": ".*\\.ts$",
+        "instruction": "Preserve all business logic. Do not remove, rename, or alter unless requested. Explain any functional change with a short comment."
+      },
+      {
+        "pattern": "pages/api/.*",
+        "instruction": "Do not edit API routes unless explicitly instructed. These power core features like Sumsub KYC, Stripe, and Supabase. Avoid breaking flows."
+      },
+      {
+        "pattern": "components/.*",
+        "instruction": "Only modify or create components when requested. Reuse existing styled components. Avoid duplication or style drift."
+      },
+      {
+        "pattern": ".*",
+        "instruction": "Never expose secrets or sensitive data in the frontend. Use environment variables via process.env. Maintain clean, scalable, and secure code."
+      },
+      {
+        "pattern": ".*",
+        "instruction": "Comment non-obvious logic. Use meaningful variable names. Avoid deeply nested logic. Follow Next.js, Supabase, and TypeScript best practices."
+      }
+    ]
+  }
+  

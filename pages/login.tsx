@@ -25,13 +25,33 @@ export default function Login() {
     setError('')
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      // Get client IP (this will be replaced with the actual IP on the server)
+      const ipResponse = await fetch('https://api.ipify.org?format=json')
+      const { ip } = await ipResponse.json()
+
+      // Check rate limit before attempting login
+      const rateLimitResponse = await fetch('/api/rate-limit-auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, ip }),
+      })
+
+      const rateLimitData = await rateLimitResponse.json()
+
+      if (!rateLimitResponse.ok) {
+        throw new Error(rateLimitData.message || 'Rate limit exceeded')
+      }
+
+      // Proceed with login
+      const { data, error: loginError } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) {
-        console.error('❌ Login failed:', error)
+      if (loginError) {
+        console.error('❌ Login failed:', loginError)
         setError('Invalid email or password.')
       } else {
         console.log('✅ Login success:', data)
@@ -93,7 +113,7 @@ export default function Login() {
               />
             </div>
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
             <button
               type="submit"
