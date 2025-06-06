@@ -2,7 +2,6 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function Login() {
   const router = useRouter()
@@ -10,7 +9,6 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
 
   // Redirect if already logged in
   useEffect(() => {
@@ -23,32 +21,10 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    if (!recaptchaToken) {
-      setError('Please complete the reCAPTCHA verification')
-      return
-    }
-
     setLoading(true)
     setError('')
 
     try {
-      // Verify reCAPTCHA first
-      const verifyResponse = await fetch('/api/verify-recaptcha', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: recaptchaToken }),
-      });
-
-      const verifyData = await verifyResponse.json();
-
-      if (!verifyResponse.ok || !verifyData.success) {
-        throw new Error('reCAPTCHA verification failed');
-      }
-
-      // Proceed with login if reCAPTCHA verification succeeded
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -114,14 +90,6 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 rounded bg-[#121212] border border-[#2a2a2a] text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
                 required
-              />
-            </div>
-
-            <div className="flex justify-center my-4">
-              <ReCAPTCHA
-                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                onChange={setRecaptchaToken}
-                theme="dark"
               />
             </div>
 
