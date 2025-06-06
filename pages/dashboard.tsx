@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
+import GoldGlobe from '../components/GoldGlobe'
 
 export default function Dashboard() {
   const [userName, setUserName] = useState('User')
@@ -203,6 +204,12 @@ export default function Dashboard() {
               <img src="https://i.postimg.cc/2yF4qc7k/Chat-GPT-Image-May-26-2025-11-02-12-PM.png" alt="Sell Gold Icon" className="w-10 h-10 mb-0" />
               <span className="text-sm">Sell Gold</span>
             </button>
+          </div>
+
+          {/* Gold Globe */}
+          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
+            <h2 className="text-xl font-semibold mb-4 text-left">Global Gold Markets</h2>
+            <GoldGlobe />
           </div>
 
           {/* Recent Transactions */}
