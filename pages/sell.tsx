@@ -84,73 +84,92 @@ export default function SellGold() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-black text-white font-sans">
-        {/* Top Navigation */}
-        <div className="flex justify-between items-center p-4">
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="text-[#e0b44a] hover:text-yellow-500 transition"
-          >
-            ← Back to Dashboard
-          </button>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex flex-col items-center justify-center flex-grow px-4">
-          <div className="w-full max-w-md">
-            <div className="text-center mb-8">
-              <img
-                src="https://i.postimg.cc/2yF4qc7k/Chat-GPT-Image-May-26-2025-11-02-12-PM.png"
-                alt="Sell Gold"
-                className="w-16 h-16 mx-auto mb-4"
+      <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-[#1a1a1a] px-4 flex items-center justify-center font-sans">
+        <div className="w-full max-w-md bg-[#121212] p-8 rounded-2xl shadow-xl border border-[#2a2a2a]">
+          <div className="flex justify-center mb-8">
+            <a href="/dashboard">
+              <img 
+                src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" 
+                alt="Solace Gold Logo" 
+                className="w-32 h-auto hover:opacity-90 transition-opacity" 
               />
-              <h1 className="text-2xl font-bold mb-2">Sell Gold</h1>
-              <p className="text-gray-400">Current Price: ${goldPrice.toLocaleString('en-US')}/oz</p>
-              <p className="text-gray-400">Gold Balance: {goldBalance.toFixed(2)} oz</p>
+            </a>
+          </div>
+
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-center text-[#e0b44a]">
+              Sell Gold
+            </h2>
+            <div className="text-center space-y-2">
+              <p className="text-gray-400 text-sm">Current Gold Price</p>
+              <p className="text-xl text-white">${goldPrice.toLocaleString('en-US')}/oz</p>
+              <p className="text-gray-400 text-sm mt-4">Available Gold Balance</p>
+              <p className="text-xl text-white">{goldBalance.toFixed(2)} oz</p>
+              <p className="text-gray-400 text-sm mt-4">Value of Holdings</p>
+              <p className="text-xl text-white">${(goldBalance * goldPrice).toLocaleString('en-US')}</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSellGold} className="mt-8 space-y-6">
+            <div>
+              <label htmlFor="amount" className="block text-sm font-medium text-gray-400 mb-2">
+                Amount (oz)
+              </label>
+              <input
+                id="amount"
+                type="number"
+                step="0.01"
+                min="0.01"
+                max={goldBalance}
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a] focus:border-transparent transition-all"
+                placeholder="0.00"
+                required
+              />
+              {amount && !isNaN(parseFloat(amount)) && (
+                <p className="mt-2 text-sm text-gray-400">
+                  You'll Receive: ${(parseFloat(amount) * goldPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                </p>
+              )}
             </div>
 
-            <form onSubmit={handleSellGold} className="space-y-6">
-              <div>
-                <label htmlFor="amount" className="block text-sm font-medium text-gray-400 mb-2">
-                  Amount (oz)
-                </label>
-                <input
-                  id="amount"
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  max={goldBalance}
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#121212] border border-[#2a2a2a] rounded-xl text-white focus:outline-none focus:border-[#e0b44a] transition"
-                  placeholder="0.00"
-                  required
-                />
-                {amount && !isNaN(parseFloat(amount)) && (
-                  <p className="mt-2 text-sm text-gray-400">
-                    You'll Receive: ${(parseFloat(amount) * goldPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                  </p>
-                )}
+            {error && (
+              <div className="p-4 bg-red-900/20 border border-red-900 rounded-lg">
+                <p className="text-red-500 text-sm text-center">{error}</p>
               </div>
+            )}
 
-              {error && (
-                <div className="text-red-500 text-sm text-center">
-                  {error}
-                </div>
+            <button
+              type="submit"
+              disabled={loading || !amount || parseFloat(amount) > goldBalance}
+              className={`w-full py-3 rounded-lg text-black font-bold transition-all duration-200
+                ${loading || !amount || parseFloat(amount) > goldBalance
+                  ? 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-[#e0b44a] to-[#c4963c] hover:from-[#e5bc5c] hover:to-[#cca04a]'}`}
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Processing...
+                </span>
+              ) : (
+                'Sell Gold'
               )}
+            </button>
 
-              <button
-                type="submit"
-                disabled={loading || !amount || parseFloat(amount) > goldBalance}
-                className={`w-full py-3 rounded-xl text-black font-semibold transition
-                  ${loading || !amount || parseFloat(amount) > goldBalance
-                    ? 'bg-gray-600 cursor-not-allowed'
-                    : 'bg-[#e0b44a] hover:bg-yellow-400'}`}
+            <div className="flex justify-center">
+              <a 
+                href="/dashboard" 
+                className="text-sm text-gray-400 hover:text-[#e0b44a] transition-colors"
               >
-                {loading ? 'Processing...' : 'Sell Gold'}
-              </button>
-            </form>
-          </div>
+                Return to Dashboard
+              </a>
+            </div>
+          </form>
         </div>
       </div>
     </>
