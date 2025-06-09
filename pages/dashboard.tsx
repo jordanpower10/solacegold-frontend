@@ -87,10 +87,20 @@ export default function Dashboard() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-black text-white font-sans relative">
-        {/* Top Navigation */}
-        <div className="flex justify-between items-center p-4 bg-black relative">
-          {/* Logo and Mobile Menu */}
-          <div className="flex items-center relative"
+        {/* Main Content */}
+        <div className="flex flex-col items-center text-center py-10 px-4">
+          {/* Logo */}
+          <div className="mb-8">
+            <img
+              src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
+              alt="Solace Gold Logo"
+              className="w-32 h-32"
+            />
+          </div>
+
+          {/* User Menu */}
+          <div 
+            className="absolute top-6 right-6"
             onMouseEnter={() => {
               clearTimeout(timeoutId)
               setIsMenuOpen(true)
@@ -99,64 +109,21 @@ export default function Dashboard() {
               timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
             }}
           >
-            <img
-              src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
-              alt="Solace Gold Logo"
-              className="w-20 h-20 cursor-pointer"
-            />
+            <button className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center hover:bg-[#2a2a2a] transition-colors">
+              <span className="text-[#e0b44a] text-xl">👤</span>
+            </button>
             {isMenuOpen && (
-              <div className="absolute top-20 left-0 w-48 bg-gray-800 rounded-lg shadow-lg z-50">
+              <div className="absolute right-0 mt-2 w-48 bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden">
                 <button
                   onClick={signOut}
-                  className="w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700 rounded-lg"
+                  className="w-full text-left px-4 py-3 text-gray-300 hover:bg-[#2a2a2a] transition-colors flex items-center gap-2"
                 >
-                  Logout
+                  <span>Logout</span>
                 </button>
               </div>
             )}
-            {/* Mobile Menu Button */}
-            <button
-              onClick={toggleMenu}
-              className="ml-4 p-2 rounded-lg hover:bg-gray-800 md:hidden"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
           </div>
 
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div className="absolute top-24 left-0 right-0 bg-gray-800 z-50 md:hidden">
-              <button
-                onClick={signOut}
-                className="w-full text-left px-4 py-3 text-white hover:bg-gray-700"
-              >
-                Logout
-              </button>
-            </div>
-          )}
-
-          {/* Top right account value */}
-          <div className="absolute top-6 right-6 flex items-center space-x-1">
-            <span className="text-[#e0b44a] font-semibold text-lg">$</span>
-            <span className="text-[#e0b44a] font-semibold text-lg">{accountValue.toLocaleString('en-US')}</span>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex flex-col items-center text-center py-10 px-4">
           <h1 className="text-3xl font-bold mb-2">Hi {firstName},</h1>
           <p className="text-gray-400 mb-8 text-lg">Your Balance</p>
 
