@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { useRouter } from 'next/router'
 
 // Global statistics for gold holdings (approximate values)
 const GLOBAL_STATS = {
@@ -14,6 +15,7 @@ const GLOBAL_STATS = {
 }
 
 export default function GoldGlobe() {
+  const router = useRouter()
   const [isGlobalView, setIsGlobalView] = useState(true)
   const [leaderboardRank, setLeaderboardRank] = useState(0)
   const [globalPercentile, setGlobalPercentile] = useState(0)
@@ -67,6 +69,10 @@ export default function GoldGlobe() {
     setHasSelected(true)
   }
 
+  const handleBuyGold = () => {
+    router.push('/buy')
+  }
+
   return (
     <div className="w-full flex flex-col items-center">
       {/* Toggle Switch */}
@@ -99,12 +105,23 @@ export default function GoldGlobe() {
       {hasSelected && (
         <div className="text-center bg-[#121212] rounded-2xl px-8 py-4">
           {goldBalance === 0 ? (
-            <p className="text-sm sm:text-base text-gray-400">
-              {isGlobalView 
-                ? "You haven't bought any gold yet, join the global average when you make your first purchase"
-                : "You haven't bought any gold yet, join the leaderboard when you make your first purchase"
-              }
-            </p>
+            <div className="flex flex-col items-center">
+              <p className="text-sm sm:text-base text-gray-400 mb-3">
+                {isGlobalView 
+                  ? "You haven't bought any gold yet, join the global average when you make your first purchase"
+                  : "You haven't bought any gold yet, join the leaderboard when you make your first purchase"
+                }
+              </p>
+              <button
+                onClick={handleBuyGold}
+                className="text-2xl hover:scale-110 transition-transform duration-200 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#1a1a1a]"
+                title="Buy Gold"
+              >
+                <span>🏆</span>
+                <span className="text-sm text-[#e0b44a]">Buy Gold</span>
+                <span>🏆</span>
+              </button>
+            </div>
           ) : isGlobalView ? (
             <>
               <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
