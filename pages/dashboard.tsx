@@ -89,18 +89,9 @@ export default function Dashboard() {
       <div className="min-h-screen flex flex-col bg-black text-white font-sans relative">
         {/* Main Content */}
         <div className="flex flex-col items-center text-center py-10 px-4">
-          {/* Logo */}
-          <div className="mb-8">
-            <img
-              src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
-              alt="Solace Gold Logo"
-              className="w-32 h-32"
-            />
-          </div>
-
-          {/* User Menu */}
+          {/* Logo with Logout */}
           <div 
-            className="absolute top-6 right-6"
+            className="relative mb-8 group"
             onMouseEnter={() => {
               clearTimeout(timeoutId)
               setIsMenuOpen(true)
@@ -109,16 +100,21 @@ export default function Dashboard() {
               timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
             }}
           >
-            <button className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center hover:bg-[#2a2a2a] transition-colors">
-              <span className="text-[#e0b44a] text-xl">👤</span>
-            </button>
+            <img
+              src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
+              alt="Solace Gold Logo"
+              className="w-32 h-32"
+            />
+            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
+              <span className="text-[#e0b44a] text-sm">👤</span>
+            </div>
             {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden">
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden">
                 <button
                   onClick={signOut}
-                  className="w-full text-left px-4 py-3 text-gray-300 hover:bg-[#2a2a2a] transition-colors flex items-center gap-2"
+                  className="w-full text-left px-4 py-3 text-gray-300 hover:bg-[#2a2a2a] transition-colors"
                 >
-                  <span>Logout</span>
+                  Logout
                 </button>
               </div>
             )}
