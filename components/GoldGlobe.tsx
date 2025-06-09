@@ -142,13 +142,10 @@ export default function GoldGlobe() {
 
   // Calculate global percentile
   useEffect(() => {
-    let percentile = 0
-    for (const [amount, pct] of Object.entries(GLOBAL_STATS.goldHolders)) {
-      if (goldBalance >= parseFloat(amount)) {
-        percentile = pct
-      }
+    if (goldBalance > 0) {
+      let percentile = 99.9 // Default to top 0.1% if they have any gold
+      setGlobalPercentile(percentile)
     }
-    setGlobalPercentile(percentile)
   }, [goldBalance])
 
   // Initialize globe data
@@ -209,7 +206,14 @@ export default function GoldGlobe() {
 
       {/* Ranking Display */}
       <div className="text-center bg-[#121212] rounded-2xl px-8 py-4">
-        {isGlobalView ? (
+        {goldBalance === 0 ? (
+          <p className="text-sm sm:text-base text-gray-400">
+            {isGlobalView 
+              ? "You haven't bought any gold yet, join the global average when you make your first purchase"
+              : "You haven't bought any gold yet, join the leaderboard when you make your first purchase"
+            }
+          </p>
+        ) : isGlobalView ? (
           <>
             <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
               Top {(100 - globalPercentile).toFixed(1)}%
