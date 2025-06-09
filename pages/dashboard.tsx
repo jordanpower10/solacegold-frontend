@@ -105,8 +105,6 @@ export default function Dashboard() {
               alt="Solace Gold Logo"
               className="w-32 h-32"
             />
-            {/* Small gold thumbnail */}
-            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gradient-to-b from-[#e0b44a] to-[#ffd700] rounded-full opacity-60" />
             
             {/* Dropdown Menu */}
             {isMenuOpen && (
@@ -122,7 +120,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          <h1 className="text-3xl font-bold mb-2">Hi {firstName},</h1>
+          <h1 className="text-3xl font-bold mb-2">Hi {firstName}</h1>
           <p className="text-gray-400 mb-8 text-lg">Your Balance</p>
 
           {/* Balances */}
