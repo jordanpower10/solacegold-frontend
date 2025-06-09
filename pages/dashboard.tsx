@@ -105,14 +105,16 @@ export default function Dashboard() {
               alt="Solace Gold Logo"
               className="w-32 h-32"
             />
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-              <span className="text-[#e0b44a] text-sm">👤</span>
-            </div>
+            {/* Small gold thumbnail */}
+            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gradient-to-b from-[#e0b44a] to-[#ffd700] rounded-full opacity-60" />
+            
+            {/* Dropdown Menu */}
             {isMenuOpen && (
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-48 bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden">
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2">
+                <div className="w-24 h-[2px] bg-gradient-to-r from-transparent via-[#e0b44a] to-transparent mb-2" />
                 <button
                   onClick={signOut}
-                  className="w-full text-left px-4 py-3 text-gray-300 hover:bg-[#2a2a2a] transition-colors"
+                  className="text-sm text-[#e0b44a] hover:text-white transition-colors duration-200"
                 >
                   Logout
                 </button>
