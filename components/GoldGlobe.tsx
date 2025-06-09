@@ -18,6 +18,7 @@ export default function GoldGlobe() {
   const [leaderboardRank, setLeaderboardRank] = useState(0)
   const [globalPercentile, setGlobalPercentile] = useState(0)
   const [goldBalance, setGoldBalance] = useState(0)
+  const [hasSelected, setHasSelected] = useState(false)
 
   // Fetch user data and calculate rankings
   useEffect(() => {
@@ -61,13 +62,18 @@ export default function GoldGlobe() {
     setGlobalPercentile(percentile)
   }, [goldBalance])
 
+  const handleViewChange = (isGlobal: boolean) => {
+    setIsGlobalView(isGlobal)
+    setHasSelected(true)
+  }
+
   return (
     <div className="w-full flex flex-col items-center">
       {/* Toggle Switch */}
       <div className="flex justify-center mb-8 w-full">
         <div className="bg-[#1a1a1a] p-1 rounded-xl flex flex-col sm:flex-row w-full sm:w-auto">
           <button
-            onClick={() => setIsGlobalView(true)}
+            onClick={() => handleViewChange(true)}
             className={`px-4 py-2 rounded-lg transition-all mb-2 sm:mb-0 sm:mr-2 ${
               isGlobalView
                 ? 'bg-[#e0b44a] text-black font-semibold'
@@ -77,7 +83,7 @@ export default function GoldGlobe() {
             Global Average
           </button>
           <button
-            onClick={() => setIsGlobalView(false)}
+            onClick={() => handleViewChange(false)}
             className={`px-4 py-2 rounded-lg transition-all ${
               !isGlobalView
                 ? 'bg-[#e0b44a] text-black font-semibold'
@@ -90,34 +96,36 @@ export default function GoldGlobe() {
       </div>
 
       {/* Ranking Display */}
-      <div className="text-center bg-[#121212] rounded-2xl px-8 py-4">
-        {goldBalance === 0 ? (
-          <p className="text-sm sm:text-base text-gray-400">
-            {isGlobalView 
-              ? "You haven't bought any gold yet, join the global average when you make your first purchase"
-              : "You haven't bought any gold yet, join the leaderboard when you make your first purchase"
-            }
-          </p>
-        ) : isGlobalView ? (
-          <>
-            <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
-              Top {(100 - globalPercentile).toFixed(1)}%
-            </p>
+      {hasSelected && (
+        <div className="text-center bg-[#121212] rounded-2xl px-8 py-4">
+          {goldBalance === 0 ? (
             <p className="text-sm sm:text-base text-gray-400">
-              You are in the top {(100 - globalPercentile).toFixed(1)}% of global gold holders
+              {isGlobalView 
+                ? "You haven't bought any gold yet, join the global average when you make your first purchase"
+                : "You haven't bought any gold yet, join the leaderboard when you make your first purchase"
+              }
             </p>
-          </>
-        ) : (
-          <>
-            <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
-              #{leaderboardRank}
-            </p>
-            <p className="text-sm sm:text-base text-gray-400">
-              Your rank on the SolaceGold leaderboard
-            </p>
-          </>
-        )}
-      </div>
+          ) : isGlobalView ? (
+            <>
+              <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
+                Top {(100 - globalPercentile).toFixed(1)}%
+              </p>
+              <p className="text-sm sm:text-base text-gray-400">
+                You are in the top {(100 - globalPercentile).toFixed(1)}% of global gold holders
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
+                #{leaderboardRank}
+              </p>
+              <p className="text-sm sm:text-base text-gray-400">
+                Your rank on the SolaceGold leaderboard
+              </p>
+            </>
+          )}
+        </div>
+      )}
     </div>
   )
 } 
