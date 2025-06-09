@@ -1,81 +1,8 @@
-import { useEffect, useState, useRef } from 'react'
-import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
-
-// Dynamically import the Globe component with SSR disabled
-const Globe = dynamic(() => import('react-globe.gl'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-[#0d0d0d]">
-      <div className="text-[#e0b44a]">Loading Globe...</div>
-    </div>
-  )
-})
-
-// Major gold regions (approximate coordinates with area coverage)
-const GOLD_REGIONS = [
-  {
-    // North America (COMEX/NYSE region)
-    coordinates: [
-      [45, -130], [45, -70],
-      [30, -70], [30, -130]
-    ],
-    name: 'North America'
-  },
-  {
-    // Western Europe (London/Zurich)
-    coordinates: [
-      [55, -10], [55, 10],
-      [45, 10], [45, -10]
-    ],
-    name: 'Western Europe'
-  },
-  {
-    // East Asia (Tokyo/Shanghai)
-    coordinates: [
-      [45, 115], [45, 145],
-      [30, 145], [30, 115]
-    ],
-    name: 'East Asia'
-  },
-  {
-    // Middle East (Dubai)
-    coordinates: [
-      [30, 45], [30, 60],
-      [20, 60], [20, 45]
-    ],
-    name: 'Middle East'
-  },
-  {
-    // South Africa
-    coordinates: [
-      [-20, 15], [-20, 35],
-      [-30, 35], [-30, 15]
-    ],
-    name: 'South Africa'
-  },
-  {
-    // Australia
-    coordinates: [
-      [-25, 115], [-25, 155],
-      [-35, 155], [-35, 115]
-    ],
-    name: 'Australia'
-  }
-];
-
-interface GlobePolygon {
-  coordinates: number[][];
-  name: string;
-}
-
-interface GlobeData {
-  polygons: GlobePolygon[];
-}
 
 // Global statistics for gold holdings (approximate values)
 const GLOBAL_STATS = {
-  totalPopulation: 8000000000, // ~8 billion people
   goldHolders: {
     '0.1': 99.9, // 0.1 oz puts you in top 99.9%
     '1': 99.0,   // 1 oz puts you in top 99%
@@ -87,27 +14,10 @@ const GLOBAL_STATS = {
 }
 
 export default function GoldGlobe() {
-  const [globeSize, setGlobeSize] = useState(300)
   const [isGlobalView, setIsGlobalView] = useState(true)
   const [leaderboardRank, setLeaderboardRank] = useState(0)
   const [globalPercentile, setGlobalPercentile] = useState(0)
   const [goldBalance, setGoldBalance] = useState(0)
-  const globeRef = useRef<any>(null)
-  const [globeData, setGlobeData] = useState<GlobeData>({
-    polygons: []
-  })
-
-  // Handle window resize
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleResize = () => {
-        setGlobeSize(window.innerWidth < 640 ? 280 : 300)
-      }
-      handleResize() // Set initial size
-      window.addEventListener('resize', handleResize)
-      return () => window.removeEventListener('resize', handleResize)
-    }
-  }, [])
 
   // Fetch user data and calculate rankings
   useEffect(() => {
@@ -142,42 +52,17 @@ export default function GoldGlobe() {
 
   // Calculate global percentile
   useEffect(() => {
-    if (goldBalance > 0) {
-      let percentile = 99.9 // Default to top 0.1% if they have any gold
-      setGlobalPercentile(percentile)
+    let percentile = 0
+    for (const [amount, pct] of Object.entries(GLOBAL_STATS.goldHolders)) {
+      if (goldBalance >= parseFloat(amount)) {
+        percentile = pct
+      }
     }
+    setGlobalPercentile(percentile)
   }, [goldBalance])
-
-  // Initialize globe data
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setGlobeData({ 
-        polygons: GOLD_REGIONS
-      })
-    }
-  }, [])
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className={`w-[${globeSize}px] h-[${globeSize}px] relative mb-8`}>
-        {typeof window !== 'undefined' && (
-          <Globe
-            ref={globeRef}
-            width={globeSize}
-            height={globeSize}
-            globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-            hexPolygonsData={globeData.polygons}
-            hexPolygonResolution={3}
-            hexPolygonMargin={0.3}
-            hexPolygonColor={() => `rgba(255, 215, 0, 0.15)`}
-            hexPolygonLabel={(d: any) => (d as GlobePolygon).name}
-            backgroundColor="#000000"
-            atmosphereColor="#ffd70030"
-            atmosphereAltitude={0.25}
-          />
-        )}
-      </div>
-
       {/* Toggle Switch */}
       <div className="flex justify-center mb-8 w-full">
         <div className="bg-[#1a1a1a] p-1 rounded-xl flex flex-col sm:flex-row w-full sm:w-auto">
