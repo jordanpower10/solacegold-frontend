@@ -272,7 +272,7 @@ export default function Signup() {
                   className="mt-1.5 h-4 w-4 rounded border-gray-600 bg-[#1a1a1a]" 
                 />
                 <label htmlFor="terms" className="text-sm text-gray-400">
-                  I agree to the <a href="/terms.pdf" target="_blank" className="text-[#e0b44a] hover:text-[#f0c45a] underline">terms and conditions</a>
+                  I agree to the <Link href="/terms" className="text-[#e0b44a] hover:text-[#f0c45a] underline">terms and conditions</Link>
                 </label>
               </div>
               <div className="flex items-start gap-3">
