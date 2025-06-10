@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { User } from '@supabase/supabase-js'
-import { getVerificationUrl } from '../lib/sumsubClient'
 
 export default function Deposit() {
   const router = useRouter()
@@ -13,7 +12,6 @@ export default function Deposit() {
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [kycStatus, setKycStatus] = useState<string | null>(null)
-  const [verificationUrl, setVerificationUrl] = useState<string | null>(null)
 
   useEffect(() => {
     const checkSession = async () => {
@@ -33,16 +31,6 @@ export default function Deposit() {
 
       if (!profileError && profile) {
         setKycStatus(profile.kyc_status)
-        
-        // If not KYC'd, get verification URL
-        if (!profile.kyc_status) {
-          try {
-            const url = await getVerificationUrl(session.user.id)
-            setVerificationUrl(url)
-          } catch (error) {
-            console.error('Error getting verification URL:', error)
-          }
-        }
       }
     }
 
@@ -113,9 +101,7 @@ export default function Deposit() {
 
   // Handle KYC verification button click
   const handleKycVerification = () => {
-    if (verificationUrl) {
-      window.location.href = verificationUrl
-    }
+    window.location.href = 'https://in.sumsub.com/websdk/p/sbx_uni_2fOqRDnDHIH2w61x'
   }
 
   // Render different content based on KYC status
