@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabaseClient'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import ReCAPTCHA from 'react-google-recaptcha'
+import Link from 'next/link'
 
 const countries = [
   "Austria", "Belgium", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany",
@@ -282,7 +283,7 @@ export default function Signup() {
                   className="mt-1.5 h-4 w-4 rounded border-gray-600 bg-[#1a1a1a]" 
                 />
                 <label htmlFor="kyc" className="text-sm text-gray-400">
-                  I agree to the <a href="/kyc.pdf" target="_blank" className="text-[#e0b44a] hover:text-[#f0c45a] underline">KYC checks</a>
+                  I agree to the <Link href="/kyc-terms" className="text-[#e0b44a] hover:text-[#f0c45a] underline">KYC checks</Link>
                 </label>
               </div>
             </div>
