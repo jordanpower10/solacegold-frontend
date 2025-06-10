@@ -103,7 +103,7 @@ export default function Dashboard() {
             <img
               src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
               alt="Solace Gold Logo"
-              className="w-32 h-32"
+              className="w-32 h-32 cursor-pointer"
             />
             
             {/* Dropdown Menu */}
@@ -112,7 +112,7 @@ export default function Dashboard() {
                 <div className="w-24 h-[2px] bg-gradient-to-r from-transparent via-[#e0b44a] to-transparent mb-2" />
                 <button
                   onClick={signOut}
-                  className="text-sm text-[#e0b44a] hover:text-white transition-colors duration-200"
+                  className="text-sm text-[#e0b44a] hover:text-white transition-colors duration-200 cursor-pointer"
                 >
                   Logout
                 </button>
@@ -141,30 +141,30 @@ export default function Dashboard() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 w-full max-w-2xl">
             <button 
               onClick={() => router.push('/deposit')}
-              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
+              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200 cursor-pointer"
             >
               <img src="https://i.postimg.cc/L87SP2kp/gold-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
               <span className="text-sm">Deposit</span>
             </button>
             <button 
               onClick={() => router.push('/withdraw')}
-              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
+              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200 cursor-pointer"
             >
               <img src="https://i.postimg.cc/L4TY11M8/Chat-GPT-Image-May-26-2025-11-07-50-PM.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
               <span className="text-sm">Withdraw</span>
             </button>
             <button 
               onClick={() => router.push('/buy')}
-              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
+              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200 cursor-pointer"
             >
               <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2" />
               <span className="text-sm">Buy Gold</span>
             </button>
             <button 
               onClick={() => router.push('/sell')}
-              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200"
+              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200 cursor-pointer"
             >
-              <img src="https://i.postimg.cc/2yF4qc7k/Chat-GPT-Image-May-26-2025-11-02-12-PM.png" alt="Sell Gold Icon" className="w-10 h-10 mb-0" />
+              <img src="https://i.postimg.cc/L5vWLQqb/gold-coins.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2" />
               <span className="text-sm">Sell Gold</span>
             </button>
           </div>
