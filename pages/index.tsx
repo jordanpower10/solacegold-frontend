@@ -2,34 +2,21 @@ import React from 'react'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import GoldPriceChart from '../components/GoldPriceChart'
+import Link from 'next/link'
 
 export default function Home() {
   const [goldPrice, setGoldPrice] = useState<number | null>(null)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  let timeoutId: NodeJS.Timeout
 
   useEffect(() => {
-    async function updateGoldPrice() {
-      try {
-        const res = await fetch('https://data-asg.goldprice.org/dbXRates/USD')
-        const data = await res.json()
-        const price = data?.items?.[0]?.xauPrice
-        if (price) {
-          // Silently add 5% margin to the price
-          setGoldPrice(price * 1.05)
-        }
-      } catch {
-        setGoldPrice(null)
-      }
-    }
-
-    updateGoldPrice()
-    const interval = setInterval(updateGoldPrice, 60000)
-    return () => clearInterval(interval)
+    // Simulated gold price for demo
+    setGoldPrice(2375.00)
   }, [])
 
   const formatPrice = (price: number) => {
-    return `$${price.toFixed(2)} USD`
+    return `$${price.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })}/oz`
   }
 
   return (
@@ -40,30 +27,8 @@ export default function Home() {
       </Head>
 
       <div className="min-h-screen flex flex-col bg-[#0d0d0d] text-[#f5f5f5] font-sans relative">
-        {/* Dropdown Menu */}
-        <div
-          className="absolute top-4 right-6 z-50"
-          onMouseEnter={() => {
-            clearTimeout(timeoutId)
-            setIsMenuOpen(true)
-          }}
-          onMouseLeave={() => {
-            timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
-          }}
-        >
-          <button className="bg-[#e0b44a] text-black font-semibold px-5 py-3 rounded-md shadow-gold hover:bg-yellow-400 transition text-sm">
-            Menu
-          </button>
-          {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg">
-              <a href="/about" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">About Us</a>
-              <a href="/contact" className="block px-4 py-2 text-sm text-white hover:bg-gray-700">Contact Us</a>
-            </div>
-          )}
-        </div>
-
         {/* Hero Section */}
-        <section className="flex flex-col items-center justify-center text-center px-6 pb-10 mt-20">
+        <section className="flex-1 flex flex-col items-center justify-center text-center px-4 py-16">
           <img src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-52 h-auto mix-blend-lighten mb-6" />
           <h2 className="text-5xl font-bold leading-tight mb-4">
             <span className="text-[#e0b44a]">Gold,</span> Simplified
@@ -74,18 +39,18 @@ export default function Home() {
           
           {/* Authentication Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xs">
-            <a 
+            <Link 
               href="/signup" 
-              className="flex-1 bg-[#e0b44a] text-black font-bold px-8 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition text-center"
+              className="flex-1 bg-[#e0b44a] text-black font-bold px-8 py-3 rounded-lg shadow-gold hover:bg-yellow-400 transition text-center cursor-pointer"
             >
               Sign Up
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/login" 
-              className="flex-1 bg-transparent text-[#e0b44a] font-bold px-8 py-3 rounded-lg border-2 border-[#e0b44a] hover:bg-[#e0b44a] hover:text-black transition text-center"
+              className="flex-1 bg-transparent text-[#e0b44a] font-bold px-8 py-3 rounded-lg border-2 border-[#e0b44a] hover:bg-[#e0b44a] hover:text-black transition text-center cursor-pointer"
             >
               Sign In
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -108,8 +73,37 @@ export default function Home() {
           </div>
         </section>
 
-        <footer className="text-center text-sm text-gray-600 py-6 border-t border-gray-800 mt-auto">
-          &copy; 2025 Solace Gold. All rights reserved.
+        {/* Footer */}
+        <footer className="bg-[#121212] border-t border-[#2a2a2a] py-8 px-4">
+          <div className="max-w-6xl mx-auto">
+            {/* Company Info */}
+            <div className="text-center mb-6 text-sm text-gray-400">
+              <p>© Copyright 2025 Solacegold Ltd.</p>
+              <p>Registered in Ireland No. 12558398 VAT No. FR85711159383</p>
+            </div>
+
+            {/* Links */}
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-6 text-sm">
+              <Link href="/about" className="text-gray-400 hover:text-[#e0b44a] transition-colors cursor-pointer">
+                About Us
+              </Link>
+              <Link href="/contact" className="text-gray-400 hover:text-[#e0b44a] transition-colors cursor-pointer">
+                Contact Us
+              </Link>
+              <Link href="/cookie-policy" className="text-gray-400 hover:text-[#e0b44a] transition-colors cursor-pointer">
+                Cookie Policy
+              </Link>
+              <Link href="/privacy-policy" className="text-gray-400 hover:text-[#e0b44a] transition-colors cursor-pointer">
+                Privacy Policy
+              </Link>
+              <Link href="/terms" className="text-gray-400 hover:text-[#e0b44a] transition-colors cursor-pointer">
+                Terms & Conditions
+              </Link>
+              <Link href="/acceptable-use" className="text-gray-400 hover:text-[#e0b44a] transition-colors cursor-pointer">
+                Acceptable Use Policy
+              </Link>
+            </div>
+          </div>
         </footer>
       </div>
     </>
