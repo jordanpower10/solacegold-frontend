@@ -27,7 +27,6 @@
     "react-google-recaptcha": "^3.1.0"
   },
   "devDependencies": {
-    "@types/framer-motion": "^10.16.4",
     "@types/chart.js": "^2.9.41",
     "@types/node": "^20",
     "@types/react": "^18.2.0",
