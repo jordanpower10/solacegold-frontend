@@ -1,8 +1,12 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import type { ComponentType } from 'react'
+import type { ReCAPTCHAProps } from 'react-google-recaptcha'
 
-const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), { ssr: false })
+const ReCAPTCHA = dynamic<ReCAPTCHAProps>(() => import('react-google-recaptcha').then(mod => mod.default), {
+  ssr: false
+})
 
 export default function Contact() {
   const [name, setName] = useState('')

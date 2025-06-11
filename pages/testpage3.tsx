@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 export default function TestPage3() {
   return (
@@ -8,6 +9,7 @@ export default function TestPage3() {
       <Head>
         <title>SolaceGold - Buy and Store Gold Instantly</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Buy, store, and transfer physical gold instantly with SolaceGold. Fully backed, no vault fees." />
       </Head>
 
       <div className="min-h-screen bg-[#0d0d0d] text-white font-sans">
@@ -16,14 +18,15 @@ export default function TestPage3() {
           {/* Background Effect */}
           <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-[#0d0d0d] z-10" />
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-[url('https://i.postimg.cc/L5vWLQqb/gold-coins.png')] bg-cover bg-center opacity-20" />
+            <div className="absolute inset-0 bg-[url('/images/gold-coins.png')] bg-cover bg-center opacity-20" />
           </div>
 
           {/* Content */}
           <div className="relative z-20 max-w-7xl mx-auto px-4 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
               <h1 className="text-6xl md:text-7xl font-bold mb-6">
@@ -54,7 +57,7 @@ export default function TestPage3() {
           <motion.div 
             className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
             animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           >
             <svg className="w-6 h-6 text-[#e0b44a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -70,6 +73,7 @@ export default function TestPage3() {
               <motion.div 
                 className="bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
                 whileHover={{ scale: 1.02 }}
+                transition={{ type: "tween" }}
               >
                 <div className="h-12 w-12 bg-[#e0b44a] rounded-lg mb-6 flex items-center justify-center">
                   <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,6 +88,7 @@ export default function TestPage3() {
               <motion.div 
                 className="bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
                 whileHover={{ scale: 1.02 }}
+                transition={{ type: "tween" }}
               >
                 <div className="h-12 w-12 bg-[#e0b44a] rounded-lg mb-6 flex items-center justify-center">
                   <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,6 +103,7 @@ export default function TestPage3() {
               <motion.div 
                 className="bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
                 whileHover={{ scale: 1.02 }}
+                transition={{ type: "tween" }}
               >
                 <div className="h-12 w-12 bg-[#e0b44a] rounded-lg mb-6 flex items-center justify-center">
                   <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,45 +119,26 @@ export default function TestPage3() {
 
         {/* Stats Section */}
         <section className="py-20 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://i.postimg.cc/L5vWLQqb/gold-coins.png')] bg-cover bg-center opacity-5" />
+          <div className="absolute inset-0 bg-[url('/images/gold-coins.png')] bg-cover bg-center opacity-5" />
           <div className="max-w-7xl mx-auto px-4 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <h4 className="text-4xl font-bold text-[#e0b44a] mb-2">$1B+</h4>
-                <p className="text-gray-400">Gold Traded</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-              >
-                <h4 className="text-4xl font-bold text-[#e0b44a] mb-2">50K+</h4>
-                <p className="text-gray-400">Active Users</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 }}
-              >
-                <h4 className="text-4xl font-bold text-[#e0b44a] mb-2">99.99%</h4>
-                <p className="text-gray-400">Pure Gold</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.8 }}
-              >
-                <h4 className="text-4xl font-bold text-[#e0b44a] mb-2">24/7</h4>
-                <p className="text-gray-400">Support</p>
-              </motion.div>
+              {[
+                { value: "$1B+", label: "Gold Traded" },
+                { value: "50K+", label: "Active Users" },
+                { value: "99.99%", label: "Pure Gold" },
+                { value: "24/7", label: "Support" }
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.2 }}
+                >
+                  <h4 className="text-4xl font-bold text-[#e0b44a] mb-2">{stat.value}</h4>
+                  <p className="text-gray-400">{stat.label}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
@@ -163,6 +150,7 @@ export default function TestPage3() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 Start Your Gold Journey Today
@@ -185,10 +173,12 @@ export default function TestPage3() {
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div>
-                <img 
-                  src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png"
+                <Image 
+                  src="/images/logo.png"
                   alt="SolaceGold Logo"
-                  className="h-8 mb-6 mix-blend-lighten"
+                  width={120}
+                  height={32}
+                  className="mb-6"
                 />
                 <p className="text-gray-400 text-sm">
                   Making gold ownership simple, secure, and accessible for everyone.
@@ -220,7 +210,7 @@ export default function TestPage3() {
               </div>
             </div>
             <div className="mt-12 pt-8 border-t border-[#2a2a2a] text-center text-gray-400 text-sm">
-              <p>© 2025 Solacegold Ltd. All rights reserved.</p>
+              <p>© {new Date().getFullYear()} Solacegold Ltd. All rights reserved.</p>
             </div>
           </div>
         </footer>

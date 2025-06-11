@@ -2,17 +2,24 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { supabase } from '../../lib/supabaseClient'
 import crypto from 'crypto'
 
+// Disable default body parser to get raw body for signature verification
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
+
+// Use the Sumsub secret key from your .env file
 const SUMSUB_SECRET_KEY = process.env.SUMSUB_SECRET_KEY || ''
 
-// Verify SumSub webhook signature
-const verifySignature = (req: NextApiRequest): boolean => {
-  const signature = req.headers['x-payload-signature']
-  if (!signature) return false
-
-  const hmac = crypto.createHmac('sha1', SUMSUB_SECRET_KEY)
-  const calculatedSignature = hmac.update(JSON.stringify(req.body)).digest('hex')
-  
-  return signature === calculatedSignature
+// Read raw body buffer for HMAC verification
+const buffer = async (req: NextApiRequest): Promise<Buffer> => {
+  return new Promise((resolve, reject) => {
+    const chunks: any[] = []
+    req.on('data', (chunk) => chunks.push(chunk))
+    req.on('end', () => resolve(Buffer.concat(chunks)))
+    req.on('error', reject)
+  })
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -20,50 +27,62 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: 'Method not allowed' })
   }
 
-  // Verify webhook signature
-  if (!verifySignature(req)) {
-    return res.status(401).json({ message: 'Invalid signature' })
-  }
-
   try {
-    const { applicantId, reviewStatus, type, externalUserId } = req.body
+    const rawBody = await buffer(req)
+    const signature = req.headers['x-payload-signature'] as string
 
-    // Only process applicant status changes
-    if (type !== 'applicantReviewed') {
-      return res.status(200).json({ message: 'Event type ignored' })
+    if (!signature) {
+      return res.status(401).json({ message: 'Missing signature' })
     }
 
-    // Map SumSub status to our status
+    const expectedSig = crypto
+      .createHmac('sha256', SUMSUB_SECRET_KEY)
+      .update(rawBody)
+      .digest('hex')
+
+    if (signature !== expectedSig) {
+      return res.status(401).json({ message: 'Invalid signature' })
+    }
+
+    const body = JSON.parse(rawBody.toString())
+    const { reviewResult, type, externalUserId } = body
+
+    if (!externalUserId) {
+      return res.status(400).json({ message: 'Missing externalUserId' })
+    }
+
+    if (type !== 'applicantReviewed' && type !== 'applicantPending') {
+      return res.status(200).json({ message: 'Ignored event type' })
+    }
+
     let kycStatus
-    switch (reviewStatus) {
-      case 'GREEN':
-        kycStatus = 'approved'
-        break
-      case 'RED':
-        kycStatus = 'rejected'
-        break
-      default:
-        kycStatus = 'pending'
+    if (type === 'applicantPending') {
+      kycStatus = 'pending'
+    } else if (type === 'applicantReviewed') {
+      kycStatus = reviewResult.reviewAnswer === 'GREEN' ? 'approved' : 'rejected'
     }
 
-    // Update user's KYC status in database
-    const { error } = await supabase
+    // Update the user's KYC status in the profiles table
+    const { error: updateError } = await supabase
       .from('profiles')
       .update({ 
         kyc_status: kycStatus,
-        kyc_updated_at: new Date().toISOString(),
-        sumsub_id: applicantId
+        kyc_updated_at: new Date().toISOString()
       })
-      .eq('id', externalUserId) // Using the user's ID from Supabase as externalUserId
+      .eq('id', externalUserId)
 
-    if (error) {
-      console.error('Error updating KYC status:', error)
-      return res.status(500).json({ message: 'Error updating KYC status' })
+    if (updateError) {
+      console.error('Error updating KYC status:', updateError)
+      return res.status(500).json({ message: 'Failed to update KYC status' })
     }
 
-    return res.status(200).json({ message: 'KYC status updated successfully' })
+    return res.status(200).json({ 
+      message: 'Webhook processed successfully',
+      status: kycStatus 
+    })
+
   } catch (error) {
-    console.error('Error processing webhook:', error)
+    console.error('Webhook processing error:', error)
     return res.status(500).json({ message: 'Internal server error' })
   }
-} 
+}
