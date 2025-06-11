@@ -2,6 +2,7 @@ import { SessionProvider } from "next-auth/react"
 import type { AppProps } from "next/app"
 import Head from 'next/head'
 import "../styles/globals.css"
+import CookieConsent from "../components/CookieConsent"
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -17,6 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <SessionProvider session={pageProps.session}>
         <Component {...pageProps} />
+        <CookieConsent />
       </SessionProvider>
     </>
   )
