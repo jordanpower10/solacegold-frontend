@@ -16,6 +16,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "d3": "^7.9.0",
     "date-fns": "^4.1.0",
+    "framer-motion": "^10.16.4",
     "next": "15.3.1",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
