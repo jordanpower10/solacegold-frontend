@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 
+interface Wallet {
+  wallet_type: string;
+  balance: number;
+}
+
 export default function BuyGold() {
   const [amount, setAmount] = useState('')
   const [cashBalance, setCashBalance] = useState(0)
@@ -13,26 +18,35 @@ export default function BuyGold() {
   const goldPrice = 2375.00 // This should match your dashboard price
 
   useEffect(() => {
-    const fetchBalance = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+    if (typeof window !== 'undefined') {
+      const fetchBalance = async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession()
 
-      if (!session) {
-        router.push('/login')
-        return
+          if (!session) {
+            router.push('/login')
+            return
+          }
+
+          const { data: wallets } = await supabase
+            .from('wallets')
+            .select('wallet_type, balance')
+            .eq('user_id', session.user.id)
+
+          if (wallets) {
+            const typedWallets = wallets as Wallet[]
+            const cashWallet = typedWallets.find(w => w.wallet_type === 'cash')
+            if (cashWallet) {
+              setCashBalance(cashWallet.balance)
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching balance:', error)
+        }
       }
 
-      const { data: wallets } = await supabase
-        .from('wallets')
-        .select('wallet_type, balance')
-        .eq('user_id', session.user.id)
-
-      const cashWallet = wallets?.find(w => w.wallet_type === 'cash')
-      if (cashWallet) {
-        setCashBalance(cashWallet.balance)
-      }
+      fetchBalance()
     }
-
-    fetchBalance()
   }, [router])
 
   const handleBuyGold = async (e: React.FormEvent) => {

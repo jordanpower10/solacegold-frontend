@@ -89,6 +89,11 @@ interface GlobeData {
   polygons: GlobePolygon[];
 }
 
+interface Wallet {
+  wallet_type: string;
+  balance: number;
+}
+
 export default function TestPage2() {
   const [goldBalance, setGoldBalance] = useState(0)
   const [isGlobalView, setIsGlobalView] = useState(true)
@@ -116,42 +121,40 @@ export default function TestPage2() {
   }, [])
 
   useEffect(() => {
-    // Fetch user's gold balance and rank
-    const fetchUserData = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        router.push('/login')
-        return
-      }
-
-      // Get user's gold balance
-      const { data: wallets } = await supabase
-        .from('wallets')
-        .select('balance')
-        .eq('user_id', session.user.id)
-        .eq('wallet_type', 'gold')
-        .single()
-
-      if (wallets) {
-        setGoldBalance(wallets.balance || 0)
-      }
-
-      // Get user's leaderboard rank
-      const { count } = await supabase
-        .from('wallets')
-        .select('*', { count: 'exact', head: true })
-        .eq('wallet_type', 'gold')
-        .gt('balance', wallets?.balance || 0)
-
-      setLeaderboardRank((count || 0) + 1)
-    }
-
-    fetchUserData()
-    // Only initialize globe data in browser environment
     if (typeof window !== 'undefined') {
-      initGlobeData()
+      const fetchUserData = async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession()
+          if (!session) return
+
+          // Get user's gold balance
+          const { data: wallet } = await supabase
+            .from('wallets')
+            .select('balance')
+            .eq('user_id', session.user.id)
+            .eq('wallet_type', 'gold')
+            .single()
+
+          if (wallet && typeof wallet.balance === 'number') {
+            setGoldBalance(wallet.balance)
+          }
+
+          // Get user's leaderboard rank
+          const { count } = await supabase
+            .from('wallets')
+            .select('*', { count: 'exact', head: true })
+            .eq('wallet_type', 'gold')
+            .gt('balance', wallet?.balance || 0)
+
+          setLeaderboardRank((count || 0) + 1)
+        } catch (error) {
+          console.error('Error fetching user data:', error)
+        }
+      }
+
+      fetchUserData()
     }
-  }, [router])
+  }, [])
 
   // Calculate global percentile based on gold balance
   useEffect(() => {

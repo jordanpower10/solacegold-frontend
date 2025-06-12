@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const ReCAPTCHA = dynamic(() => import('react-google-recaptcha').then(mod => mod.default), {
+const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
   ssr: false,
   loading: () => <div className="h-[78px] w-[302px] bg-[#1a1a1a] rounded animate-pulse" />
 })

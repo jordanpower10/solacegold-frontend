@@ -4,6 +4,24 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
 import GoldGlobe from '../components/GoldGlobe'
+import dynamic from 'next/dynamic'
+
+interface Profile {
+  first_name: string;
+  last_name: string;
+}
+
+interface Wallet {
+  wallet_type: string;
+  balance: number;
+}
+
+interface Transaction {
+  id: string;
+  type: string;
+  amount: number;
+  created_at: string;
+}
 
 export default function Dashboard() {
   const [userName, setUserName] = useState('User')
@@ -11,7 +29,8 @@ export default function Dashboard() {
   const [cashBalance, setCashBalance] = useState(0)
   const [goldBalance, setGoldBalance] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [transactions, setTransactions] = useState<any[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
   let timeoutId: NodeJS.Timeout
 
@@ -33,51 +52,74 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+    if (typeof window !== 'undefined') {
+      const fetchData = async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession()
 
-      if (!session) {
-        router.push('/login')
-        return
-      }
+          if (!session) {
+            router.push('/login')
+            return
+          }
 
-      const userId = session.user.id
+          const userId = session.user.id
 
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('first_name, last_name')
-        .eq('id', userId)
-        .single()
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('first_name, last_name')
+            .eq('id', userId)
+            .single()
 
-      setUserName(profileData?.first_name || 'User')
-      if (profileData?.first_name) {
-        setFirstName(profileData.first_name)
-      }
+          if (profileData) {
+            const typedProfile = profileData as Profile
+            setUserName(typedProfile.first_name || 'User')
+            setFirstName(typedProfile.first_name || 'User')
+          }
 
-      const { data: wallets } = await supabase
-        .from('wallets')
-        .select('wallet_type, balance')
-        .eq('user_id', userId)
+          const { data: wallets } = await supabase
+            .from('wallets')
+            .select('wallet_type, balance')
+            .eq('user_id', userId)
 
-      wallets?.forEach((wallet) => {
-        if (wallet.wallet_type === 'cash') {
-          setCashBalance(wallet.balance)
-        } else if (wallet.wallet_type === 'gold') {
-          setGoldBalance(wallet.balance)
+          if (wallets) {
+            const typedWallets = wallets as Wallet[]
+            typedWallets.forEach((wallet) => {
+              if (wallet.wallet_type === 'cash') {
+                setCashBalance(wallet.balance)
+              } else if (wallet.wallet_type === 'gold') {
+                setGoldBalance(wallet.balance)
+              }
+            })
+          }
+
+          // Fetch transactions
+          const { data: txs } = await supabase
+            .from('transactions')
+            .select('id, type, amount, created_at')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false })
+
+          if (txs) {
+            setTransactions(txs as Transaction[])
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error)
+        } finally {
+          setIsLoading(false)
         }
-      })
+      }
 
-      // Fetch transactions
-      const { data: txs } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-      setTransactions(txs || [])
+      fetchData()
     }
-
-    fetchData()
   }, [router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
+        <div className="text-[#e0b44a] text-xl">Loading...</div>
+      </div>
+    )
+  }
 
   return (
     <>

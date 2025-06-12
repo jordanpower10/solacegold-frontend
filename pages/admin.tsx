@@ -11,6 +11,24 @@ interface PageView {
   updated_at: string
 }
 
+interface Wallet {
+  user_id: string
+  wallet_type: string
+  balance: number
+}
+
+interface User {
+  id: string
+  email: string
+  wallets: Wallet[]
+}
+
+interface Profile {
+  id: string
+  email: string
+  role?: string
+}
+
 interface GroupedPageView {
   path: string
   total: number
@@ -18,14 +36,6 @@ interface GroupedPageView {
     date: string
     count: number
   }>
-}
-
-interface User {
-  id: string
-  email: string
-  cashBalance: number
-  goldBalance: number
-  totalValue: number
 }
 
 export default function AdminPage() {
@@ -41,89 +51,91 @@ export default function AdminPage() {
   const goldPrice = 2375.00 // Example USD price, update as needed
 
   useEffect(() => {
-    const fetchAdminData = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+    if (typeof window !== 'undefined') {
+      const fetchAdminData = async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession()
 
-      if (!session) {
-        router.push('/login')
-        return
-      }
+          if (!session) {
+            router.push('/login')
+            return
+          }
 
-      // Fetch the current user's role
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', session.user.id)
-        .single()
+          // Fetch the current user's role
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', session.user.id)
+            .single()
 
-      if (profileError || !profileData || profileData.role !== 'admin') {
-        router.push('/dashboard')
-        return
-      }
+          if (profileError || !profileData || profileData.role !== 'admin') {
+            router.push('/dashboard')
+            return
+          }
 
-      // Fetch all users from profiles
-      const { data: profiles, error: profilesError } = await supabase
-        .from('profiles')
-        .select('id, email')
+          // Fetch all users from profiles
+          const { data: profiles, error: profilesError } = await supabase
+            .from('profiles')
+            .select('id, email')
 
-      if (profilesError) {
-        console.error('❌ Error fetching profiles:', profilesError)
-        return
-      }
+          if (profilesError) {
+            console.error('❌ Error fetching profiles:', profilesError)
+            return
+          }
 
-      // Fetch wallets
-      const { data: wallets, error: walletsError } = await supabase
-        .from('wallets')
-        .select('user_id, wallet_type, balance')
+          // Fetch wallets
+          const { data: wallets, error: walletsError } = await supabase
+            .from('wallets')
+            .select('user_id, wallet_type, balance')
 
-      if (walletsError) {
-        console.error('❌ Error fetching wallets:', walletsError)
-        return
-      }
+          if (walletsError) {
+            console.error('❌ Error fetching wallets:', walletsError)
+            return
+          }
 
-      // Fetch page views for the last 7 days
-      const { data: views, error: viewsError } = await supabase
-        .from('page_views')
-        .select('*')
-        .gte('view_date', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-        .order('view_date', { ascending: false })
+          // Fetch page views for the last 7 days
+          const { data: views, error: viewsError } = await supabase
+            .from('page_views')
+            .select('path, view_count, view_date, created_at, updated_at')
+            .gte('view_date', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+            .order('view_date', { ascending: false })
 
-      if (viewsError) {
-        console.error('❌ Error fetching page views:', viewsError)
-      } else {
-        setPageViews(views || [])
-        setTotalViews(views ? views.reduce((sum, view) => sum + view.view_count, 0) : 0)
-      }
+          if (viewsError) {
+            console.error('❌ Error fetching page views:', viewsError)
+          } else if (views) {
+            const typedViews = views as PageView[]
+            setPageViews(typedViews)
+            setTotalViews(typedViews.reduce((sum, view) => sum + view.view_count, 0))
+          }
 
-      // Match user balances
-      const userData = profiles.map((profile) => {
-        const userWallets = wallets.filter(w => w.user_id === profile.id)
+          // Process and combine the data
+          if (profiles && wallets) {
+            const typedProfiles = profiles as Profile[]
+            const typedWallets = wallets as Wallet[]
+            
+            const usersWithWallets = typedProfiles.map((profile) => ({
+              id: profile.id,
+              email: profile.email,
+              wallets: typedWallets.filter(w => w.user_id === profile.id) || []
+            }))
+            
+            setUsers(usersWithWallets)
 
-        const cashWallet = userWallets.find(w => w.wallet_type === 'cash')
-        const goldWallet = userWallets.find(w => w.wallet_type === 'gold')
-
-        const cashBalance = cashWallet ? cashWallet.balance : 0
-        const goldBalance = goldWallet ? goldWallet.balance : 0
-        const totalValue = cashBalance + (goldBalance * goldPrice)
-
-        return {
-          id: profile.id,
-          email: profile.email,
-          cashBalance,
-          goldBalance,
-          totalValue
+            const totalSiteValue = usersWithWallets.reduce((total, user) => {
+              return total + user.wallets.reduce((sum, wallet) => sum + wallet.balance, 0)
+            }, 0)
+            
+            setSiteValue(totalSiteValue)
+          }
+        } catch (error) {
+          console.error('Error fetching admin data:', error)
+        } finally {
+          setLoading(false)
         }
-      })
+      }
 
-      setUsers(userData)
-
-      const totalSiteValue = userData.reduce((sum, user) => sum + user.totalValue, 0)
-      setSiteValue(totalSiteValue)
-
-      setLoading(false)
+      fetchAdminData()
     }
-
-    fetchAdminData()
   }, [router])
 
   // Group page views by path
@@ -146,8 +158,8 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white">
-        <p>Loading...</p>
+      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
+        <div className="text-[#e0b44a] text-xl">Loading...</div>
       </div>
     )
   }
@@ -276,9 +288,9 @@ export default function AdminPage() {
                       {users.map((user) => (
                         <tr key={user.id} className="border-b border-[#2a2a2a] hover:bg-[#1d1d1d]">
                           <td className="py-3 px-3 max-w-[150px] md:max-w-[200px] truncate">{user.email}</td>
-                          <td className="py-3 px-3 whitespace-nowrap">${user.cashBalance.toLocaleString('en-US')}</td>
-                          <td className="py-3 px-3 whitespace-nowrap">{user.goldBalance.toFixed(2)} oz</td>
-                          <td className="py-3 px-3 whitespace-nowrap text-[#e0b44a]">${user.totalValue.toLocaleString('en-US')}</td>
+                          <td className="py-3 px-3 whitespace-nowrap">${user.wallets.find(w => w.wallet_type === 'cash')?.balance.toLocaleString('en-US') || '0'}</td>
+                          <td className="py-3 px-3 whitespace-nowrap">{user.wallets.find(w => w.wallet_type === 'gold')?.balance.toFixed(2)} oz</td>
+                          <td className="py-3 px-3 whitespace-nowrap text-[#e0b44a]">${user.wallets.reduce((sum, wallet) => sum + wallet.balance, 0).toLocaleString('en-US')}</td>
                         </tr>
                       ))}
                     </tbody>

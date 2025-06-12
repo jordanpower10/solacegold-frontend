@@ -14,6 +14,11 @@ const GLOBAL_STATS = {
   }
 }
 
+interface Wallet {
+  balance: number;
+  wallet_type: string;
+}
+
 export default function GoldGlobe() {
   const router = useRouter()
   const [isGlobalView, setIsGlobalView] = useState(true)
@@ -25,33 +30,39 @@ export default function GoldGlobe() {
 
   // Fetch user data and calculate rankings
   useEffect(() => {
-    const fetchUserData = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return
+    if (typeof window !== 'undefined') {
+      const fetchUserData = async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession()
+          if (!session) return
 
-      // Get user's gold balance
-      const { data: wallets } = await supabase
-        .from('wallets')
-        .select('balance')
-        .eq('user_id', session.user.id)
-        .eq('wallet_type', 'gold')
-        .single()
+          // Get user's gold balance
+          const { data: wallet } = await supabase
+            .from('wallets')
+            .select('balance')
+            .eq('user_id', session.user.id)
+            .eq('wallet_type', 'gold')
+            .single()
 
-      if (wallets) {
-        setGoldBalance(wallets.balance || 0)
+          if (wallet && typeof wallet.balance === 'number') {
+            setGoldBalance(wallet.balance)
+          }
+
+          // Get user's leaderboard rank
+          const { count } = await supabase
+            .from('wallets')
+            .select('*', { count: 'exact', head: true })
+            .eq('wallet_type', 'gold')
+            .gt('balance', wallet?.balance || 0)
+
+          setLeaderboardRank((count || 0) + 1)
+        } catch (error) {
+          console.error('Error fetching user data:', error)
+        }
       }
 
-      // Get user's leaderboard rank
-      const { count } = await supabase
-        .from('wallets')
-        .select('*', { count: 'exact', head: true })
-        .eq('wallet_type', 'gold')
-        .gt('balance', wallets?.balance || 0)
-
-      setLeaderboardRank((count || 0) + 1)
+      fetchUserData()
     }
-
-    fetchUserData()
   }, [])
 
   // Calculate global percentile
