@@ -6,10 +6,15 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import type { ReCAPTCHAProps } from 'react-google-recaptcha'
 
-const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
-  ssr: false
-})
+const ReCAPTCHA = dynamic<ReCAPTCHAProps>(
+  () => import('react-google-recaptcha').then(mod => mod.default),
+  {
+    ssr: false,
+    loading: () => <div className="h-[78px] w-[302px] bg-[#1a1a1a] rounded animate-pulse" />
+  }
+)
 
 const countries = [
   "Austria", "Belgium", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany",

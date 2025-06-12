@@ -3,10 +3,15 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import dynamic from 'next/dynamic'
+import type { ReCAPTCHAProps } from 'react-google-recaptcha'
 
-const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
-  ssr: false
-})
+const ReCAPTCHA = dynamic<ReCAPTCHAProps>(
+  () => import('react-google-recaptcha').then(mod => mod.default),
+  {
+    ssr: false,
+    loading: () => <div className="h-[78px] w-[302px] bg-[#1a1a1a] rounded animate-pulse" />
+  }
+)
 
 export default function ResetPassword() {
   const router = useRouter()
