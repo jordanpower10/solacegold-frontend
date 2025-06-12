@@ -2,7 +2,11 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
-import ReCAPTCHA from 'react-google-recaptcha'
+import dynamic from 'next/dynamic'
+
+const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
+  ssr: false
+})
 
 export default function ResetPassword() {
   const router = useRouter()

@@ -4,8 +4,12 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import ReCAPTCHA from 'react-google-recaptcha'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
+
+const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
+  ssr: false
+})
 
 const countries = [
   "Austria", "Belgium", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany",

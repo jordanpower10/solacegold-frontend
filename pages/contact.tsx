@@ -1,10 +1,8 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
-import type { ComponentType } from 'react'
-import type { ReCAPTCHAProps } from 'react-google-recaptcha'
 
-const ReCAPTCHA = dynamic<ReCAPTCHAProps>(() => import('react-google-recaptcha').then(mod => mod.default), {
+const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
   ssr: false
 })
 
@@ -82,7 +80,7 @@ export default function Contact() {
             Contact Us
           </h2>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
               placeholder="Your Name"

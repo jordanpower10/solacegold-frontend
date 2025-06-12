@@ -1,7 +1,11 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import ReCAPTCHA from 'react-google-recaptcha'
+import dynamic from 'next/dynamic'
+
+const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
+  ssr: false
+})
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
