@@ -28,7 +28,7 @@ export default function PasswordStep({ onNext }: PasswordStepProps) {
       exit={{ opacity: 0, y: -20 }}
       className="w-full"
     >
-      <h2 className="text-2xl font-bold mb-6">Create a password</h2>
+      <h2 className="text-2xl font-bold mb-6 text-white">Create a password</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="relative">
