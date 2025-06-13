@@ -9,7 +9,7 @@ export default function Home() {
       <Head>
         <title>SolaceGold - Buy and Store Gold Instantly</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Buy, store, and transfer physical gold instantly with SolaceGold. Fully backed, no vault fees." />
+        <meta name="description" content="Buy, store, and transfer digital gold instantly with SolaceGold. Fully backed, no vault fees." />
       </Head>
 
       <div className="min-h-screen bg-[#0d0d0d] text-white font-sans">
@@ -18,7 +18,7 @@ export default function Home() {
           <img
             src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
             alt="SolaceGold Logo"
-            className="w-32 h-32"
+            className="w-48 h-48"
           />
         </div>
 
@@ -43,7 +43,7 @@ export default function Home() {
                 <br />Digital Age
               </h1>
               <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
-                Buy, store, and transfer physical gold instantly. Fully backed, no vault fees.
+                Buy, store, and transfer digital gold instantly. Fully backed, no vault fees.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <Link 
@@ -206,7 +206,7 @@ export default function Home() {
                 <ul className="space-y-2">
                   <li><Link href="/help" className="text-gray-400 hover:text-[#e0b44a] transition">Help Center</Link></li>
                   <li><Link href="/contact" className="text-gray-400 hover:text-[#e0b44a] transition">Contact Us</Link></li>
-                  <li><Link href="/status" className="text-gray-400 hover:text-[#e0b44a] transition">Status</Link></li>
+                  <li><Link href="/faq" className="text-gray-400 hover:text-[#e0b44a] transition">FAQ</Link></li>
                 </ul>
               </div>
               <div>
