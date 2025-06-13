@@ -23,7 +23,7 @@ export default function EmailStep({ onNext }: EmailStepProps) {
       exit={{ opacity: 0, y: -20 }}
       className="w-full"
     >
-      <h2 className="text-2xl font-bold mb-6">Please enter your email</h2>
+      <h2 className="text-2xl font-bold mb-6 text-white">Please enter your email</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <input

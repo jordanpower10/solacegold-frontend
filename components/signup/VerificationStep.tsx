@@ -22,7 +22,7 @@ export default function VerificationStep({ email, onNext, onResend }: Verificati
       exit={{ opacity: 0, y: -20 }}
       className="w-full"
     >
-      <h2 className="text-2xl font-bold mb-6">Verify your email</h2>
+      <h2 className="text-2xl font-bold mb-6 text-white">Verify your email</h2>
       <p className="text-gray-400 mb-6">
         A 6-digit code has been sent to {email}. Please enter it within the next 30 minutes.
       </p>

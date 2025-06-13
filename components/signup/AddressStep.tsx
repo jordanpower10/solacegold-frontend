@@ -31,7 +31,7 @@ export default function AddressStep({ residence, onNext }: AddressStepProps) {
       exit={{ opacity: 0, y: -20 }}
       className="w-full"
     >
-      <h2 className="text-2xl font-bold mb-6">Residential Address</h2>
+      <h2 className="text-2xl font-bold mb-6 text-white">Residential Address</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-4">
