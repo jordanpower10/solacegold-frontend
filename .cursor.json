@@ -2,7 +2,7 @@
     "rules": [
       {
         "pattern": ".*\\.tsx$",
-        "instruction": "Use Tailwind CSS only. Maintain SolaceGold’s black-and-gold premium style. Do not restructure layout or change spacing unless explicitly asked."
+        "instruction": "Use Tailwind CSS only. Maintain SolaceGold's black-and-gold premium style. Do not restructure layout or change spacing unless explicitly asked."
       },
       {
         "pattern": ".*\\.ts$",
@@ -23,6 +23,18 @@
       {
         "pattern": ".*",
         "instruction": "Comment non-obvious logic. Use meaningful variable names. Avoid deeply nested logic. Follow Next.js, Supabase, and TypeScript best practices."
+      },
+      {
+        "pattern": ".*",
+        "instruction": "If a new feature or addition exceeds 100 lines, extract it into a separate file and import it to maintain clean and modular code."
+      },
+      {
+        "pattern": ".*",
+        "instruction": "If a feature requires a Supabase SQL change, include the SQL query or detailed Supabase dashboard instructions in the output. Store a copy in /supabase-migrations with the change summary."
+      },
+      {
+        "pattern": "pages/.*\\.tsx$",
+        "instruction": "For each page, implement Framer Motion animations: use a reusable fadeInUp animation config, apply fade-in-up effect to each item, and stagger their appearance for visual polish."
       }
     ]
   }
