@@ -23,7 +23,7 @@ export default function EmailStep({ onNext }: EmailStepProps) {
       exit={{ opacity: 0, y: -20 }}
       className="w-full"
     >
-      <h2 className="text-2xl font-bold mb-6">Verify your email</h2>
+      <h2 className="text-2xl font-bold mb-6">Please enter your email</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <input
@@ -45,7 +45,7 @@ export default function EmailStep({ onNext }: EmailStepProps) {
             className="mt-1 mr-3"
           />
           <label htmlFor="terms" className="text-sm text-gray-400">
-            By creating an account, I agree to SolaceGold's terms and KYC requirements.
+            By creating an account, I agree to <a href="/terms" className="text-[#e0b44a] hover:underline">SolaceGold's terms</a> and <a href="/kyc-terms" className="text-[#e0b44a] hover:underline">KYC requirements</a>.
           </label>
         </div>
 
