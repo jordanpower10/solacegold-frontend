@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import Flag from 'react-world-flags'
+import 'flag-icons/css/flag-icons.min.css'
 
 interface PersonalInfoStepProps {
   onNext: (data: {
@@ -15,24 +15,24 @@ interface PersonalInfoStepProps {
 }
 
 const countries = [
-  { name: "Afghanistan", code: "AF" }, { name: "Albania", code: "AL" }, { name: "Algeria", code: "DZ" },
-  { name: "Andorra", code: "AD" }, { name: "Angola", code: "AO" }, { name: "Argentina", code: "AR" },
-  { name: "Armenia", code: "AM" }, { name: "Australia", code: "AU" }, { name: "Austria", code: "AT" },
-  { name: "Azerbaijan", code: "AZ" }, { name: "Bahamas", code: "BS" }, { name: "Bahrain", code: "BH" },
-  { name: "Bangladesh", code: "BD" }, { name: "Belgium", code: "BE" }, { name: "Brazil", code: "BR" },
-  { name: "Canada", code: "CA" }, { name: "China", code: "CN" }, { name: "Denmark", code: "DK" },
-  { name: "Egypt", code: "EG" }, { name: "Finland", code: "FI" }, { name: "France", code: "FR" },
-  { name: "Germany", code: "DE" }, { name: "Greece", code: "GR" }, { name: "Iceland", code: "IS" },
-  { name: "India", code: "IN" }, { name: "Indonesia", code: "ID" }, { name: "Ireland", code: "IE" },
-  { name: "Israel", code: "IL" }, { name: "Italy", code: "IT" }, { name: "Japan", code: "JP" },
-  { name: "Malaysia", code: "MY" }, { name: "Mexico", code: "MX" }, { name: "Netherlands", code: "NL" },
-  { name: "New Zealand", code: "NZ" }, { name: "Norway", code: "NO" }, { name: "Poland", code: "PL" },
-  { name: "Portugal", code: "PT" }, { name: "Qatar", code: "QA" }, { name: "Russia", code: "RU" },
-  { name: "Saudi Arabia", code: "SA" }, { name: "Singapore", code: "SG" }, { name: "South Africa", code: "ZA" },
-  { name: "South Korea", code: "KR" }, { name: "Spain", code: "ES" }, { name: "Sweden", code: "SE" },
-  { name: "Switzerland", code: "CH" }, { name: "Thailand", code: "TH" }, { name: "Turkey", code: "TR" },
-  { name: "Ukraine", code: "UA" }, { name: "United Arab Emirates", code: "AE" }, { name: "United Kingdom", code: "GB" },
-  { name: "United States", code: "US" }, { name: "Vietnam", code: "VN" }
+  { name: "Afghanistan", code: "af" }, { name: "Albania", code: "al" }, { name: "Algeria", code: "dz" },
+  { name: "Andorra", code: "ad" }, { name: "Angola", code: "ao" }, { name: "Argentina", code: "ar" },
+  { name: "Armenia", code: "am" }, { name: "Australia", code: "au" }, { name: "Austria", code: "at" },
+  { name: "Azerbaijan", code: "az" }, { name: "Bahamas", code: "bs" }, { name: "Bahrain", code: "bh" },
+  { name: "Bangladesh", code: "bd" }, { name: "Belgium", code: "be" }, { name: "Brazil", code: "br" },
+  { name: "Canada", code: "ca" }, { name: "China", code: "cn" }, { name: "Denmark", code: "dk" },
+  { name: "Egypt", code: "eg" }, { name: "Finland", code: "fi" }, { name: "France", code: "fr" },
+  { name: "Germany", code: "de" }, { name: "Greece", code: "gr" }, { name: "Iceland", code: "is" },
+  { name: "India", code: "in" }, { name: "Indonesia", code: "id" }, { name: "Ireland", code: "ie" },
+  { name: "Israel", code: "il" }, { name: "Italy", code: "it" }, { name: "Japan", code: "jp" },
+  { name: "Malaysia", code: "my" }, { name: "Mexico", code: "mx" }, { name: "Netherlands", code: "nl" },
+  { name: "New Zealand", code: "nz" }, { name: "Norway", code: "no" }, { name: "Poland", code: "pl" },
+  { name: "Portugal", code: "pt" }, { name: "Qatar", code: "qa" }, { name: "Russia", code: "ru" },
+  { name: "Saudi Arabia", code: "sa" }, { name: "Singapore", code: "sg" }, { name: "South Africa", code: "za" },
+  { name: "South Korea", code: "kr" }, { name: "Spain", code: "es" }, { name: "Sweden", code: "se" },
+  { name: "Switzerland", code: "ch" }, { name: "Thailand", code: "th" }, { name: "Turkey", code: "tr" },
+  { name: "Ukraine", code: "ua" }, { name: "United Arab Emirates", code: "ae" }, { name: "United Kingdom", code: "gb" },
+  { name: "United States", code: "us" }, { name: "Vietnam", code: "vn" }
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
@@ -82,38 +82,46 @@ export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
             <label htmlFor="residence" className="block text-sm font-medium text-gray-400 mb-2">
               Residence
             </label>
-            <select
-              id="residence"
-              value={residence}
-              onChange={(e) => setResidence(e.target.value)}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-white focus:outline-none focus:border-[#e0b44a] transition-colors"
-            >
-              {countries.map((country) => (
-                <option key={country.code} value={country.name} className="flex items-center gap-2">
-                  <Flag code={country.code} className="w-5 h-4 inline-block mr-2" />
-                  {country.name}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                id="residence"
+                value={residence}
+                onChange={(e) => setResidence(e.target.value)}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-white focus:outline-none focus:border-[#e0b44a] transition-colors appearance-none"
+              >
+                {countries.map((country) => (
+                  <option key={country.code} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <span className={`fi fi-${countries.find(c => c.name === residence)?.code || 'ie'} mr-2`}></span>
+              </div>
+            </div>
           </div>
 
           <div>
             <label htmlFor="nationality" className="block text-sm font-medium text-gray-400 mb-2">
               Nationality
             </label>
-            <select
-              id="nationality"
-              value={nationality}
-              onChange={(e) => setNationality(e.target.value)}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-white focus:outline-none focus:border-[#e0b44a] transition-colors"
-            >
-              {countries.map((country) => (
-                <option key={country.code} value={country.name} className="flex items-center gap-2">
-                  <Flag code={country.code} className="w-5 h-4 inline-block mr-2" />
-                  {country.name}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                id="nationality"
+                value={nationality}
+                onChange={(e) => setNationality(e.target.value)}
+                className="w-full px-4 py-3 pl-12 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-white focus:outline-none focus:border-[#e0b44a] transition-colors appearance-none"
+              >
+                {countries.map((country) => (
+                  <option key={country.code} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                <span className={`fi fi-${countries.find(c => c.name === nationality)?.code || 'ie'} mr-2`}></span>
+              </div>
+            </div>
           </div>
 
           <div>
