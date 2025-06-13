@@ -13,6 +13,15 @@ export default function Home() {
       </Head>
 
       <div className="min-h-screen bg-[#0d0d0d] text-white font-sans">
+        {/* Top Logo */}
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-30">
+          <img
+            src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
+            alt="SolaceGold Logo"
+            className="w-32 h-32"
+          />
+        </div>
+
         {/* Hero Section */}
         <section className="relative h-screen flex items-center justify-center overflow-hidden">
           {/* Background Effect */}
@@ -44,10 +53,10 @@ export default function Home() {
                   Get Started
                 </Link>
                 <Link 
-                  href="/about"
+                  href="/login"
                   className="px-8 py-4 bg-transparent border-2 border-[#e0b44a] text-[#e0b44a] font-bold rounded-lg hover:bg-[#e0b44a] hover:text-black transition-all transform hover:scale-105"
                 >
-                  Learn More
+                  Log In
                 </Link>
               </div>
             </motion.div>
@@ -173,8 +182,8 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div>
-                <Image 
-                  src="/images/logo.png"
+                <img 
+                  src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
                   alt="SolaceGold Logo"
                   width={120}
                   height={32}
