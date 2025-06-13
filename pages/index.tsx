@@ -14,11 +14,11 @@ export default function Home() {
 
       <div className="min-h-screen bg-[#0d0d0d] text-white font-sans">
         {/* Top Logo */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-30">
+        <div className="absolute top-4 md:top-8 left-1/2 transform -translate-x-1/2 z-30">
           <img
             src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
             alt="SolaceGold Logo"
-            className="w-48 h-48"
+            className="w-32 h-32 md:w-48 md:h-48"
           />
         </div>
 
@@ -38,11 +38,11 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-6xl md:text-7xl font-bold mb-6">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 md:mb-6 mt-16 md:mt-0">
                 <span className="text-[#e0b44a]">Gold</span> for the
                 <br />Digital Age
               </h1>
-              <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 md:mb-12 max-w-3xl mx-auto px-4">
                 Buy, store, and transfer digital gold instantly. Fully backed, no vault fees.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -75,7 +75,7 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="py-20 bg-[#121212]">
+        <section className="py-12 md:py-20 bg-[#121212]">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {/* Feature 1 */}
@@ -127,7 +127,7 @@ export default function Home() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-20 relative overflow-hidden">
+        <section className="py-12 md:py-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/images/gold-coins.png')] bg-cover bg-center opacity-5" />
           <div className="max-w-7xl mx-auto px-4 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
@@ -153,7 +153,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-b from-[#121212] to-[#0d0d0d]">
+        <section className="py-12 md:py-20 bg-gradient-to-b from-[#121212] to-[#0d0d0d]">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -161,10 +161,10 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">
                 Start Your Gold Journey Today
               </h2>
-              <p className="text-xl text-gray-400 mb-12">
+              <p className="text-lg sm:text-xl text-gray-400 mb-8 md:mb-12">
                 Join thousands of investors who trust SolaceGold for their precious metal investments.
               </p>
               <Link 

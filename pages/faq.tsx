@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 interface FAQItem {
   question: string;
@@ -9,6 +10,13 @@ interface FAQItem {
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+
+  const fadeInUp = {
+    initial: { opacity: 0, y: 20 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.5 }
+  }
 
   const faqs: FAQItem[] = [
     {
@@ -73,8 +81,10 @@ export default function FAQ() {
           {/* FAQ List */}
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div 
+              <motion.div 
                 key={index}
+                {...fadeInUp}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-[#121212] border border-[#2a2a2a] rounded-xl overflow-hidden"
               >
                 <button
@@ -96,12 +106,18 @@ export default function FAQ() {
                     {faq.answer}
                   </div>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
 
           {/* Contact Section */}
-          <div className="mt-12 text-center">
+          <motion.div 
+            className="mt-12 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             <p className="text-gray-400 mb-6">
               Still have questions? We're here to help.
             </p>
@@ -111,7 +127,7 @@ export default function FAQ() {
             >
               Visit Help Center
             </Link>
-          </div>
+          </motion.div>
         </main>
 
         {/* Footer */}
