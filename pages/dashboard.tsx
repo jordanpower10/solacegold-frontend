@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
 import GoldGlobe from '../components/GoldGlobe'
 import Footer from '../components/Footer'
+import AppLayout from '../components/AppLayout'
 import { motion } from 'framer-motion'
 import {
   ArrowRightOnRectangleIcon,
@@ -230,7 +231,7 @@ export default function Dashboard() {
   }
 
   return (
-    <>
+    <AppLayout>
       <Head>
         <title>Dashboard - Solace Gold</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -560,6 +561,6 @@ export default function Dashboard() {
 
         <Footer />
       </div>
-    </>
+    </AppLayout>
   )
 }

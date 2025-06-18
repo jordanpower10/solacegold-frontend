@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import MobileNumberWheel from '../components/MobileNumberWheel'
+import AppLayout from '../components/AppLayout'
 import { isMobileApp } from '../utils/mobileUtils'
 
 interface Wallet {
@@ -98,7 +99,7 @@ export default function SellGold() {
   };
 
   return (
-    <>
+    <AppLayout>
       <Head>
         <title>Sell Gold - Solace Gold</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -183,6 +184,6 @@ export default function SellGold() {
           </form>
         </div>
       </div>
-    </>
+    </AppLayout>
   )
 } 
