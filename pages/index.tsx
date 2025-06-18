@@ -39,9 +39,8 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="mt-20 md:mt-24"
             >
-              <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 md:mb-6">
-                <span className="text-[#e0b44a]">Gold</span> for the
-                <br />Digital Age
+              <h1 className="text-4xl sm:text-5xl font-bold text-center mb-6">
+                Buy, store, and sell digital gold instantly. Fully backed, no vault fees.
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 md:mb-12 max-w-3xl mx-auto px-4">
                 Buy, store, and transfer digital gold instantly. Fully backed, no vault fees.
@@ -106,7 +105,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold mb-4">100% Secure</h3>
-                <p className="text-gray-400">Your gold is fully insured and stored in high-security vaults.</p>
+                <p className="text-gray-400">Your gold is fully insured and stored with bank-grade security.</p>
               </motion.div>
 
               {/* Feature 3 */}
@@ -121,7 +120,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold mb-4">Zero Storage Fees</h3>
-                <p className="text-gray-400">No monthly fees or hidden charges. Just pure gold ownership.</p>
+                <p className="text-gray-400">No monthly fees or hidden charges. Just ownership of your asset.</p>
               </motion.div>
             </div>
           </div>
@@ -133,9 +132,9 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
               {[
-                { value: "$1B+", label: "Gold Traded" },
+                { value: "$20mm+", label: "Gold Traded" },
                 { value: "50K+", label: "Active Users" },
-                { value: "99.99%", label: "Pure Gold" },
+                { value: "100%", label: "Insured" },
                 { value: "24/7", label: "Support" }
               ].map((stat, index) => (
                 <motion.div
@@ -166,7 +165,7 @@ export default function Home() {
                 Start Your Gold Journey Today
               </h2>
               <p className="text-lg sm:text-xl text-gray-400 mb-8 md:mb-12">
-                Join thousands of investors who trust SolaceGold for their precious metal investments.
+                Join thousands of investors who trust SolaceGold for their long term investments.
               </p>
               <Link 
                 href="/signup"
