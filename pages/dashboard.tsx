@@ -4,7 +4,8 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
 import GoldGlobe from '../components/GoldGlobe'
-import dynamic from 'next/dynamic'
+import { motion } from 'framer-motion'
+import { FiLogOut, FiArrowUpRight, FiArrowDownRight, FiDollarSign, FiTrendingUp } from 'react-icons/fi'
 
 interface Profile {
   first_name: string;
@@ -32,18 +33,10 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-  let timeoutId: NodeJS.Timeout
 
   const goldPrice = 2375.00
   const dailyChangePercent = 1.42
-
-  // Calculate full account value
   const accountValue = cashBalance + (goldBalance * goldPrice)
-
-  // Handle menu toggle for mobile
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
 
   // Handle logout
   const signOut = async () => {
@@ -92,12 +85,12 @@ export default function Dashboard() {
             })
           }
 
-          // Fetch transactions
           const { data: txs } = await supabase
             .from('transactions')
             .select('id, type, amount, created_at')
             .eq('user_id', userId)
             .order('created_at', { ascending: false })
+            .limit(5)
 
           if (txs) {
             setTransactions(txs as Transaction[])
@@ -128,123 +121,207 @@ export default function Dashboard() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-black text-white font-sans relative">
-        {/* Main Content */}
-        <div className="flex flex-col items-center text-center py-10 px-4">
-          {/* Logo with Logout */}
-          <div 
-            className="relative mb-8 group"
-            onMouseEnter={() => {
-              clearTimeout(timeoutId)
-              setIsMenuOpen(true)
-            }}
-            onMouseLeave={() => {
-              timeoutId = setTimeout(() => setIsMenuOpen(false), 200)
-            }}
-          >
+      <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-black text-white font-sans">
+        {/* Top Navigation */}
+        <nav className="flex justify-between items-center px-6 py-4 bg-[#121212]/50 backdrop-blur-lg border-b border-[#2a2a2a]">
+          <div className="flex items-center gap-4">
             <img
               src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
               alt="Solace Gold Logo"
-              className="w-32 h-32 cursor-pointer"
+              className="w-10 h-10"
             />
-            
-            {/* Dropdown Menu */}
-            {isMenuOpen && (
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2">
-                <div className="w-24 h-[2px] bg-gradient-to-r from-transparent via-[#e0b44a] to-transparent mb-2" />
-                <button
-                  onClick={signOut}
-                  className="text-sm text-[#e0b44a] hover:text-white transition-colors duration-200 cursor-pointer"
-                >
-                  Logout
-                </button>
+            <span className="text-lg font-semibold">SolaceGold</span>
+          </div>
+          <button
+            onClick={signOut}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+          >
+            <FiLogOut /> Logout
+          </button>
+        </nav>
+
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Welcome Section */}
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold mb-2">Welcome back, {firstName}</h1>
+            <p className="text-gray-400">Here's your financial overview</p>
+          </div>
+
+          {/* Account Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {/* Total Value Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <p className="text-gray-400 text-sm">Total Value</p>
+                  <h2 className="text-2xl font-bold">${accountValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h2>
+                </div>
+                <div className="bg-[#e0b44a]/10 p-2 rounded-lg">
+                  <FiDollarSign className="text-[#e0b44a] text-xl" />
+                </div>
               </div>
-            )}
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-green-400">+2.5%</span>
+                <span className="text-gray-400">This month</span>
+              </div>
+            </motion.div>
+
+            {/* Cash Balance Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <p className="text-gray-400 text-sm">Cash Balance</p>
+                  <h2 className="text-2xl font-bold">${cashBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h2>
+                </div>
+                <div className="bg-blue-500/10 p-2 rounded-lg">
+                  <FiArrowUpRight className="text-blue-500 text-xl" />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-gray-400">Available for trading</span>
+              </div>
+            </motion.div>
+
+            {/* Gold Balance Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <p className="text-gray-400 text-sm">Gold Balance</p>
+                  <h2 className="text-2xl font-bold">{goldBalance.toFixed(3)} oz</h2>
+                </div>
+                <div className="bg-[#e0b44a]/10 p-2 rounded-lg">
+                  <FiTrendingUp className="text-[#e0b44a] text-xl" />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-[#e0b44a]">${(goldBalance * goldPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                <span className="text-gray-400">Current value</span>
+              </div>
+            </motion.div>
           </div>
 
-          <h1 className="text-3xl font-bold mb-2">Hi {firstName}</h1>
-          <p className="text-gray-400 mb-8 text-lg">Your Balance</p>
-
-          {/* Balances */}
-          <div className="flex flex-col md:flex-row gap-8 mb-10 w-full max-w-2xl justify-center items-center">
-            <div className="bg-[#121212] border border-[#2a2a2a] flex flex-col items-center justify-center"
-              style={{ width: 160, height: 160, borderRadius: '50%' }}>
-              <div className="text-2xl font-bold mb-1">${cashBalance.toLocaleString('en-US')}</div>
-              <div className="text-sm text-gray-400">Cash Balance</div>
-            </div>
-            <div className="bg-[#121212] border border-[#2a2a2a] flex flex-col items-center justify-center"
-              style={{ width: 160, height: 160, borderRadius: '50%' }}>
-              <div className="text-2xl font-bold mb-1">{goldBalance.toFixed(2)} oz</div>
-              <div className="text-sm text-gray-400">Gold Balance</div>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 w-full max-w-2xl">
-            <button 
+          {/* Quick Actions */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => router.push('/deposit')}
-              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200 cursor-pointer"
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
-              <img src="https://i.postimg.cc/L87SP2kp/gold-euro-sign.png" alt="Deposit Icon" className="w-8 h-8 mb-2" />
-              <span className="text-sm">Deposit</span>
-            </button>
-            <button 
-              onClick={() => router.push('/withdraw')}
-              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200 cursor-pointer"
-            >
-              <img src="https://i.postimg.cc/L4TY11M8/Chat-GPT-Image-May-26-2025-11-07-50-PM.png" alt="Withdraw Icon" className="w-8 h-8 mb-2" />
-              <span className="text-sm">Withdraw</span>
-            </button>
-            <button 
-              onClick={() => router.push('/buy')}
-              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200 cursor-pointer"
-            >
-              <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Buy Gold Icon" className="w-8 h-8 mb-2" />
-              <span className="text-sm">Buy Gold</span>
-            </button>
-            <button 
-              onClick={() => router.push('/sell')}
-              className="bg-[#121212] border border-[#2a2a2a] hover:border-[#e0b44a] rounded-2xl p-4 flex flex-col items-center transition-colors duration-200 cursor-pointer"
-            >
-              <img src="https://i.postimg.cc/L5vWLQqb/gold-coins.png" alt="Sell Gold Icon" className="w-8 h-8 mb-2" />
-              <span className="text-sm">Sell Gold</span>
-            </button>
-          </div>
-
-          {/* Rankings */}
-          <div className="w-full max-w-2xl mb-10">
-            <GoldGlobe />
-          </div>
-
-          {/* Recent Transactions */}
-          <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full max-w-2xl mb-10">
-            <h2 className="text-xl font-semibold mb-4 text-left">Recent Transactions</h2>
-            {transactions.length > 0 ? (
-              <div className="space-y-3">
-                {transactions.map((tx) => (
-                  <div key={tx.id} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-400">{tx.type.charAt(0).toUpperCase() + tx.type.slice(1)} {tx.amount ? `$${tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}` : ''}</span>
-                    <span className="text-[#e0b44a]">{new Date(tx.created_at).toLocaleDateString()}</span>
-                  </div>
-                ))}
+              <div className="bg-blue-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
+                <FiArrowDownRight className="text-blue-500 text-2xl" />
               </div>
-            ) : (
-              <div className="text-gray-500 text-center">No recent transactions.</div>
-            )}
+              <span className="text-sm font-medium">Deposit</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => router.push('/withdraw')}
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
+            >
+              <div className="bg-purple-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
+                <FiArrowUpRight className="text-purple-500 text-2xl" />
+              </div>
+              <span className="text-sm font-medium">Withdraw</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => router.push('/buy')}
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
+            >
+              <div className="bg-green-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
+                <FiTrendingUp className="text-green-500 text-2xl" />
+              </div>
+              <span className="text-sm font-medium">Buy Gold</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => router.push('/sell')}
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
+            >
+              <div className="bg-red-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
+                <FiDollarSign className="text-red-500 text-2xl" />
+              </div>
+              <span className="text-sm font-medium">Sell Gold</span>
+            </motion.button>
           </div>
 
-          {/* Gold Price Chart */}
-          <div className="w-full max-w-2xl mb-20">
-            <div className="h-[250px] mb-8">
-              <GoldPriceChart />
+          {/* Charts and Activity Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            {/* Price Chart */}
+            <div className="lg:col-span-2 bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-semibold">Gold Price</h2>
+                <div className="flex items-center gap-3">
+                  <span className="text-[#e0b44a] font-medium">${goldPrice.toLocaleString('en-US')}</span>
+                  <span className="text-green-400">+{dailyChangePercent}%</span>
+                </div>
+              </div>
+              <div className="h-[300px]">
+                <GoldPriceChart />
+              </div>
+            </div>
+
+            {/* Recent Activity */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6">
+              <h2 className="text-lg font-semibold mb-6">Recent Activity</h2>
+              <div className="space-y-4">
+                {transactions.length > 0 ? (
+                  transactions.map((tx) => (
+                    <div key={tx.id} className="flex items-center justify-between p-3 bg-[#121212]/50 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${
+                          tx.type === 'deposit' ? 'bg-green-500/10 text-green-500' :
+                          tx.type === 'withdraw' ? 'bg-red-500/10 text-red-500' :
+                          'bg-blue-500/10 text-blue-500'
+                        }`}>
+                          {tx.type === 'deposit' ? <FiArrowDownRight /> :
+                           tx.type === 'withdraw' ? <FiArrowUpRight /> :
+                           <FiTrendingUp />}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
+                          <p className="text-xs text-gray-400">{new Date(tx.created_at).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                      <span className="text-sm font-medium">${tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-400 py-4">No recent activity</div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Global Gold Distribution */}
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6 mb-8">
+            <h2 className="text-lg font-semibold mb-6">Global Gold Distribution</h2>
+            <div className="h-[400px]">
+              <GoldGlobe />
             </div>
           </div>
         </div>
-
-        {/* Footer */}
-        <footer className="text-center text-xs text-gray-600 py-6">
-          © 2025 SolaceGold. All rights reserved.
-        </footer>
       </div>
     </>
   )
