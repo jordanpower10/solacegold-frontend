@@ -6,12 +6,13 @@ import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
 import GoldGlobe from '../components/GoldGlobe'
 import { motion } from 'framer-motion'
-import { IconType } from 'react-icons'
-import { FiLogOut, FiArrowUpRight, FiArrowDownRight, FiDollarSign, FiTrendingUp } from 'react-icons/fi'
-
-const IconWrapper = ({ icon: IconComponent }: { icon: IconType }) => {
-  return <IconComponent />
-}
+import {
+  ArrowRightOnRectangleIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
+  CurrencyDollarIcon,
+  ChartBarIcon
+} from '@heroicons/react/24/outline'
 
 interface Profile {
   first_name: string;
@@ -142,7 +143,7 @@ export default function Dashboard() {
             onClick={signOut}
             className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
           >
-            <IconWrapper icon={FiLogOut} /> Logout
+            <ArrowRightOnRectangleIcon className="w-5 h-5" /> Logout
           </button>
         </nav>
 
@@ -168,7 +169,7 @@ export default function Dashboard() {
                   <h2 className="text-2xl font-bold">${accountValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h2>
                 </div>
                 <div className="bg-[#e0b44a]/10 p-2 rounded-lg">
-                  <IconWrapper icon={FiDollarSign} />
+                  <CurrencyDollarIcon className="w-5 h-5 text-[#e0b44a]" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
@@ -190,7 +191,7 @@ export default function Dashboard() {
                   <h2 className="text-2xl font-bold">${cashBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h2>
                 </div>
                 <div className="bg-blue-500/10 p-2 rounded-lg">
-                  <IconWrapper icon={FiArrowUpRight} />
+                  <ArrowUpIcon className="w-5 h-5 text-blue-500" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
@@ -211,7 +212,7 @@ export default function Dashboard() {
                   <h2 className="text-2xl font-bold">{goldBalance.toFixed(3)} oz</h2>
                 </div>
                 <div className="bg-[#e0b44a]/10 p-2 rounded-lg">
-                  <IconWrapper icon={FiTrendingUp} />
+                  <ChartBarIcon className="w-5 h-5 text-[#e0b44a]" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
@@ -230,7 +231,7 @@ export default function Dashboard() {
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
               <div className="bg-blue-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
-                <IconWrapper icon={FiArrowDownRight} />
+                <ArrowDownIcon className="w-6 h-6 text-blue-500" />
               </div>
               <span className="text-sm font-medium">Deposit</span>
             </motion.button>
@@ -242,7 +243,7 @@ export default function Dashboard() {
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
               <div className="bg-purple-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
-                <IconWrapper icon={FiArrowUpRight} />
+                <ArrowUpIcon className="w-6 h-6 text-purple-500" />
               </div>
               <span className="text-sm font-medium">Withdraw</span>
             </motion.button>
@@ -254,7 +255,7 @@ export default function Dashboard() {
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
               <div className="bg-green-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
-                <IconWrapper icon={FiTrendingUp} />
+                <ChartBarIcon className="w-6 h-6 text-green-500" />
               </div>
               <span className="text-sm font-medium">Buy Gold</span>
             </motion.button>
@@ -266,7 +267,7 @@ export default function Dashboard() {
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
               <div className="bg-red-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
-                <IconWrapper icon={FiDollarSign} />
+                <CurrencyDollarIcon className="w-6 h-6 text-red-500" />
               </div>
               <span className="text-sm font-medium">Sell Gold</span>
             </motion.button>
@@ -301,9 +302,9 @@ export default function Dashboard() {
                           tx.type === 'withdraw' ? 'bg-red-500/10 text-red-500' :
                           'bg-blue-500/10 text-blue-500'
                         }`}>
-                          {tx.type === 'deposit' ? <IconWrapper icon={FiArrowDownRight} /> :
-                           tx.type === 'withdraw' ? <IconWrapper icon={FiArrowUpRight} /> :
-                           <IconWrapper icon={FiTrendingUp} />}
+                          {tx.type === 'deposit' ? <ArrowDownIcon className="w-5 h-5" /> :
+                           tx.type === 'withdraw' ? <ArrowUpIcon className="w-5 h-5" /> :
+                           <ChartBarIcon className="w-5 h-5" />}
                         </div>
                         <div>
                           <p className="text-sm font-medium">{tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
