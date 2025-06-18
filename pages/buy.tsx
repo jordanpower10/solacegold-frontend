@@ -110,15 +110,17 @@ export default function BuyGold() {
 
       <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-[#1a1a1a] px-4 flex items-center justify-center font-sans">
         <div className="w-full max-w-md bg-[#121212] p-8 rounded-2xl shadow-xl border border-[#2a2a2a]">
-          <div className="flex justify-center mb-8">
-            <a href="/dashboard">
-              <img 
-                src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" 
-                alt="Solace Gold Logo" 
-                className="w-32 h-auto hover:opacity-90 transition-opacity" 
-              />
-            </a>
-          </div>
+          {!isMobileApp() && (
+            <div className="flex justify-center mb-8">
+              <a href="/dashboard">
+                <img 
+                  src="https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png" 
+                  alt="Solace Gold Logo" 
+                  className="w-32 h-auto hover:opacity-90 transition-opacity" 
+                />
+              </a>
+            </div>
+          )}
 
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-center text-[#e0b44a]">
@@ -175,8 +177,10 @@ export default function BuyGold() {
                 'Buy Gold'
               )}
             </button>
+          </form>
 
-            <div className="flex justify-center">
+          {!isMobileApp() && (
+            <div className="flex justify-center mt-6">
               <a 
                 href="/dashboard" 
                 className="text-sm text-gray-400 hover:text-[#e0b44a] transition-colors"
@@ -184,7 +188,7 @@ export default function BuyGold() {
                 Return to Dashboard
               </a>
             </div>
-          </form>
+          )}
         </div>
       </div>
     </AppLayout>

@@ -8,6 +8,7 @@ import GoldGlobe from '../components/GoldGlobe'
 import Footer from '../components/Footer'
 import AppLayout from '../components/AppLayout'
 import { motion } from 'framer-motion'
+import { isMobileApp } from '../utils/mobileUtils'
 import {
   ArrowRightOnRectangleIcon,
   ArrowUpIcon,
@@ -238,28 +239,41 @@ export default function Dashboard() {
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-black text-white font-sans">
-        {/* Top Navigation */}
-        <nav className="flex justify-between items-center px-4 sm:px-6 py-4 bg-[#121212]/50 backdrop-blur-lg border-b border-[#2a2a2a]">
-          <div className="flex items-center gap-4">
+        {/* Top Navigation - Only show on non-mobile app */}
+        {!isMobileApp() && (
+          <nav className="flex justify-between items-center px-4 sm:px-6 py-4 bg-[#121212]/50 backdrop-blur-lg border-b border-[#2a2a2a]">
+            <div className="flex items-center gap-4">
+              <img
+                src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
+                alt="Solace Gold Logo"
+                className="w-8 h-8 sm:w-10 sm:h-10"
+              />
+              <span className="text-base sm:text-lg font-semibold">SolaceGold</span>
+            </div>
+            <button
+              onClick={handleLogoutWithVibration}
+              onTouchStart={handleLogoutWithVibration}
+              className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors px-4 py-2.5 rounded-lg hover:bg-[#2a2a2a] min-w-[44px] min-h-[44px] active:bg-[#3a3a3a] touch-manipulation"
+            >
+              <ArrowRightOnRectangleIcon className="w-6 h-6" />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+          </nav>
+        )}
+
+        {/* Mobile App Header */}
+        {isMobileApp() && (
+          <div className="px-4 pt-6 pb-2">
             <img
               src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
               alt="Solace Gold Logo"
-              className="w-8 h-8 sm:w-10 sm:h-10"
+              className="w-10 h-10"
             />
-            <span className="text-base sm:text-lg font-semibold">SolaceGold</span>
           </div>
-          <button
-            onClick={handleLogoutWithVibration}
-            onTouchStart={handleLogoutWithVibration}
-            className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors px-4 py-2.5 rounded-lg hover:bg-[#2a2a2a] min-w-[44px] min-h-[44px] active:bg-[#3a3a3a] touch-manipulation"
-          >
-            <ArrowRightOnRectangleIcon className="w-6 h-6" />
-            <span className="hidden sm:inline">Logout</span>
-          </button>
-        </nav>
+        )}
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className={`max-w-7xl mx-auto px-4 py-8 ${isMobileApp() ? 'pt-2' : ''}`}>
           {/* Welcome Section */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -559,7 +573,8 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        <Footer />
+        {/* Only show footer on non-mobile app */}
+        {!isMobileApp() && <Footer />}
       </div>
     </AppLayout>
   )
