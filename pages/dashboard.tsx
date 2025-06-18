@@ -45,6 +45,7 @@ export default function Dashboard() {
   const [goldPrice, setGoldPrice] = useState(0)
   const [dailyChangePercent, setDailyChangePercent] = useState(0)
   const [portfolioChange, setPortfolioChange] = useState({ percent: 0, direction: 'neutral' as 'up' | 'down' | 'neutral' })
+  const [globalPercentile, setGlobalPercentile] = useState(0)
 
   const accountValue = cashBalance + (goldBalance * goldPrice)
 
@@ -169,6 +170,19 @@ export default function Dashboard() {
     
     fetchPortfolioChange()
   }, [accountValue])
+
+  useEffect(() => {
+    const fetchGlobalPercentile = async () => {
+      try {
+        const response = await fetch('/api/global-percentile')
+        const data = await response.json()
+        setGlobalPercentile(data.percentile)
+      } catch (error) {
+        console.error('Error fetching global percentile:', error)
+      }
+    }
+    fetchGlobalPercentile()
+  }, [])
 
   if (isLoading) {
     return (
@@ -439,15 +453,25 @@ export default function Dashboard() {
           </motion.div>
 
           {/* Global Gold Distribution */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.8 }}
-            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-full border border-[#2a2a2a] p-2 max-w-[240px] mx-auto overflow-hidden"
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-4 max-w-[400px] mx-auto overflow-hidden"
           >
-            <h2 className="text-xs font-medium mb-1 text-center text-gray-400">Global Gold Distribution</h2>
-            <div className="aspect-square w-full max-w-[160px] mx-auto">
-              <GoldGlobe />
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-center sm:text-left">
+                <h2 className="text-sm font-medium mb-2 text-gray-400">Global Gold Distribution</h2>
+                <div className="text-2xl font-bold text-[#e0b44a]">{goldBalance.toFixed(3)} oz</div>
+                {goldBalance > 0 && (
+                  <div className="text-sm text-gray-400 mt-1">
+                    Top {(100 - globalPercentile).toFixed(1)}% globally
+                  </div>
+                )}
+              </div>
+              <div className="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px]">
+                <GoldGlobe />
+              </div>
             </div>
           </motion.div>
         </div>
