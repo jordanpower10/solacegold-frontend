@@ -322,8 +322,8 @@ export default function Dashboard() {
           </div>
 
           {/* Global Gold Distribution */}
-          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6 mb-8">
-            <h2 className="text-lg font-semibold mb-6">Global Gold Distribution</h2>
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6">
+            <h2 className="text-base font-medium mb-6">Global Gold Distribution</h2>
             <div className="h-[400px]">
               <GoldGlobe />
             </div>

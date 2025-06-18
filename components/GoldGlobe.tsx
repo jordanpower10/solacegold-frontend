@@ -79,7 +79,9 @@ export default function GoldGlobe() {
   const handleViewChange = (isGlobal: boolean) => {
     setIsGlobalView(isGlobal)
     setHasSelected(true)
-    setShowMessage(true)
+    if (goldBalance > 0) {
+      setShowMessage(false)
+    }
   }
 
   const handleBuyGold = () => {
@@ -87,9 +89,7 @@ export default function GoldGlobe() {
   }
 
   const handleMouseLeave = () => {
-    if (goldBalance === 0) {
-      setShowMessage(false)
-    }
+    // Remove this function as we want the message to stay
   }
 
   return (
@@ -121,50 +121,44 @@ export default function GoldGlobe() {
       </div>
 
       {/* Ranking Display */}
-      {hasSelected && (
-        <div 
-          className="text-center bg-[#121212] rounded-2xl px-8 py-4"
-          onMouseLeave={handleMouseLeave}
-        >
-          {goldBalance === 0 && showMessage ? (
-            <div className="flex flex-col items-center">
-              <p className="text-sm sm:text-base text-gray-400 mb-3">
-                {isGlobalView 
-                  ? "You haven't bought any gold yet, join the global average when you make your first purchase"
-                  : "You haven't bought any gold yet, join the leaderboard when you make your first purchase"
-                }
-              </p>
-              <button
-                onClick={handleBuyGold}
-                className="text-2xl hover:scale-110 transition-transform duration-200 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#1a1a1a]"
-                title="Buy Gold"
-              >
-                <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Gold Bar" className="w-6 h-6" />
-                <span className="text-sm text-[#e0b44a]">Buy Gold</span>
-                <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Gold Bar" className="w-6 h-6" />
-              </button>
-            </div>
-          ) : isGlobalView ? (
-            <>
-              <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
-                Top {(100 - globalPercentile).toFixed(1)}%
-              </p>
-              <p className="text-sm sm:text-base text-gray-400">
-                You are in the top {(100 - globalPercentile).toFixed(1)}% of global gold holders
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
-                #{leaderboardRank}
-              </p>
-              <p className="text-sm sm:text-base text-gray-400">
-                Your rank on the SolaceGold leaderboard
-              </p>
-            </>
-          )}
-        </div>
-      )}
+      <div 
+        className="text-center bg-[#121212] rounded-2xl px-8 py-4"
+      >
+        {goldBalance === 0 ? (
+          <div className="flex flex-col items-center">
+            <p className="text-sm sm:text-base text-gray-400 mb-3">
+              You haven't bought any gold yet, join the {isGlobalView ? 'global average' : 'leaderboard'} when you make your first purchase.
+            </p>
+            <button
+              onClick={handleBuyGold}
+              className="text-2xl hover:scale-110 transition-transform duration-200 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#1a1a1a]"
+              title="Buy Gold"
+            >
+              <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Gold Bar" className="w-6 h-6" />
+              <span className="text-sm text-[#e0b44a]">Buy Gold</span>
+              <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Gold Bar" className="w-6 h-6" />
+            </button>
+          </div>
+        ) : isGlobalView ? (
+          <>
+            <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
+              Top {(100 - globalPercentile).toFixed(1)}%
+            </p>
+            <p className="text-sm sm:text-base text-gray-400">
+              You are in the top {(100 - globalPercentile).toFixed(1)}% of global gold holders
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-3xl sm:text-4xl font-bold text-[#e0b44a] mb-4">
+              #{leaderboardRank}
+            </p>
+            <p className="text-sm sm:text-base text-gray-400">
+              Your rank on the SolaceGold leaderboard
+            </p>
+          </>
+        )}
+      </div>
     </div>
   )
 } 
