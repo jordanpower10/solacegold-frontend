@@ -14,11 +14,11 @@ export default function Home() {
 
       <div className="min-h-screen bg-[#0d0d0d] text-white font-sans">
         {/* Top Logo */}
-        <div className="absolute top-4 md:top-8 left-1/2 transform -translate-x-1/2 z-30">
+        <div className="absolute top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-30">
           <img
             src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
             alt="SolaceGold Logo"
-            className="w-32 h-32 md:w-48 md:h-48"
+            className="w-24 h-24 md:w-32 md:h-32"
           />
         </div>
 
@@ -37,8 +37,9 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
+              className="mt-20 md:mt-24"
             >
-              <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 md:mb-6 mt-16 md:mt-0">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 md:mb-6">
                 <span className="text-[#e0b44a]">Gold</span> for the
                 <br />Digital Age
               </h1>
