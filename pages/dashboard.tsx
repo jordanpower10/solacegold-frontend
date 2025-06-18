@@ -52,7 +52,11 @@ export default function Dashboard() {
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut()
-      window.location.href = '/login'
+      // Clear any local storage or session storage
+      localStorage.clear()
+      sessionStorage.clear()
+      // Force a hard redirect to the index page
+      window.location.href = '/'
     } catch (error) {
       console.error('Error signing out:', error)
     }
@@ -424,10 +428,10 @@ export default function Dashboard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.8 }}
-            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-4 max-w-[600px] mx-auto overflow-hidden"
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-3 max-w-[400px] mx-auto overflow-hidden"
           >
-            <h2 className="text-base font-medium mb-2 text-center">Global Gold Distribution</h2>
-            <div className="aspect-square w-full max-w-[400px] mx-auto">
+            <h2 className="text-sm font-medium mb-1 text-center">Global Gold Distribution</h2>
+            <div className="aspect-square w-full max-w-[280px] mx-auto">
               <GoldGlobe />
             </div>
           </motion.div>
