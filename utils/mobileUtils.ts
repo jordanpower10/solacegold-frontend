@@ -3,8 +3,16 @@ export const isMobileApp = (): boolean => {
   return window.location.hostname.startsWith('app.');
 };
 
+export const hasVibrationSupport = (): boolean => {
+  return typeof navigator !== 'undefined' && 'vibrate' in navigator;
+};
+
 export const vibrateOnPress = (): void => {
-  if (typeof navigator !== 'undefined' && navigator.vibrate && isMobileApp()) {
-    navigator.vibrate(50); // Short 50ms vibration
+  if (isMobileApp() && hasVibrationSupport()) {
+    try {
+      navigator.vibrate(50); // Short 50ms vibration
+    } catch (error) {
+      console.warn('Vibration failed:', error);
+    }
   }
 }; 

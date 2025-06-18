@@ -3,7 +3,7 @@ const axios = require('axios');
 const fs = require('fs').promises;
 const path = require('path');
 
-const LOGO_URL = 'https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png';
+const LOGO_URL = 'https://i.postimg.cc/zBgSppPL/Gold-solace-logo.png';
 const FAVICON_DIR = path.join(process.cwd(), 'public', 'favicon');
 
 async function downloadImage(url) {
@@ -30,13 +30,19 @@ async function generateFavicons() {
 
     for (const [filename, size] of Object.entries(sizes)) {
       await sharp(imageBuffer)
-        .resize(size, size)
+        .resize(size, size, {
+          fit: 'contain',
+          background: { r: 13, g: 13, b: 13, alpha: 1 } // #0d0d0d background
+        })
         .toFile(path.join(FAVICON_DIR, filename));
     }
 
     // Generate ICO file (16x16 and 32x32)
     await sharp(imageBuffer)
-      .resize(32, 32)
+      .resize(32, 32, {
+        fit: 'contain',
+        background: { r: 13, g: 13, b: 13, alpha: 1 } // #0d0d0d background
+      })
       .toFile(path.join(process.cwd(), 'public', 'favicon.ico'));
 
     console.log('Favicon generation complete!');
