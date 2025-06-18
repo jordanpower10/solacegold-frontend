@@ -125,19 +125,30 @@ export default function GoldGlobe() {
         className="text-center bg-[#121212] rounded-2xl px-8 py-4"
       >
         {goldBalance === 0 ? (
-          <div className="flex flex-col items-center">
-            <p className="text-sm sm:text-base text-gray-400 mb-3">
-              You haven't bought any gold yet, join the {isGlobalView ? 'global average' : 'leaderboard'} when you make your first purchase.
-            </p>
+          <div className="flex flex-col items-center bg-[#121212]/50 p-8 rounded-2xl backdrop-blur-sm border border-[#2a2a2a] hover:border-[#e0b44a] transition-all">
+            <div className="mb-6">
+              <div className="text-[#e0b44a] text-4xl mb-4">0.000 oz</div>
+              <p className="text-base text-gray-400 max-w-md text-center">
+                Start your journey into digital gold ownership. Join the {isGlobalView ? 'global elite' : 'SolaceGold community'} with your first purchase.
+              </p>
+            </div>
             <button
               onClick={handleBuyGold}
-              className="text-2xl hover:scale-110 transition-transform duration-200 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#1a1a1a]"
-              title="Buy Gold"
+              className="group relative px-8 py-3 bg-gradient-to-r from-[#e0b44a] to-[#d4a43d] rounded-xl hover:from-[#e5bc5c] hover:to-[#deb154] transition-all duration-300 transform hover:scale-105"
             >
-              <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Gold Bar" className="w-6 h-6" />
-              <span className="text-sm text-[#e0b44a]">Buy Gold</span>
-              <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Gold Bar" className="w-6 h-6" />
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 rounded-xl transition-opacity"></div>
+              <div className="flex items-center gap-3">
+                <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Gold Bar" className="w-5 h-5" />
+                <span className="text-black font-semibold">Buy Your First Gold</span>
+                <img src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png" alt="Gold Bar" className="w-5 h-5" />
+              </div>
             </button>
+            <div className="mt-6 flex items-center gap-2 text-sm text-gray-500">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Secure storage • Instant transfers • No vault fees</span>
+            </div>
           </div>
         ) : isGlobalView ? (
           <>

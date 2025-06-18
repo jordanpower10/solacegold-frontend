@@ -131,37 +131,49 @@ export default function Dashboard() {
 
       <div className="min-h-screen bg-gradient-to-b from-[#0d0d0d] to-black text-white font-sans">
         {/* Top Navigation */}
-        <nav className="flex justify-between items-center px-6 py-4 bg-[#121212]/50 backdrop-blur-lg border-b border-[#2a2a2a]">
+        <nav className="flex justify-between items-center px-4 sm:px-6 py-4 bg-[#121212]/50 backdrop-blur-lg border-b border-[#2a2a2a]">
           <div className="flex items-center gap-4">
             <img
               src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
               alt="Solace Gold Logo"
-              className="w-10 h-10"
+              className="w-8 h-8 sm:w-10 sm:h-10"
             />
-            <span className="text-lg font-semibold">SolaceGold</span>
+            <span className="text-base sm:text-lg font-semibold">SolaceGold</span>
           </div>
           <button
             onClick={signOut}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-[#2a2a2a]"
           >
-            <ArrowRightOnRectangleIcon className="w-5 h-5" /> Logout
+            <ArrowRightOnRectangleIcon className="w-5 h-5" />
+            <span className="hidden sm:inline">Logout</span>
           </button>
         </nav>
 
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 py-8">
           {/* Welcome Section */}
-          <div className="mb-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8"
+          >
             <h1 className="text-2xl font-bold mb-2">Welcome back, {firstName}</h1>
             <p className="text-gray-400">Here's your financial overview</p>
-          </div>
+          </motion.div>
 
           {/* Account Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
+          >
             {/* Total Value Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
             >
               <div className="flex justify-between items-start mb-4">
@@ -183,7 +195,7 @@ export default function Dashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
             >
               <div className="flex justify-between items-start mb-4">
@@ -204,7 +216,7 @@ export default function Dashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
             >
               <div className="flex justify-between items-start mb-4">
@@ -221,10 +233,15 @@ export default function Dashboard() {
                 <span className="text-gray-400">Current value</span>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+          >
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -272,10 +289,15 @@ export default function Dashboard() {
               </div>
               <span className="text-sm font-medium">Sell Gold</span>
             </motion.button>
-          </div>
+          </motion.div>
 
           {/* Charts and Activity Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8"
+          >
             {/* Price Chart */}
             <div className="lg:col-span-2 bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6">
               <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
@@ -335,15 +357,20 @@ export default function Dashboard() {
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Global Gold Distribution */}
-          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6"
+          >
             <h2 className="text-base font-medium mb-6">Global Gold Distribution</h2>
             <div className="h-[400px]">
               <GoldGlobe />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </>
