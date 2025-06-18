@@ -39,6 +39,10 @@
       {
         "pattern": ".*\\.tsx$",
         "instruction": "Whenever I say 'On the mobile app only,' make this feature appear only on app.solacegold.com — not on the desktop site at solacegold.com. Use a helper function like isMobileApp() to conditionally render based on hostname starting with 'app'."
+      },
+      {
+        "pattern": ".*",
+        "instruction": "Never remove any feature from the site unless I clearly ask you to. Always ask for permission first, in simple English."
       }
     ]
   }

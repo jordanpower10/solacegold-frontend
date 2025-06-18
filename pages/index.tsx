@@ -88,7 +88,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold mb-4">100% Secure</h3>
-              <p className="text-gray-400">Your gold is fully insured and stored in high-security vaults.</p>
+              <p className="text-gray-400">Your gold is fully insured and stored with bank grade encryption.</p>
             </motion.div>
 
             {/* Feature 3 */}
@@ -103,7 +103,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold mb-4">Zero Storage Fees</h3>
-              <p className="text-gray-400">No monthly fees or hidden charges. Just pure gold ownership.</p>
+              <p className="text-gray-400">No monthly fees or hidden charges. Just pure ownership.</p>
             </motion.div>
           </div>
 
@@ -115,7 +115,7 @@ export default function Home() {
                 {[
                   { value: "$1B+", label: "Gold Traded" },
                   { value: "50K+", label: "Active Users" },
-                  { value: "99.99%", label: "Pure Gold" },
+                  { value: "100% insured", label: "Pure Gold" },
                   { value: "24/7", label: "Support" }
                 ].map((stat, index) => (
                   <motion.div
@@ -145,7 +145,7 @@ export default function Home() {
                 Start Your Gold Journey Today
               </h2>
               <p className="text-xl text-gray-400 mb-12">
-                Join thousands of investors who trust SolaceGold for their precious metal investments.
+                Join thousands of investors who trust SolaceGold for their long term investments.
               </p>
               <button
                 onClick={() => router.push('/signup')}
