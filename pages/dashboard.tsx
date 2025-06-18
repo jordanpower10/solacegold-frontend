@@ -14,6 +14,7 @@ import {
   CurrencyDollarIcon,
   ChartBarIcon
 } from '@heroicons/react/24/outline'
+import { useVibration } from '../hooks/useVibration'
 
 interface Profile {
   first_name: string;
@@ -64,6 +65,12 @@ export default function Dashboard() {
       console.error('Error signing out:', error)
     }
   }
+
+  const handleLogoutWithVibration = useVibration(handleLogout)
+  const handleBuyWithVibration = useVibration(() => router.push('/buy'))
+  const handleSellWithVibration = useVibration(() => router.push('/sell'))
+  const handleDepositWithVibration = useVibration(() => router.push('/deposit'))
+  const handleWithdrawWithVibration = useVibration(() => router.push('/withdraw'))
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -241,7 +248,7 @@ export default function Dashboard() {
             <span className="text-base sm:text-lg font-semibold">SolaceGold</span>
           </div>
           <button
-            onClick={handleLogout}
+            onClick={handleLogoutWithVibration}
             className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors px-4 py-2.5 rounded-lg hover:bg-[#2a2a2a] min-w-[44px] min-h-[44px] active:bg-[#3a3a3a] touch-manipulation"
           >
             <ArrowRightOnRectangleIcon className="w-6 h-6" />
@@ -353,7 +360,7 @@ export default function Dashboard() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => router.push('/deposit')}
+              onClick={handleDepositWithVibration}
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
               <div className="bg-blue-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
@@ -365,7 +372,7 @@ export default function Dashboard() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => router.push('/withdraw')}
+              onClick={handleWithdrawWithVibration}
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
               <div className="bg-purple-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
@@ -377,7 +384,7 @@ export default function Dashboard() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => router.push('/buy')}
+              onClick={handleBuyWithVibration}
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
               <div className="bg-green-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
@@ -389,7 +396,7 @@ export default function Dashboard() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => router.push('/sell')}
+              onClick={handleSellWithVibration}
               className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] p-6 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all text-center"
             >
               <div className="bg-red-500/10 p-3 rounded-xl mx-auto mb-3 w-fit">
