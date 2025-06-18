@@ -46,6 +46,8 @@ export default function Dashboard() {
   const [dailyChangePercent, setDailyChangePercent] = useState(0)
   const [portfolioChange, setPortfolioChange] = useState({ percent: 0, direction: 'neutral' as 'up' | 'down' | 'neutral' })
   const [globalPercentile, setGlobalPercentile] = useState(0)
+  const [isGlobalView, setIsGlobalView] = useState(true)
+  const [leaderboardRank, setLeaderboardRank] = useState(0)
 
   const accountValue = cashBalance + (goldBalance * goldPrice)
 
@@ -182,6 +184,19 @@ export default function Dashboard() {
       }
     }
     fetchGlobalPercentile()
+  }, [])
+
+  useEffect(() => {
+    const fetchLeaderboardRank = async () => {
+      try {
+        const response = await fetch('/api/leaderboard-rank')
+        const data = await response.json()
+        setLeaderboardRank(data.rank)
+      } catch (error) {
+        console.error('Error fetching leaderboard rank:', error)
+      }
+    }
+    fetchLeaderboardRank()
   }, [])
 
   if (isLoading) {
@@ -459,19 +474,69 @@ export default function Dashboard() {
             transition={{ duration: 0.5, delay: 0.8 }}
             className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-4 max-w-[400px] mx-auto overflow-hidden"
           >
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-center sm:text-left">
+            <div className="flex flex-col items-center gap-4">
+              <div className="text-center">
                 <h2 className="text-sm font-medium mb-2 text-gray-400">Global Gold Distribution</h2>
-                <div className="text-2xl font-bold text-[#e0b44a]">{goldBalance.toFixed(3)} oz</div>
-                {goldBalance > 0 && (
-                  <div className="text-sm text-gray-400 mt-1">
-                    Top {(100 - globalPercentile).toFixed(1)}% globally
+                <div className="flex gap-2 p-1 bg-[#121212] rounded-lg">
+                  <button
+                    onClick={() => setIsGlobalView(true)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      isGlobalView
+                        ? 'bg-[#e0b44a] text-black'
+                        : 'text-gray-400 hover:text-white hover:bg-[#2a2a2a]'
+                    }`}
+                  >
+                    Global Rankings
+                  </button>
+                  <button
+                    onClick={() => setIsGlobalView(false)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      !isGlobalView
+                        ? 'bg-[#e0b44a] text-black'
+                        : 'text-gray-400 hover:text-white hover:bg-[#2a2a2a]'
+                    }`}
+                  >
+                    SolaceGold Leaderboard
+                  </button>
+                </div>
+              </div>
+
+              {goldBalance === 0 ? (
+                <div className="text-center p-4">
+                  <p className="text-gray-400 mb-4">Start your journey with SolaceGold</p>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => router.push('/buy')}
+                    className="px-6 py-2 bg-gradient-to-r from-[#e0b44a]/20 to-[#e0b44a]/10 rounded-lg border border-[#e0b44a]/20 hover:border-[#e0b44a]/40 transition-all text-[#e0b44a] text-sm"
+                  >
+                    Buy Gold
+                  </motion.button>
+                </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+                  <div className="text-center sm:text-left">
+                    {isGlobalView ? (
+                      <>
+                        <div className="text-2xl font-bold text-[#e0b44a]">{goldBalance.toFixed(3)} oz</div>
+                        <div className="text-sm text-gray-400 mt-1">
+                          Top {(100 - globalPercentile).toFixed(1)}% globally
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="text-2xl font-bold text-[#e0b44a]">#{leaderboardRank}</div>
+                        <div className="text-sm text-gray-400 mt-1">
+                          Your rank on SolaceGold
+                        </div>
+                      </>
+                    )}
                   </div>
-                )}
-              </div>
-              <div className="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px]">
-                <GoldGlobe />
-              </div>
+                  <div className="w-[120px] h-[120px] sm:w-[140px] sm:h-[140px]">
+                    <GoldGlobe />
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>

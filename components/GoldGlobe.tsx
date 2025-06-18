@@ -50,17 +50,21 @@ export default function GoldGlobe() {
   return (
     <div className="relative w-full h-full">
       <div className="absolute inset-0 rounded-full bg-[#1a1a1a] border border-[#2a2a2a] animate-pulse"></div>
-      <div 
-        className="absolute inset-0 rounded-full bg-gradient-to-br from-[#e0b44a]/20 to-transparent"
-        style={{
-          clipPath: `circle(${Math.min(100, goldBalance * 10)}% at center)`
-        }}
-      ></div>
+      {goldBalance === 0 ? (
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#e0b44a]/5 to-transparent animate-pulse"></div>
+      ) : (
+        <div 
+          className="absolute inset-0 rounded-full bg-gradient-to-br from-[#e0b44a]/20 to-transparent"
+          style={{
+            clipPath: `circle(${Math.min(100, goldBalance * 10)}% at center)`
+          }}
+        ></div>
+      )}
       <div className="absolute inset-0 flex items-center justify-center">
         <img
           src="https://i.postimg.cc/xTfNxywd/gold-bar-sign.png"
           alt="Gold Icon"
-          className="w-8 h-8 opacity-80"
+          className={`w-8 h-8 ${goldBalance === 0 ? 'opacity-40' : 'opacity-80'}`}
         />
       </div>
     </div>
