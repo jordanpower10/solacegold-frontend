@@ -35,6 +35,10 @@
       {
         "pattern": "pages/.*\\.tsx$",
         "instruction": "For each page, implement Framer Motion animations: use a reusable fadeInUp animation config, apply fade-in-up effect to each item, and stagger their appearance for visual polish."
+      },
+      {
+        "pattern": ".*\\.tsx$",
+        "instruction": "Whenever I say 'On the mobile app only,' make this feature appear only on app.solacegold.com — not on the desktop site at solacegold.com. Use a helper function like isMobileApp() to conditionally render based on hostname starting with 'app'."
       }
     ]
   }
