@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
 import GoldGlobe from '../components/GoldGlobe'
+import Footer from '../components/Footer'
 import { motion } from 'framer-motion'
 import {
   ArrowRightOnRectangleIcon,
@@ -364,14 +365,16 @@ export default function Dashboard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.8 }}
-            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6"
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-4 sm:p-6"
           >
-            <h2 className="text-base font-medium mb-6">Global Gold Distribution</h2>
-            <div className="h-[400px]">
+            <h2 className="text-base font-medium mb-4">Global Gold Distribution</h2>
+            <div className="h-[280px] sm:h-[320px]">
               <GoldGlobe />
             </div>
           </motion.div>
         </div>
+
+        <Footer />
       </div>
     </>
   )
