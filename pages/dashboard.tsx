@@ -42,18 +42,17 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
   const [timeframe, setTimeframe] = useState('1M')
+  const [goldPrice, setGoldPrice] = useState(0)
+  const [dailyChangePercent, setDailyChangePercent] = useState(0)
+  const [portfolioChange, setPortfolioChange] = useState({ percent: 0, direction: 'neutral' as 'up' | 'down' | 'neutral' })
 
-  const goldPrice = 2375.00
-  const dailyChangePercent = 1.42
   const accountValue = cashBalance + (goldBalance * goldPrice)
 
   // Handle logout
-  const signOut = async (e: React.MouseEvent) => {
-    e.preventDefault() // Prevent default refresh
+  const handleLogout = async () => {
     try {
-      const { error } = await supabase.auth.signOut()
-      if (error) throw error
-      router.push('/login')
+      await supabase.auth.signOut()
+      window.location.href = '/login'
     } catch (error) {
       console.error('Error signing out:', error)
     }
@@ -121,6 +120,52 @@ export default function Dashboard() {
     }
   }, [router])
 
+  useEffect(() => {
+    const fetchGoldPrice = async () => {
+      try {
+        const response = await fetch('/api/gold-price')
+        const data = await response.json()
+        setGoldPrice(data.price)
+        setDailyChangePercent(data.change24h)
+      } catch (error) {
+        console.error('Error fetching gold price:', error)
+      }
+    }
+    fetchGoldPrice()
+    const interval = setInterval(fetchGoldPrice, 60000) // Update every minute
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const fetchPortfolioChange = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session?.user?.id) return
+
+      try {
+        const { data: transactions } = await supabase
+          .from('transactions')
+          .select('amount, created_at, type')
+          .eq('user_id', session.user.id)
+          .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
+          .order('created_at', { ascending: true })
+
+        if (transactions && transactions.length > 0) {
+          const startBalance = Number(transactions[0].amount)
+          const endBalance = accountValue
+          const changePercent = ((endBalance - startBalance) / startBalance) * 100
+          setPortfolioChange({
+            percent: Math.abs(changePercent),
+            direction: changePercent >= 0 ? 'up' : 'down'
+          })
+        }
+      } catch (error) {
+        console.error('Error fetching portfolio change:', error)
+      }
+    }
+    
+    fetchPortfolioChange()
+  }, [accountValue])
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
@@ -148,8 +193,8 @@ export default function Dashboard() {
             <span className="text-base sm:text-lg font-semibold">SolaceGold</span>
           </div>
           <button
-            onClick={signOut}
-            className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors px-4 py-2.5 rounded-lg hover:bg-[#2a2a2a] min-w-[40px] min-h-[40px]"
+            onClick={handleLogout}
+            className="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition-colors px-4 py-2.5 rounded-lg hover:bg-[#2a2a2a] min-w-[44px] min-h-[44px] active:bg-[#3a3a3a] touch-manipulation"
           >
             <ArrowRightOnRectangleIcon className="w-6 h-6" />
             <span className="hidden sm:inline">Logout</span>
@@ -193,8 +238,16 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-green-400">+2.5%</span>
-                <span className="text-gray-400">This month</span>
+                {accountValue > 0 ? (
+                  <>
+                    <span className={portfolioChange.direction === 'up' ? 'text-green-400' : 'text-red-400'}>
+                      {portfolioChange.direction === 'up' ? '+' : '-'}{portfolioChange.percent.toFixed(2)}%
+                    </span>
+                    <span className="text-gray-400">This month</span>
+                  </>
+                ) : (
+                  <span className="text-gray-400">No balance history</span>
+                )}
               </div>
             </motion.div>
 
@@ -371,10 +424,10 @@ export default function Dashboard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.8 }}
-            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-4 sm:p-6 overflow-hidden"
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-4 max-w-[600px] mx-auto overflow-hidden"
           >
-            <h2 className="text-base font-medium mb-2">Global Gold Distribution</h2>
-            <div className="h-[200px] sm:h-[240px] w-full">
+            <h2 className="text-base font-medium mb-2 text-center">Global Gold Distribution</h2>
+            <div className="aspect-square w-full max-w-[400px] mx-auto">
               <GoldGlobe />
             </div>
           </motion.div>
