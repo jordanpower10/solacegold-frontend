@@ -44,7 +44,7 @@ export default function Home() {
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col gap-4 max-w-xs mx-auto mb-20">
+          <div className={`flex flex-col gap-4 max-w-xs mx-auto ${isMobileApp() ? 'mb-32' : 'mb-20'}`}>
             <button
               onClick={() => router.push('/signup')}
               className="w-full bg-gradient-to-r from-[#e0b44a] to-[#c4963c] text-black font-bold py-4 px-8 rounded-lg hover:from-[#e5bc5c] hover:to-[#cca04a] transition-all"
@@ -60,10 +60,10 @@ export default function Home() {
           </div>
 
           {/* Features Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+          <div className={`grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 ${isMobileApp() ? 'mt-16 px-2' : ''}`}>
             {/* Feature 1 */}
             <motion.div 
-              className="bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
+              className={`bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all ${isMobileApp() ? 'mb-4' : ''}`}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "tween" }}
             >
@@ -78,7 +78,7 @@ export default function Home() {
 
             {/* Feature 2 */}
             <motion.div 
-              className="bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
+              className={`bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all ${isMobileApp() ? 'mb-4' : ''}`}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "tween" }}
             >
@@ -93,7 +93,7 @@ export default function Home() {
 
             {/* Feature 3 */}
             <motion.div 
-              className="bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all"
+              className={`bg-[#1a1a1a] p-8 rounded-2xl border border-[#2a2a2a] hover:border-[#e0b44a] transition-all ${isMobileApp() ? 'mb-4' : ''}`}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "tween" }}
             >
@@ -115,7 +115,7 @@ export default function Home() {
                 {[
                   { value: "$1B+", label: "Gold Traded" },
                   { value: "50K+", label: "Active Users" },
-                  { value: "100% insured", label: "Pure Gold" },
+                  { value: "100%", label: "Insured" },
                   { value: "24/7", label: "Support" }
                 ].map((stat, index) => (
                   <motion.div
