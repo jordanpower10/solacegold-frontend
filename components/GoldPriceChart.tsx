@@ -30,6 +30,10 @@ interface PriceData {
   prices: number[];
 }
 
+interface GoldPriceChartProps {
+  timeframe: string;
+}
+
 // Helper to get all months between two dates
 function getMonthLabels(start: Date, end: Date) {
   const labels = [];
@@ -52,9 +56,8 @@ function getMonthTicks(start: Date, end: Date) {
   return ticks;
 }
 
-export default function GoldPriceChart() {
+export default function GoldPriceChart({ timeframe }: GoldPriceChartProps) {
   const [chartData, setChartData] = useState<any>(null);
-  const [timeframe, setTimeframe] = useState('1Y');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -195,27 +198,8 @@ export default function GoldPriceChart() {
   const monthTicks = getMonthTicks(chartStartDate, chartEndDate);
 
   return (
-    <div className="bg-[#121212] border border-[#2a2a2a] rounded-2xl p-6 w-full">
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        <h2 className="text-xl font-semibold text-[#e0b44a]">Gold Price Chart</h2>
-        <div className="flex gap-2">
-          {['1M', '3M', '6M', '1Y'].map((period) => (
-            <button
-              key={period}
-              onClick={() => setTimeframe(period)}
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
-                timeframe === period
-                  ? 'bg-[#e0b44a] text-black'
-                  : 'bg-[#2a2a2a] text-gray-400 hover:bg-[#3a3a3a]'
-              }`}
-            >
-              {period}
-            </button>
-          ))}
-        </div>
-      </div>
-      
-      <div className="h-[300px] relative">
+    <div className="w-full h-full">
+      <div className="h-full relative">
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#e0b44a]"></div>

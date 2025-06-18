@@ -40,6 +40,7 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
+  const [timeframe, setTimeframe] = useState('1M')
 
   const goldPrice = 2375.00
   const dailyChangePercent = 1.42
@@ -277,15 +278,30 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             {/* Price Chart */}
             <div className="lg:col-span-2 bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-semibold">Gold Price</h2>
+              <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
                 <div className="flex items-center gap-3">
+                  <h2 className="text-lg font-semibold">Gold Price</h2>
                   <span className="text-[#e0b44a] font-medium">${goldPrice.toLocaleString('en-US')}</span>
                   <span className="text-green-400">+{dailyChangePercent}%</span>
                 </div>
+                <div className="flex gap-2">
+                  {['1M', '3M', '6M', '1Y'].map((period) => (
+                    <button
+                      key={period}
+                      onClick={() => setTimeframe(period)}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
+                        timeframe === period
+                          ? 'bg-[#e0b44a] text-black'
+                          : 'bg-[#2a2a2a] text-gray-400 hover:bg-[#3a3a3a]'
+                      }`}
+                    >
+                      {period}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="h-[300px]">
-                <GoldPriceChart />
+              <div className="h-[calc(100%-4rem)]">
+                <GoldPriceChart timeframe={timeframe} />
               </div>
             </div>
 
