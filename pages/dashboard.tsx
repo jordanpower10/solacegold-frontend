@@ -503,7 +503,12 @@ export default function Dashboard() {
 
               {goldBalance === 0 ? (
                 <div className="text-center p-4">
-                  <p className="text-gray-400 mb-4">Start your journey with SolaceGold</p>
+                  <p className="text-gray-400 mb-4">
+                    {isGlobalView 
+                      ? "To join the Global Rankings start your journey with SolaceGold"
+                      : "To join the Solacegold Leaderboard start your journey with SolaceGold"
+                    }
+                  </p>
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -12,11 +13,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div className="col-span-1">
-            <img
-              src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
-              alt="SolaceGold Logo"
-              className="w-12 h-12 mb-4"
-            />
+            <Link href="/">
+              <img
+                src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
+                alt="SolaceGold Logo"
+                className="w-12 h-12 mb-4"
+              />
+            </Link>
             <p className="text-sm text-gray-400 max-w-xs">
               Making gold ownership simple, secure, and accessible for everyone.
             </p>
@@ -28,9 +31,9 @@ export default function Footer() {
             <ul className="space-y-2">
               {['About', 'Careers', 'Press'].map((item) => (
                 <li key={item}>
-                  <a href={`/${item.toLowerCase()}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link href={`/${item.toLowerCase()}`} className="text-sm text-gray-400 hover:text-white transition-colors">
                     {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -42,9 +45,9 @@ export default function Footer() {
             <ul className="space-y-2">
               {['Help Center', 'Contact Us', 'FAQ'].map((item) => (
                 <li key={item}>
-                  <a href={`/${item.toLowerCase().replace(' ', '-')}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link href={`/${item.toLowerCase().replace(' ', '-')}`} className="text-sm text-gray-400 hover:text-white transition-colors">
                     {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -56,9 +59,9 @@ export default function Footer() {
             <ul className="space-y-2">
               {['Privacy', 'Terms', 'Cookies'].map((item) => (
                 <li key={item}>
-                  <a href={`/${item.toLowerCase()}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <Link href={`/${item.toLowerCase()}`} className="text-sm text-gray-400 hover:text-white transition-colors">
                     {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
