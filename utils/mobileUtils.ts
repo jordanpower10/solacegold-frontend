@@ -1,6 +1,18 @@
 export const isMobileApp = (): boolean => {
   if (typeof window === 'undefined') return false;
-  return window.location.hostname.startsWith('app.');
+  
+  // Check if we're in a WebView
+  const isWebView = /(iPhone|iPod|iPad|Android).*AppleWebKit(?!.*Version)/i.test(window.navigator.userAgent);
+  
+  // Check if we're on a mobile device
+  const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    window.navigator.userAgent
+  );
+  
+  // Check if screen size is mobile
+  const isMobileScreen = typeof window !== 'undefined' && window.innerWidth <= 768;
+
+  return isWebView || (isMobileDevice && isMobileScreen);
 };
 
 export const isMobileDevice = (): boolean => {
