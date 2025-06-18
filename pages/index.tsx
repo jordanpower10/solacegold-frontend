@@ -12,32 +12,6 @@ export default function Home() {
         <meta name="description" content="Buy, store, and transfer digital gold instantly with SolaceGold. Fully backed, no vault fees." />
       </Head>
 
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4">
-        <div className="text-center mb-12">
-          <img src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png" alt="Solace Gold Logo" className="w-32 h-auto mx-auto mb-8" />
-          <h1 className="text-5xl font-bold mb-6">
-            <span className="text-[#e0b44a]">Gold</span> for the
-            <br />
-            Digital Age
-          </h1>
-          <p className="text-gray-400 text-lg mb-8">
-            Buy, store, and transfer digital gold instantly. Fully backed, no vault fees.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link href="/signup">
-              <button className="bg-[#e0b44a] text-black px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition-colors">
-                Get Started
-              </button>
-            </Link>
-            <Link href="/login">
-              <button className="border border-[#e0b44a] text-[#e0b44a] px-8 py-3 rounded-lg font-semibold hover:bg-[#e0b44a] hover:text-black transition-colors">
-                Log In
-              </button>
-            </Link>
-          </div>
-        </div>
-      </div>
-
       <div className="min-h-screen bg-[#0d0d0d] text-white font-sans">
         {/* Top Logo */}
         <div className="absolute top-4 md:top-8 left-1/2 transform -translate-x-1/2 z-30">
