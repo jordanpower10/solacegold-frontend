@@ -37,7 +37,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="mt-20 md:mt-24"
+              className="mt-12 md:mt-16"
             >
               <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 md:mb-6">
                 <span className="text-[#e0b44a]">Gold</span> for the

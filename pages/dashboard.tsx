@@ -173,7 +173,22 @@ export default function Dashboard() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
-        <div className="text-[#e0b44a] text-xl">Loading...</div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col items-center"
+        >
+          <motion.img
+            src="https://i.postimg.cc/wBT6H1j9/Gold-solace-logo.png"
+            alt="Solace Gold Logo"
+            className="w-16 h-16 mb-4"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          />
+          <div className="bg-[#1a1a1a] rounded-lg px-4 py-2 shadow-lg">
+            <span className="text-[#e0b44a] text-sm font-medium">Loading...</span>
+          </div>
+        </motion.div>
       </div>
     )
   }
@@ -428,10 +443,10 @@ export default function Dashboard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.8 }}
-            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-3 max-w-[400px] mx-auto overflow-hidden"
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-full border border-[#2a2a2a] p-2 max-w-[240px] mx-auto overflow-hidden"
           >
-            <h2 className="text-sm font-medium mb-1 text-center">Global Gold Distribution</h2>
-            <div className="aspect-square w-full max-w-[280px] mx-auto">
+            <h2 className="text-xs font-medium mb-1 text-center text-gray-400">Global Gold Distribution</h2>
+            <div className="aspect-square w-full max-w-[160px] mx-auto">
               <GoldGlobe />
             </div>
           </motion.div>
