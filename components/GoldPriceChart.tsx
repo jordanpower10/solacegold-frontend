@@ -85,9 +85,7 @@ export default function GoldPriceChart({ timeframe }: GoldPriceChartProps) {
             return tooltipItems[0].label || '';
           },
           label: (context) => {
-            // Add 5% margin to the displayed price
-            const price = context.parsed.y * 1.05;
-            return `$${price.toFixed(2)}`;
+            return `$${context.parsed.y.toFixed(2)}`;
           },
         },
       },
@@ -103,24 +101,33 @@ export default function GoldPriceChart({ timeframe }: GoldPriceChartProps) {
         ticks: {
           color: '#666',
           maxRotation: 0,
-          display: false,
+          maxTicksLimit: 6,
+          display: true,
+          font: {
+            size: 10
+          }
         },
       },
       y: {
         grid: {
           color: '#2a2a2a',
+          drawTicks: false,
         },
         border: {
           display: false,
         },
         ticks: {
           color: '#666',
+          padding: 8,
+          font: {
+            size: 10
+          },
           callback: (value) => {
-            // Add 5% margin to the y-axis values
-            const price = Number(value) * 1.05;
-            return `$${price.toFixed(0)}`;
+            return `$${Number(value).toFixed(0)}`;
           },
         },
+        min: undefined,
+        max: undefined,
       },
     },
   };
@@ -185,10 +192,18 @@ export default function GoldPriceChart({ timeframe }: GoldPriceChartProps) {
   };
 
   const processChartData = (priceData: [number, number][]): PriceData => {
-    return {
-      dates: priceData.map(([timestamp]) => format(fromUnixTime(timestamp / 1000), 'yyyy-MM-dd')),
-      prices: priceData.map(([, price]) => price)
-    };
+    const dates = priceData.map(([timestamp]) => format(fromUnixTime(timestamp / 1000), timeframe === '1M' ? 'MMM d' : 'MMM d, yyyy'));
+    const prices = priceData.map(([, price]) => price);
+    
+    // Calculate min and max for y-axis with padding
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const padding = (maxPrice - minPrice) * 0.1;
+    
+    options.scales!.y!.min = minPrice - padding;
+    options.scales!.y!.max = maxPrice + padding;
+    
+    return { dates, prices };
   };
 
   // Find the first and last date in the data

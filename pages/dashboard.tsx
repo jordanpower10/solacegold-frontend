@@ -300,7 +300,7 @@ export default function Dashboard() {
                   ))}
                 </div>
               </div>
-              <div className="h-[calc(100%-4rem)]">
+              <div className="h-[240px]">
                 <GoldPriceChart timeframe={timeframe} />
               </div>
             </div>
