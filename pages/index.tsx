@@ -39,11 +39,12 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="mt-20 md:mt-24"
             >
-              <h1 className="text-4xl sm:text-5xl font-bold text-center mb-6">
-                Buy, store, and sell digital gold instantly. Fully backed, no vault fees.
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-4 md:mb-6">
+                <span className="text-[#e0b44a]">Gold</span> for the
+                <br />Digital Age
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 md:mb-12 max-w-3xl mx-auto px-4">
-                Buy, store, and transfer digital gold instantly. Fully backed, no vault fees.
+                Buy, store, and sell digital gold instantly. Fully backed, no vault fees.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <Link 
