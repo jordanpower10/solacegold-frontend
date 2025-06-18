@@ -8,11 +8,11 @@ export const hasVibrationSupport = (): boolean => {
 };
 
 export const vibrateOnPress = (): void => {
-  if (isMobileApp() && hasVibrationSupport()) {
-    try {
-      navigator.vibrate(50); // Short 50ms vibration
-    } catch (error) {
-      console.warn('Vibration failed:', error);
+  try {
+    if (typeof window !== 'undefined' && window.navigator.vibrate) {
+      window.navigator.vibrate(50);
     }
+  } catch (error) {
+    console.warn('Vibration failed:', error);
   }
 }; 

@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { User } from '@supabase/supabase-js'
+import MobileNumberWheel from '../components/MobileNumberWheel'
+import { isMobileApp } from '../utils/mobileUtils'
 
 interface Wallet {
   balance: number;
@@ -87,6 +89,10 @@ export default function Withdraw() {
     }
   }
 
+  const formatUsdAmount = (value: number) => {
+    return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+  };
+
   return (
     <>
       <Head>
@@ -120,17 +126,13 @@ export default function Withdraw() {
               <label htmlFor="amount" className="block text-sm font-medium text-gray-400 mb-2">
                 Amount (USD)
               </label>
-              <input
-                type="number"
-                id="amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.00"
-                required
-                min="0.01"
-                step="0.01"
+              <MobileNumberWheel
+                min={10}
                 max={currentBalance}
-                className="w-full px-4 py-2 rounded bg-[#1c1c1c] text-white border border-[#2a2a2a] focus:outline-none focus:ring-2 focus:ring-[#e0b44a]"
+                step={10}
+                value={Number(amount) || 0}
+                onChange={(value) => setAmount(value.toString())}
+                formatValue={formatUsdAmount}
               />
             </div>
 

@@ -2,6 +2,8 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
+import MobileNumberWheel from '../components/MobileNumberWheel'
+import { isMobileApp } from '../utils/mobileUtils'
 
 interface Wallet {
   wallet_type: string;
@@ -91,6 +93,10 @@ export default function SellGold() {
     }
   }
 
+  const formatGoldAmount = (value: number) => {
+    return `${value.toFixed(3)} oz ($${(value * goldPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })})`;
+  };
+
   return (
     <>
       <Head>
@@ -129,23 +135,14 @@ export default function SellGold() {
               <label htmlFor="amount" className="block text-sm font-medium text-gray-400 mb-2">
                 Amount (oz)
               </label>
-              <input
-                id="amount"
-                type="number"
-                step="0.01"
-                min="0.01"
+              <MobileNumberWheel
+                min={0.001}
                 max={goldBalance}
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#e0b44a] focus:border-transparent transition-all"
-                placeholder="0.00"
-                required
+                step={0.001}
+                value={Number(amount) || 0}
+                onChange={(value) => setAmount(value.toString())}
+                formatValue={formatGoldAmount}
               />
-              {amount && !isNaN(parseFloat(amount)) && (
-                <p className="mt-2 text-sm text-gray-400">
-                  You'll Receive: ${(parseFloat(amount) * goldPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                </p>
-              )}
             </div>
 
             {error && (

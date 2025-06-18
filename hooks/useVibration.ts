@@ -1,21 +1,14 @@
 import { useCallback } from 'react';
-import { vibrateOnPress, isMobileApp } from '../utils/mobileUtils';
+import { vibrateOnPress } from '../utils/mobileUtils';
 
-type EventType = React.MouseEvent | React.TouchEvent;
-type CallbackType = (event: EventType) => void;
-
-export const useVibration = (callback?: CallbackType) => {
-  return useCallback((event: EventType) => {
-    // Prevent double triggering on devices that fire both click and touch events
-    if (event.type === 'mousedown' && isMobileApp()) {
-      return;
-    }
-
-    // Call vibrate before the callback to ensure immediate feedback
+export const useVibration = (callback?: () => void) => {
+  return useCallback((event?: React.TouchEvent | React.MouseEvent) => {
+    // Always vibrate first
     vibrateOnPress();
-
+    
+    // Then execute the callback if provided
     if (callback) {
-      callback(event);
+      callback();
     }
   }, [callback]);
 }; 
