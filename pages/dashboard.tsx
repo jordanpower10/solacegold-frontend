@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
 import GoldGlobe from '../components/GoldGlobe'
+import FearGreedIndex from '../components/FearGreedIndex'
 import Footer from '../components/Footer'
 import AppLayout from '../components/AppLayout'
 import { motion } from 'framer-motion'
@@ -43,6 +44,7 @@ export default function Dashboard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubscribed, setIsSubscribed] = useState(false)
   const router = useRouter()
   const [timeframe, setTimeframe] = useState('1M')
   const [goldPrice, setGoldPrice] = useState(0)
@@ -86,6 +88,12 @@ export default function Dashboard() {
           }
 
           const userId = session.user.id
+
+          // Check subscription status
+          const { data: isUserSubscribed } = await supabase
+            .rpc('is_subscribed', { user_uuid: userId })
+          
+          setIsSubscribed(!!isUserSubscribed)
 
           const { data: profileData } = await supabase
             .from('profiles')
@@ -462,43 +470,51 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Recent Activity */}
-            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6">
-              <h2 className="text-lg font-semibold mb-6">Recent Activity</h2>
-              <div className="space-y-4">
-                {transactions.length > 0 ? (
-                  transactions.map((tx) => (
-                    <div key={tx.id} className="flex items-center justify-between p-3 bg-[#121212]/50 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${
-                          tx.type === 'deposit' ? 'bg-green-500/10 text-green-500' :
-                          tx.type === 'withdraw' ? 'bg-red-500/10 text-red-500' :
-                          'bg-blue-500/10 text-blue-500'
-                        }`}>
-                          {tx.type === 'deposit' ? <ArrowDownIcon className="w-5 h-5" /> :
-                           tx.type === 'withdraw' ? <ArrowUpIcon className="w-5 h-5" /> :
-                           <ChartBarIcon className="w-5 h-5" />}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">{tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
-                          <p className="text-xs text-gray-400">{new Date(tx.created_at).toLocaleDateString()}</p>
-                        </div>
+            {/* Fear & Greed Index */}
+            <FearGreedIndex isSubscribed={isSubscribed} />
+          </motion.div>
+
+          {/* Recent Activity */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-6 mb-8"
+          >
+            <h2 className="text-lg font-semibold mb-6">Recent Activity</h2>
+            <div className="space-y-4">
+              {transactions.length > 0 ? (
+                transactions.map((tx) => (
+                  <div key={tx.id} className="flex items-center justify-between p-3 bg-[#121212]/50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${
+                        tx.type === 'deposit' ? 'bg-green-500/10 text-green-500' :
+                        tx.type === 'withdraw' ? 'bg-red-500/10 text-red-500' :
+                        'bg-blue-500/10 text-blue-500'
+                      }`}>
+                        {tx.type === 'deposit' ? <ArrowDownIcon className="w-5 h-5" /> :
+                         tx.type === 'withdraw' ? <ArrowUpIcon className="w-5 h-5" /> :
+                         <ChartBarIcon className="w-5 h-5" />}
                       </div>
-                      <span className="text-sm font-medium">${tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                      <div>
+                        <p className="text-sm font-medium">{tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
+                        <p className="text-xs text-gray-400">{new Date(tx.created_at).toLocaleDateString()}</p>
+                      </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center text-gray-400 py-4">No recent activity</div>
-                )}
-              </div>
+                    <span className="text-sm font-medium">${tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-400 py-4">No recent activity</div>
+              )}
             </div>
           </motion.div>
 
           {/* Global Gold Distribution */}
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
+            transition={{ duration: 0.5, delay: 0.9 }}
             className="bg-gradient-to-br from-[#1a1a1a] to-[#121212] rounded-2xl border border-[#2a2a2a] p-4 max-w-[400px] mx-auto overflow-hidden"
           >
             <div className="flex flex-col items-center gap-4">
