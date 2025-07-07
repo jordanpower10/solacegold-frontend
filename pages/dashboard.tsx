@@ -44,7 +44,6 @@ export default function Dashboard() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isSubscribed, setIsSubscribed] = useState(false)
   const router = useRouter()
   const [timeframe, setTimeframe] = useState('1M')
   const [goldPrice, setGoldPrice] = useState(0)
@@ -88,12 +87,6 @@ export default function Dashboard() {
           }
 
           const userId = session.user.id
-
-          // Check subscription status
-          const { data: isUserSubscribed } = await supabase
-            .rpc('is_subscribed', { user_uuid: userId })
-          
-          setIsSubscribed(!!isUserSubscribed)
 
           const { data: profileData } = await supabase
             .from('profiles')
@@ -471,7 +464,14 @@ export default function Dashboard() {
             </div>
 
             {/* Fear & Greed Index */}
-            <FearGreedIndex isSubscribed={isSubscribed} />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="w-full"
+            >
+              <FearGreedIndex />
+            </motion.div>
           </motion.div>
 
           {/* Recent Activity */}

@@ -8,11 +8,7 @@ interface FearGreedData {
   timestamp: string;
 }
 
-interface FearGreedIndexProps {
-  isSubscribed: boolean;
-}
-
-export default function FearGreedIndex({ isSubscribed }: FearGreedIndexProps) {
+export default function FearGreedIndex() {
   const [data, setData] = useState<FearGreedData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -91,59 +87,41 @@ export default function FearGreedIndex({ isSubscribed }: FearGreedIndexProps) {
         <p className="text-sm text-gray-400">Market Sentiment Indicator</p>
       </div>
 
-      {isSubscribed ? (
-        <>
-          <div className="relative h-40 flex items-center justify-center mb-6">
-            {/* Gauge Background */}
-            <div className="absolute w-32 h-32 rounded-full border-8 border-[#2a2a2a]" />
-            
-            {/* Gauge Needle */}
-            <motion.div
-              initial={{ rotate: -90 }}
-              animate={{ rotate: getGaugeRotation(data.value) }}
-              transition={{ type: "spring", stiffness: 100, damping: 15 }}
-              className="absolute w-1 h-20 bg-[#e0b44a] origin-bottom rounded-full"
-              style={{ transformOrigin: 'bottom center' }}
-            />
-            
-            {/* Value Display */}
-            <div className="absolute bottom-0 text-center">
-              <span className={`text-3xl font-bold ${getColorClass(data.value)}`}>
-                {data.value}
-              </span>
-            </div>
-          </div>
-
-          <div className="text-center space-y-2">
-            <p className={`text-lg font-semibold ${getColorClass(data.value)}`}>
-              {data.classification}
-            </p>
-            <div className="flex items-center justify-center gap-2">
-              <span className="text-gray-400">Recommendation:</span>
-              <span className={`font-bold ${getRecommendationColor(data.recommendation)}`}>
-                {data.recommendation}
-              </span>
-            </div>
-            <p className="text-xs text-gray-500">
-              Last updated: {new Date(data.timestamp).toLocaleString()}
-            </p>
-          </div>
-        </>
-      ) : (
-        <div className="text-center py-8 space-y-4">
-          <p className="text-gray-400">
-            Subscribe to access our Fear & Greed Index recommendations
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => window.location.href = '/subscribe'}
-            className="px-6 py-2 bg-[#e0b44a] text-black rounded-lg font-medium hover:bg-[#f0c45a] transition-colors"
-          >
-            Subscribe for $5.99/month
-          </motion.button>
+      <div className="relative h-40 flex items-center justify-center mb-6">
+        {/* Gauge Background */}
+        <div className="absolute w-32 h-32 rounded-full border-8 border-[#2a2a2a]" />
+        
+        {/* Gauge Needle */}
+        <motion.div
+          initial={{ rotate: -90 }}
+          animate={{ rotate: getGaugeRotation(data.value) }}
+          transition={{ type: "spring", stiffness: 100, damping: 15 }}
+          className="absolute w-1 h-20 bg-[#e0b44a] origin-bottom rounded-full"
+          style={{ transformOrigin: 'bottom center' }}
+        />
+        
+        {/* Value Display */}
+        <div className="absolute bottom-0 text-center">
+          <span className={`text-3xl font-bold ${getColorClass(data.value)}`}>
+            {data.value}
+          </span>
         </div>
-      )}
+      </div>
+
+      <div className="text-center space-y-2">
+        <p className={`text-lg font-semibold ${getColorClass(data.value)}`}>
+          {data.classification}
+        </p>
+        <div className="flex items-center justify-center gap-2">
+          <span className="text-gray-400">Recommendation:</span>
+          <span className={`font-bold ${getRecommendationColor(data.recommendation)}`}>
+            {data.recommendation}
+          </span>
+        </div>
+        <p className="text-xs text-gray-500">
+          Last updated: {new Date(data.timestamp).toLocaleString()}
+        </p>
+      </div>
     </motion.div>
   );
 } 
