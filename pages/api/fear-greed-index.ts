@@ -10,6 +10,12 @@ interface FearGreedData {
   timestamp: string;
 }
 
+interface CacheData {
+  value: number;
+  classification: string;
+  created_at: string;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -20,12 +26,16 @@ export default async function handler(
 
   try {
     // Check cache first
-    const { data: cachedData } = await supabase
+    const { data: cachedData, error: cacheError } = await supabase
       .from('fear_greed_cache')
-      .select('*')
+      .select('value, classification, created_at')
       .order('created_at', { ascending: false })
       .limit(1)
-      .single();
+      .single() as { data: CacheData | null, error: any };
+
+    if (cacheError && cacheError.code !== 'PGRST116') {
+      console.error('Error fetching from cache:', cacheError);
+    }
 
     // If we have cached data that's still fresh, return it
     if (
@@ -48,13 +58,13 @@ export default async function handler(
       throw new Error('Invalid response from Fear & Greed API');
     }
 
-    const fearGreedData = data.data[0];
+    const fearGreedData = data.data[0] as FearGreedData;
     
     // Store in cache
     const { error: insertError } = await supabase
       .from('fear_greed_cache')
       .insert({
-        value: parseInt(fearGreedData.value),
+        value: parseInt(fearGreedData.value.toString()),
         classification: fearGreedData.value_classification,
         created_at: new Date().toISOString(),
       });
@@ -64,9 +74,9 @@ export default async function handler(
     }
 
     return res.status(200).json({
-      value: parseInt(fearGreedData.value),
+      value: parseInt(fearGreedData.value.toString()),
       classification: fearGreedData.value_classification,
-      recommendation: getRecommendation(parseInt(fearGreedData.value)),
+      recommendation: getRecommendation(parseInt(fearGreedData.value.toString())),
       timestamp: fearGreedData.timestamp,
     });
   } catch (error) {
