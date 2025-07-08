@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
 import GoldGlobe from '../components/GoldGlobe'
-import FearGreedIndex from '../components/FearGreedIndex'
+import InvestmentAlgorithm from '../components/InvestmentAlgorithm'
 import Footer from '../components/Footer'
 import AppLayout from '../components/AppLayout'
 import { motion } from 'framer-motion'
@@ -463,14 +463,14 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Fear & Greed Index */}
+            {/* Market Signal */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
               className="w-full"
             >
-              <FearGreedIndex />
+              <InvestmentAlgorithm />
             </motion.div>
           </motion.div>
 

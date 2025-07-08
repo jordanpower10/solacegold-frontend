@@ -37,9 +37,9 @@ export default function Home() {
               Digital Age
             </h1>
             <p className="text-xl text-gray-400 mb-8">
-              Buy, store, and sell digital gold instantly.
+              Smart gold investments powered by our proprietary algorithm.
               <br />
-              Fully backed, no vault fees.
+              Buy, store, and sell with confidence.
             </p>
           </div>
 
@@ -69,11 +69,11 @@ export default function Home() {
             >
               <div className="h-12 w-12 bg-[#e0b44a] rounded-lg mb-6 flex items-center justify-center">
                 <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-4">Instant Transactions</h3>
-              <p className="text-gray-400">Buy and sell gold instantly with zero processing delays.</p>
+              <h3 className="text-xl font-bold mb-4">Smart Algorithm</h3>
+              <p className="text-gray-400">Data-driven signals to help you make informed investment decisions.</p>
             </motion.div>
 
             {/* Feature 2 */}
@@ -99,11 +99,11 @@ export default function Home() {
             >
               <div className="h-12 w-12 bg-[#e0b44a] rounded-lg mb-6 flex items-center justify-center">
                 <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-4">Zero Storage Fees</h3>
-              <p className="text-gray-400">No monthly fees or hidden charges. Just pure ownership.</p>
+              <h3 className="text-xl font-bold mb-4">Market Signals</h3>
+              <p className="text-gray-400">Real-time buy and sell signals based on market analysis.</p>
             </motion.div>
           </div>
 
@@ -142,10 +142,10 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Start Your Gold Journey Today
+                Invest Smarter with SolaceGold
               </h2>
               <p className="text-xl text-gray-400 mb-12">
-                Join thousands of investors who trust SolaceGold for their long term investments.
+                Join thousands of investors who trust our algorithm for their gold investments.
               </p>
               <button
                 onClick={() => router.push('/signup')}
