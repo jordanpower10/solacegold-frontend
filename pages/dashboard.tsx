@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabaseClient'
 import GoldPriceChart from '../components/GoldPriceChart'
 import GoldGlobe from '../components/GoldGlobe'
 import InvestmentAlgorithm from '../components/InvestmentAlgorithm'
+import MirrorAIReport from '../components/MirrorAIReport'
 import Footer from '../components/Footer'
 import AppLayout from '../components/AppLayout'
 import { motion } from 'framer-motion'
@@ -52,6 +53,7 @@ export default function Dashboard() {
   const [globalPercentile, setGlobalPercentile] = useState(0)
   const [isGlobalView, setIsGlobalView] = useState(true)
   const [leaderboardRank, setLeaderboardRank] = useState(0)
+  const [reportCount, setReportCount] = useState(0)
 
   const accountValue = cashBalance + (goldBalance * goldPrice)
 
@@ -74,6 +76,16 @@ export default function Dashboard() {
   const handleSellWithVibration = useVibration(() => router.push('/sell'))
   const handleDepositWithVibration = useVibration(() => router.push('/deposit'))
   const handleWithdrawWithVibration = useVibration(() => router.push('/withdraw'))
+
+  const handleViewReports = () => {
+    // TODO: Implement view reports functionality
+    console.log('View reports clicked')
+  }
+
+  const handleGenerateNew = () => {
+    // TODO: Implement generate new report functionality
+    console.log('Generate new clicked')
+  }
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -463,14 +475,19 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Market Signal */}
+            {/* Market Signal and Mirror AI Report */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="w-full"
+              className="w-full space-y-6"
             >
               <InvestmentAlgorithm />
+              <MirrorAIReport 
+                onViewReports={handleViewReports}
+                onGenerateNew={handleGenerateNew}
+                reportCount={reportCount}
+              />
             </motion.div>
           </motion.div>
 
