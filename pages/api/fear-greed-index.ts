@@ -4,12 +4,6 @@ import { supabase } from '../../lib/supabaseClient';
 // Cache duration in seconds (5 minutes)
 const CACHE_DURATION = 300;
 
-interface FearGreedData {
-  value: number;
-  value_classification: string;
-  timestamp: string;
-}
-
 interface CacheData {
   value: number;
   classification: string;
@@ -50,22 +44,29 @@ export default async function handler(
       });
     }
 
-    // Fetch new data from alternative.me
-    const response = await fetch('https://api.alternative.me/fng/?limit=1&format=json');
-    const data = await response.json();
+    // Fetch new data from alternative.me CSV endpoint
+    const response = await fetch('https://api.alternative.me/fng/?limit=0&format=csv');
+    const csvData = await response.text();
     
-    if (!data.data?.[0]) {
-      throw new Error('Invalid response from Fear & Greed API');
+    // Get the first line (today's data) and parse it
+    const [todayData] = csvData.split('\n').slice(1);
+    if (!todayData) {
+      throw new Error('No data available from Fear & Greed API');
     }
 
-    const fearGreedData = data.data[0] as FearGreedData;
+    const [date, value, classification] = todayData.split(',');
+    const numericValue = parseInt(value);
+    
+    if (isNaN(numericValue)) {
+      throw new Error('Invalid value from Fear & Greed API');
+    }
     
     // Store in cache
     const { error: insertError } = await supabase
       .from('fear_greed_cache')
       .insert({
-        value: parseInt(fearGreedData.value.toString()),
-        classification: fearGreedData.value_classification,
+        value: numericValue,
+        classification: classification.trim(),
         created_at: new Date().toISOString(),
       });
 
@@ -74,10 +75,10 @@ export default async function handler(
     }
 
     return res.status(200).json({
-      value: parseInt(fearGreedData.value.toString()),
-      classification: fearGreedData.value_classification,
-      recommendation: getRecommendation(parseInt(fearGreedData.value.toString())),
-      timestamp: fearGreedData.timestamp,
+      value: numericValue,
+      classification: classification.trim(),
+      recommendation: getRecommendation(numericValue),
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Error fetching fear & greed index:', error);
